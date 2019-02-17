@@ -12,6 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MomentModule } from 'ngx-moment';
 import {MatButtonModule, MatInputModule, MatDatepickerModule, MatIconModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+
 
 
 
@@ -23,6 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ManipulateConfigComponent } from './manipulate-config/manipulate-config.component';
 import { SankeyComponent } from './sankey/sankey.component';
 import { MutateuiComponent } from './mutateui/mutateui.component';
+import { MapComponent } from './map/map.component';
 
 
 @NgModule({
@@ -32,7 +35,8 @@ import { MutateuiComponent } from './mutateui/mutateui.component';
     DatepickerComponent,
     ManipulateConfigComponent,
     SankeyComponent,
-    MutateuiComponent
+    MutateuiComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
@@ -47,6 +51,7 @@ import { MutateuiComponent } from './mutateui/mutateui.component';
     FormsModule,
     ReactiveFormsModule,
     MatIconModule,
+    LeafletModule
   ],
   providers: [
     PowerService,

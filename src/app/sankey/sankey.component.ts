@@ -46,8 +46,8 @@ export class SankeyComponent implements OnInit {
         this.colors = colors;
     });
 
-    //this.makeNodes(this.rules)
-    console.log(this.saki)
+    // this.makeNodes(this.rules)
+    console.log(this.saki);
     this.eventHandler.on('datechange').subscribe((data) => {
       this.loadData(data);
     });
@@ -55,30 +55,25 @@ export class SankeyComponent implements OnInit {
 
   async loadData(ctrl) {
     const charts = await this.powerService.loadCharts(ctrl);
+    console.log('charts', charts);
     this.allCharts = null;
     this.mutateService.getMutate(charts).subscribe((response) => {
-        console.log('-----------da')
+        console.log('-----------da');
       if (!this.allCharts) {
         this.allCharts = response;
       }
-      console.log('charts', this.allCharts)
-      console.log('response', response)
       //      this.nvd3.updateWithData(response);
-      let sum = this.makeDiff(this.allCharts, response);
-      console.log('SUM', sum);
+      const sum = this.makeDiff(this.allCharts, response);
       this.saki.nodes = [];
-      let direct = this.makeNodes(sum)
+      const direct = this.makeNodes(sum);
         this.saki.links = [];
-      this.makeLinks(sum, direct)
-      this.makeLinks2(sum, direct)
+      this.makeLinks(sum, direct);
+      this.makeLinks2(sum, direct);
 //      this.makeLinks(sum, direct)
-      //this.removeUnneededNodes();
-      console.log('sake', this.saki)
-      console.log('sake2', this.sankey)
-      console.log('sake.colors', this.colors)
+      // this.removeUnneededNodes();
       this.DrawChart(this.colors);
     });
-    //this.DrawChart();
+    // this.DrawChart();
   }
 
   removeUnneededNodes() {
@@ -86,75 +81,75 @@ export class SankeyComponent implements OnInit {
     this.saki.nodes = this.saki.nodes.filter((node) => {
         let keep = false;
         this.saki.links.forEach((link) => {
-            //console.log(link, node.nodeId)
+            // console.log(link, node.nodeId)
             if (link.source === node.nodeId || link.target === node.nodeId) {
-                console.log('keep', node.nodeId, node.name)
+                console.log('keep', node.nodeId, node.name);
                 keep = true;
             }
         });
         return keep;
     });
-    console.log('remaining nodes',this.saki.nodes)
+    console.log('remaining nodes', this.saki.nodes);
   }
 
   makeLinks(sum, direct) {
-    for (let s in sum) {
+    for (const s in sum) {
       if (!s.startsWith('Preis') && !s.startsWith('Leistung')) {
-        let value = sum[s];
-        console.log(s,value)
-        let source = direct.left[s];
-        let target = direct.right[s];
-        console.log(source, target, value.modified);
-        let link = {
-                "source": source,
-                "target": target,
-                "value": Math.abs(sum[s].orig),
-                "color": "red",
-                "uom": "Widget(s)"
+        let value = Math.abs(sum[s].modified);
+        if (s === 'Solar' || s === 'Wind')    {  //ugly
+            value = Math.abs(sum[s].orig);
         }
-        console.log('makelines', link)
+
+        const source = direct.left[s];
+        const target = direct.right[s];
+   
+        const link = {
+                'source': source,
+                'target': target,
+                'value': value,
+                'color': 'red',
+                'type': 'base',
+                'uom': 'Widget(s)'
+        };
         if (link.value) {
-            this.saki.links.push(link)
+            this.saki.links.push(link);
         }
       }
     }
-    console.log(this.saki.links)
   }
   makeLinks2(sum, direct) {
-    console.log('SUMMM', sum, this.rules.loadShift);
-    //this.saki.links = [];
+    // this.saki.links = [];
     this.rules.loadShift.from.forEach((item) => {
       this.saki.nodes.forEach((node) => {
         if (item === node.name) {
-          console.log(node);
-          var link = {
-            "source": 0,
-            "target": direct.right[item],
-            "value": Math.abs(sum[node.name].delta),
-            "color": "red",
-            "uom": "Widget(s)"
-          }
+          const link = {
+            'source': direct.left[item],
+            'target': 0,
+            'value': Math.abs(sum[node.name].delta),
+            'color': 'red',
+            'uom': 'Widget(s)'
+          };
           if (link.value > 0) {
             this.saki.links.push(link);
           }
         }
-      })
-    })
+      });
+    });
     this.rules.loadShift.to.forEach((item) => {
       this.saki.nodes.forEach((node) => {
         if (item === node.name) {
-          var link = {
-            "source": direct.left[item],
-            "target": 0,
-            "value": Math.abs(sum[node.name].delta),
-            "uom": "Widget(s)"
-          }
+          const link = {
+            'source': 0,
+            'target': direct.right[item],
+            'value': Math.abs(sum[node.name].delta),
+            'uom': 'Widget(s)'
+          };
           if (link.value > 0) {
             this.saki.links.push(link);
           }
         }
-      })
-    })
+      });
+    });
     /*
     this.allCharts.forEach(element => {
       this.saki.nodes.forEach((node) => {
@@ -174,34 +169,40 @@ export class SankeyComponent implements OnInit {
   }
 
   makeNodes(sum) {
-    console.log('RULES', this.rules.loadShift);
+    const kickKeys = ['Preis [EUR/MWh]', 'Leistung [MW]', 'Öl', 'Sonstige Erneuerbare', 'Geothermie'];
     this.saki.nodes = [
-        {nodeId:0, name: 'Changes'}
-    ]
-    let direct = {
+        {nodeId: 0, name: 'Changes'}
+    ];
+    const direct = {
         left: {},
         right: {}
     };
     let count = this.saki.nodes.length;
+    this.allCharts = this.allCharts.filter((chart) => {
+        console.log(chart.key);
+        if (kickKeys.indexOf(chart.key) !== -1) {
+          return false;
+        }
+        return true;
+    });
     if (this.allCharts) {
         this.allCharts.forEach((chart) => {
             this.saki.nodes.push({
                 nodeId: count,
                 name: chart.key,
-            })
+            });
             direct.left[chart.key] = count;
             count++;
-        })
+        });
         this.allCharts.forEach((chart) => {
             this.saki.nodes.push({
                 nodeId: count,
                 name: chart.key,
-            })
+            });
             direct.right[chart.key] = count;
             count++;
-        })
+        });
     }
-    console.log('FFFF',this.saki)
     return direct;
 
 
@@ -221,7 +222,7 @@ export class SankeyComponent implements OnInit {
   }
 
   makeDiff(origList, modifiedList) {
-    const sum = {}
+    const sum = {};
     origList.forEach(function (orig) {
       modifiedList.forEach(function (modified) {
         if (orig.key === modified.key) {
@@ -236,7 +237,7 @@ export class SankeyComponent implements OnInit {
             }
             sum[orig.key].delta -= delta;
             sum[orig.key].orig -= item.y;
-            sum[orig.key].modified -= modified.values[i].y; 
+            sum[orig.key].modified -= modified.values[i].y;
           });
         }
       });
@@ -246,7 +247,6 @@ export class SankeyComponent implements OnInit {
 
 
   private DrawChart(colors) {
-      console.log('are this colors?', colors)
     const string2HexCodeColor = new String2HexCodeColor();
 
     const svg = d3.select('#sankey'),
@@ -258,8 +258,7 @@ export class SankeyComponent implements OnInit {
     });
     */
 
-    console.log('savg', svg[0][0])
-    const element = svg[0][0]
+    const element = svg[0][0];
     if (element.firstChild) {
         while (element.firstChild) {
         element.removeChild(element.firstChild);
@@ -269,34 +268,32 @@ export class SankeyComponent implements OnInit {
       format = function (d: any) {
         return formatNumber(d) + ' GWh';
       },
-      //color = d3.scaleOrdinal(d3.schemeCategory10);
+      // color = d3.scaleOrdinal(d3.schemeCategory10);
       color = 'red';
 
     this.sankey = d3Sankey.sankey()
       .nodeWidth(15)
-      .nodePadding(20)
+      .nodePadding(10)
       .extent([
         [1, 1],
         [width - 1, height - 6]
-      ])
+      ]);
     //  .nodeAlign(d3Sankey.sankeyLeft)
       /*
       .nodeAlign(function(data){
           console.log('nodeAlign', data);
-          return 
+          return
       });
       */
-      console.log('d3', d3)
-      console.log('d3.sankeyRight', this.sankey)
 
 
     let link = svg.append('g')
       .attr('class', 'links')
       .attr('fill', 'none')
       .attr('stroke', function() {
-          return '#000'
+          return '#000';
       })
-      .attr('stroke-opacity', 0.2)
+      .attr('stroke-opacity', 0.5)
       .selectAll('path');
 
     let node = svg.append('g')
@@ -304,10 +301,10 @@ export class SankeyComponent implements OnInit {
       .attr('font-family', 'tahoma')
       .attr('font-size', 10)
       .selectAll('g');
-    //d3.json('../assets/data.json', function (error, data: any) {
-    let data = this.saki;
-
-console.log('kaputt', data)
+    // d3.json('../assets/data.json', function (error, data: any) {
+    const data = this.saki;
+      var theValue = 9;
+console.log('kaputt', data);
     this.sankey(data);
 
 
@@ -317,6 +314,22 @@ console.log('kaputt', data)
       .attr('d', d3Sankey.sankeyLinkHorizontal())
       .attr('stroke-width', function (d: any) {
         return Math.max(1, d.width);
+      })
+      .attr('stroke', function (d: any) {
+          let color = '#ccc';
+          const name = d.source.name;
+          if (colors && colors[name] && d.index > theValue) {
+            color = colors[name].color;
+          }
+          const name = d.target.name;
+          if (colors && colors[name] && d.index > theValue) {
+            color = colors[name].color;
+          }
+
+
+
+        return color;
+        // return '#0f0'
       });
 
     link.append('title')
@@ -343,10 +356,9 @@ console.log('kaputt', data)
         return d.x1 - d.x0;
       })
       .attr('fill', function (d: any) {
-          let color = '#fff'
-          if(colors && colors[d.name]){
-            color =  colors[d.name].color
-            console.log(d.name, color);
+          let color = '#fff';
+          if (colors && colors[d.name]) {
+            color =  colors[d.name].color;
           }
           return color;
 //        return string2HexCodeColor.stringToColor(d.name);

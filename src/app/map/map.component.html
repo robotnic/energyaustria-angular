@@ -1,0 +1,9 @@
+<p>
+  map works!
+</p>
+<div class="map"
+     leaflet
+    [leafletLayersControl]="layersControl"
+     (leafletMapReady)="onMapReady($event)"
+     [leafletOptions]="options">
+</div>
