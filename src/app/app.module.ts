@@ -3,16 +3,57 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PowerComponent } from './power/power.component';
+import { PowerService } from './power.service';
+import { EventHandlerService } from './event-handler.service';
+import { DatepickerComponent} from './datepicker/datepicker.component';
+import { NvD3Module } from 'ng2-nvd3';
+import { HttpClientModule } from '@angular/common/http';
+import { MomentModule } from 'ngx-moment';
+import {MatButtonModule, MatInputModule, MatDatepickerModule, MatIconModule} from '@angular/material';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
+
+
+
+
+import 'd3';
+import 'nvd3';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ManipulateConfigComponent } from './manipulate-config/manipulate-config.component';
+import { SankeyComponent } from './sankey/sankey.component';
+import { MutateuiComponent } from './mutateui/mutateui.component';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PowerComponent,
+    DatepickerComponent,
+    ManipulateConfigComponent,
+    SankeyComponent,
+    MutateuiComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NvD3Module,
+    HttpClientModule,
+    MomentModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatInputModule,
+    MatDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule,
   ],
-  providers: [],
+  providers: [
+    PowerService,
+    EventHandlerService
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  yyyymmdd = '20181111';
+}

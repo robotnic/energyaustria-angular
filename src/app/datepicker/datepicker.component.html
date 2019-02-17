@@ -1,0 +1,18 @@
+<div text-align="right">
+<button mat-flat-button (click)="back()">
+  <mat-icon inline="true">arrow_back_ios</mat-icon>
+</button>
+<button mat-flat-button (click)="forward()">
+  <mat-icon inline="true">arrow_forward_ios</mat-icon>
+</button>
+<button mat-icon-button>
+  <mat-icon>refresh</mat-icon>
+</button>
+
+
+<mat-form-field>
+  <input matInput [matDatepicker]="dp" laceholder="Verbose datepicker" [value]="date" (dateChange)="onDate()">
+  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+  <mat-datepicker #dp ></mat-datepicker>
+</mat-form-field>
+</div>

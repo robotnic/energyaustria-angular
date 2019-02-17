@@ -1,0 +1,19 @@
+<pre>
+  {{mutate|json}}
+</pre>
+
+<div class="box">
+    <mat-form-field class="md-block" title="Add {{mutate.Solar}} GWp Photovoltic. This equals to {{mutate.Solar*0.4}} photovoltaic panels per Austrian">
+        <input matInput (input) = "change()" placeholder="Solar" type="number" min="0" [(ngModel)] ="mutate.Solar" style="width:50px;">
+      </mat-form-field>
+      <mat-form-field class="md-block" lex-gt-sm title="Add {{mutate.Wind}} GW Wind. This equals to {{mutate.Wind*200}} big Windturbines">
+        <input matInput (input) = "change()" placeholder="Wind" type="number" min="0" [(ngModel)]="mutate.Wind" style="width:50px;">
+      </mat-form-field>
+      <mat-form-field class="md-block" lex-gt-sm title="Electric Transport percentage. Replace Diesel and Benzin">
+        <input matInput (input) = "change()" placeholder="EV%" type="number" min="0" max="100" step="5" [(ngModel)]="mutate.Transport" >
+      </mat-form-field>
+      <mat-form-field class="md-block" lex-gt-sm title="Electrolysis max Power {{mutate.Power2Gas}} GW">
+        <input matInput (input) = "change()" type="number" placeholder="P2G" min="0" [(ngModel)]="mutate.Power2Gas" style="width:50px;" >
+      </mat-form-field>
+        <button type="button" ng-click="mutate.Power2Gas" style="width:50px;background-color:white;border:1px solid black"  value="click" ng-mouseover="setOriginal()" ng-mouseout="setModified()">orig</button>
+  </div>
