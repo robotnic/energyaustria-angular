@@ -7,6 +7,8 @@ import { MutateService } from '../mutate.service';
 import { StatisticsService } from '../statistics.service';
 import { Observable } from 'rxjs';
 import { String2HexCodeColor } from 'string-to-hex-code-color';
+import { SankeyComponent } from '../sankey/sankey.component';
+import { SankeyService } from '../sankey.service';
 
 @Component({
   selector: 'app-energy',
@@ -23,12 +25,21 @@ export class EnergyComponent implements OnInit {
   allNames = [];
   constructor(
     private eventHandler: EventHandlerService,
-    private powerService: PowerService, private statisticsService: StatisticsService, private mutateService: MutateService) {}
+    private powerService: PowerService,
+    private statisticsService: StatisticsService,
+    private sankeyService: SankeyService,
+    private mutateService: MutateService) {}
 
   async ngOnInit() {
     const colors = await this.powerService.getDefaults();
     delete colors['Leistung [MW]'];
     delete colors['Preis [EUR/MWh]'];
+    this.sankeyService.sankey().then(ob => ob.subscribe(data => {
+      console.log('-----------the data-----------', data)
+      this.saki = data;
+      this.DrawChart(data);
+    }));
+    /*
     const statistics = await this.statisticsService.init();
     this.eventHandler.on('datechange').subscribe((data) => {
       this.loadData(data).then((ob) => {
@@ -45,6 +56,7 @@ export class EnergyComponent implements OnInit {
         });
       });
     });
+    */
 
   }
 
