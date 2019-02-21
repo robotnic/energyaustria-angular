@@ -26,6 +26,7 @@ import { ManipulateConfigComponent } from './manipulate-config/manipulate-config
 import { SankeyComponent } from './sankey/sankey.component';
 import { MutateuiComponent } from './mutateui/mutateui.component';
 import { MapComponent } from './map/map.component';
+import { EnergyComponent } from './energy/energy.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { MapComponent } from './map/map.component';
     ManipulateConfigComponent,
     SankeyComponent,
     MutateuiComponent,
-    MapComponent
+    MapComponent,
+    EnergyComponent
   ],
   imports: [
     BrowserModule,

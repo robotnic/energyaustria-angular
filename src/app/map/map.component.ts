@@ -20,7 +20,7 @@ export class MapComponent implements OnInit {
       })
     ],
     zoom: 7,
-    center: latLng([ 48.879966, 14.726909 ])
+    center: latLng([ 47.879966, 12.726909 ])
   };
   constructor(private httpClient: HttpClient) { }
 
@@ -41,6 +41,6 @@ export class MapComponent implements OnInit {
         };
       }})
       pv.addTo(map);
-    })
-  }
+    });
+  } 
 }
