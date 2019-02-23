@@ -15,7 +15,6 @@ export class EventHandlerService {
   constructor() {}
   on(eventtype) {
     const source = Observable.create((observer) => {
-      console.log('.................', this.state, eventtype)
       if (!this.observers[eventtype]) {
         this.observers[eventtype] = [];
       }
@@ -35,20 +34,28 @@ export class EventHandlerService {
   */
 
   setDate(dateobj) {
-    this.state['datechange'] = dateobj;
-    if (this.observers['datechange']) {
-      this.observers['datechange'].forEach(function(observer){
-        observer.next(dateobj);
-      });
-    }
+    return this.setObserver('datechange', dateobj);
   }
   setMutate(mutate) {
+    return this.setObserver('mutate', mutate);
+    /*
     this.state['mutate'] = mutate;
     if (this.observers['mutate']) {
       this.observers['mutate'].forEach(function(observer) {
         observer.next(mutate);
       });
     }
-    console.log(mutate);
+    */
+  }
+  setQuickMode(active: boolean) {
+    return this.setObserver('quickmode', active);
+  }
+  setObserver(name, value) {
+    this.state[name] = value;
+    if (this.observers[name]) {
+      this.observers[name].forEach(function(observer) {
+        observer.next(value);
+      });
+    }
   }
 }

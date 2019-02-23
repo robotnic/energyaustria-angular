@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { latLng, tileLayer, geoJSON } from 'leaflet';
+import { EventHandlerService } from '../event-handler.service';
+import { deflateRaw } from 'zlib';
 
 
 
@@ -12,6 +14,7 @@ import { latLng, tileLayer, geoJSON } from 'leaflet';
 })
 export class MapComponent implements OnInit {
   url = '/assets/wiesen.json';
+  pv;
   defaultOverlay = null;
   options = {
     layers: [
@@ -22,25 +25,37 @@ export class MapComponent implements OnInit {
     zoom: 7,
     center: latLng([ 47.879966, 12.726909 ])
   };
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private eventHandler: EventHandlerService) { }
 
   ngOnInit() {
-    this.httpClient.get(this.url).subscribe((data) => {
-      console.log(data);
-//      this.defaultOverlay = geoJSON(data);
-    });
   }
   onMapReady(map: Map) {
     // Do stuff with map
-    console.log(map);
     this.httpClient.get(this.url).subscribe((data) => {
-      const pv = geoJSON(data, {style: function() { 
+      this.eventHandler.on('mutate').subscribe(mutate => {
+        this.draw(map, data, mutate.Solar);
+      });
+    });
+  }
+
+  draw(map, data, solar) {
+      let total = 0;
+      const installed = data.features.filter(feature=>{
+        let GW = feature.properties.area * 100 / 1000 / 1000 / 1000;
+        total += GW;
+        if(total < solar) {
+          return true;
+        }
+      })
+      if(this.pv) {
+        this.pv.remove();
+      }
+      this.pv = geoJSON(installed, {style: function() { 
         return {
           'color': 'black',
           'weight': 0.5
         };
-      }})
-      pv.addTo(map);
-    });
-  } 
+      }});
+      this.pv.addTo(map);
+  }
 }

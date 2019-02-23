@@ -1,18 +1,68 @@
 <div text-align="right">
-<button mat-flat-button (click)="back()">
+
+<!-- day-->  
+<button mat-flat-button (click)="back('days')">
   <mat-icon inline="true">arrow_back_ios</mat-icon>
 </button>
-<button mat-flat-button (click)="forward()">
+<mat-form-field  style="width:40px">
+  <select matNativeControl required [(ngModel)] = "day" placeholder="day">
+    <option *ngFor="let day of days" value="{{day}}">{{day}}</option>
+  </select>
+</mat-form-field>
+<button mat-flat-button (click)="forward('days')">
+  <mat-icon inline="true">arrow_forward_ios</mat-icon>
+</button>
+
+
+<!-- month-->  
+<button mat-flat-button (click)="back('month')">
+  <mat-icon inline="true">arrow_back_ios</mat-icon>
+</button>
+<mat-form-field  style="width:70px">
+  <select matNativeControl required [(ngModel)] = "month" placeholder="month">
+    <option value="1">Jänner</option>
+    <option value="2">Februar</option>
+    <option value="3">März</option>
+    <option value="4">April</option>
+    <option value="5">Mai</option>
+    <option value="6">Juni</option>
+    <option value="7">Juli</option>
+    <option value="8">August</option>
+    <option value="9">September</option>
+    <option value="10">Oktober</option>
+    <option value="11">November</option>
+    <option value="12">Dezember</option>
+  </select>
+</mat-form-field>
+<button mat-flat-button (click)="forward('month')">
+  <mat-icon inline="true">arrow_forward_ios</mat-icon>
+</button>
+
+
+<!-- year-->  
+<button mat-flat-button (click)="back('year')">
+  <mat-icon inline="true">arrow_back_ios</mat-icon>
+</button>
+<mat-form-field  style="width:70px">
+  <select matNativeControl required [(ngModel)] = "year" placeholder="year">
+    <option value="2019">2019</option>
+    <option value="2018">2018</option>
+    <option value="2017">2017</option>
+    <option value="2016">2016</option>
+    <option value="2015">2015</option>
+  </select>
+</mat-form-field>
+<button mat-flat-button (click)="forward('year')">
   <mat-icon inline="true">arrow_forward_ios</mat-icon>
 </button>
 <button mat-icon-button>
   <mat-icon>refresh</mat-icon>
 </button>
-
-
+<!--
 <mat-form-field>
   <input matInput [matDatepicker]="dp" laceholder="Verbose datepicker" [value]="date" (dateChange)="onDate()">
   <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
   <mat-datepicker #dp ></mat-datepicker>
 </mat-form-field>
+-->
 </div>

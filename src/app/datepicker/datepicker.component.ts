@@ -43,6 +43,10 @@ export class DatepickerComponent implements OnInit {
   timetype = 'day';
   @Input() public yyyymmdd: string;
   date: any;
+  days = Array(31).fill(0).map((x, i) => i + 1);
+  day = 12;
+  month = 6;
+  year = 2018;
   constructor(private eventHandler: EventHandlerService) {}
   ngOnInit() {
     if (this.yyyymmdd) {
@@ -50,19 +54,25 @@ export class DatepickerComponent implements OnInit {
     } else {
       this.date = (_moment()).toDate();
     }
+    this.onDate();
     this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype});
   }
-  forward() {
-    this.date = _moment(this.date).add(1, 'days').toDate();
+  forward(type) {
+    this.date = _moment(this.date).add(1, type).toDate();
     this.onDate();
   }
-  back() {
-    _moment(this.date).subtract(1, 'days');
-    this.date = _moment(this.date).subtract(1, 'days').toDate();
+  back(type) {
+    this.date = _moment(this.date).subtract(1, type).toDate();
     this.onDate();
   }
+
   onDate() {
     this.yyyymmdd = _moment(this.date).format('YYYYMMDD');
+    this.day = parseInt(this.yyyymmdd.substring(6, 8));
+    this.month = parseInt(this.yyyymmdd.substring(4, 6));
+    this.year = parseInt(this.yyyymmdd.substring(0, 4));
+    console.log('year', this.year)
+    console.log('DAY', this.day);
     this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, reload: false});
   }
 }

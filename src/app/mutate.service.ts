@@ -28,10 +28,14 @@ export class MutateService {
         this.eventHandler.on('mutate').subscribe((mutate) => {
   //        const modified = this.doTheChanges(mutate, defaults);
           const modified =  this.calculator.mutate(this.data, mutate, this.rules, defaults);
+          modified.original = allCharts;
+          observer.next(modified);
+          /*
           observer.next({
             modified: modified,
             original: allCharts
           });
+          */
         });
       });
     });

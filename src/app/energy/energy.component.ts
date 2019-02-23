@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { String2HexCodeColor } from 'string-to-hex-code-color';
 import { SankeyComponent } from '../sankey/sankey.component';
 import { SankeyService } from '../sankey.service';
+import { HttpClient } from '@angular/common/http';
+import { getClosureSafeProperty } from '@angular/core/src/util/property';
 
 @Component({
   selector: 'app-energy',
@@ -28,20 +30,43 @@ export class EnergyComponent implements OnInit {
     private powerService: PowerService,
     private statisticsService: StatisticsService,
     private sankeyService: SankeyService,
-    private mutateService: MutateService) {}
+    private mutateService: MutateService,
+    private http: HttpClient) {}
 
   async ngOnInit() {
-    const colors = await this.powerService.getDefaults();
-    delete colors['Leistung [MW]'];
-    delete colors['Preis [EUR/MWh]'];
     this.sankeyService.sankey().then(ob => ob.subscribe(data => {
       console.log('-----------the data-----------', data)
       this.saki = data;
       this.DrawChart(data);
     }));
   }
-  private DrawChart(colors) {
 
+  getColor(d, colors) {
+    let color = null;
+    color = colors[d.name];
+    if (d.source) {
+      const name = d.source.name;
+      if (colors && colors[name]) {
+        color = colors[name];
+      }
+    }
+    if (d.target && !color) {
+      const name2 = d.target.name;
+      if (colors && colors[name2]) {
+        color = colors[name2];
+      }
+    }
+    if (!color) {
+      const string2HexCodeColor = new String2HexCodeColor();
+      color = string2HexCodeColor.stringToColor(name + '49ou888');
+    }
+    return color;
+  }
+
+
+
+  private async DrawChart(sankeyData) {
+    const colors = await this.http.get('/assets/colors.json').toPromise();
     const svg = d3.select('#sankey'),
       width = +svg.attr('width'),
       height = +svg.attr('height');
@@ -66,7 +91,7 @@ export class EnergyComponent implements OnInit {
 
     this.sankey = d3Sankey.sankey()
       .nodeWidth(15)
-      .nodePadding(20)
+      .nodePadding(10)
       .extent([
         [1, 1],
         [width - 1, height - 6]
@@ -90,12 +115,11 @@ export class EnergyComponent implements OnInit {
 
     let node = svg.append('g')
       .attr('class', 'nodes')
-      .attr('font-family', 'tahoma')
+      .attr('font-family', 'Sans-Serif')
       .attr('font-size', 10)
       .selectAll('g');
     // d3.json('../assets/data.json', function (error, data: any) {
     const data = this.saki;
-    var theValue = 9;
     console.log('kaputt', data);
     this.sankey(data);
 
@@ -106,23 +130,8 @@ export class EnergyComponent implements OnInit {
       .attr('stroke-width', function(d: any) {
         return Math.max(1, d.width);
       })
-      .attr('stroke', function(d: any) {
-        let color = null;
-        const name = d.source.name;
-        if (colors && colors[name]) {
-          color = colors[name].color;
-        }
-        const name2 = d.target.name;
-        if (colors && colors[name2]) {
-          color = colors[name2].color;
-        }
-        if (!color) {
-          const string2HexCodeColor = new String2HexCodeColor();
-          color = string2HexCodeColor.stringToColor(name + '49ou888');
-        }
-
-        return color;
-        // return '#0f0'
+      .attr('stroke', (d: any) => {
+        return this.getColor(d, colors);
       });
 
     link.append('title')
@@ -147,15 +156,17 @@ export class EnergyComponent implements OnInit {
       .attr('width', function(d: any) {
         return d.x1 - d.x0;
       })
-      .attr('fill', function(d: any) {
+      .attr('fill', (d: any) => {
+        /*
         let color = '#fff';
-        if (colors && colors[d.name]) {
-          color = colors[d.name].color;
-        }else {
+        if (sankeyData && sankeyData[d.name]) {
+          color = sankeyData[d.name].color;
+        } else {
           const string2HexCodeColor = new String2HexCodeColor();
           color = string2HexCodeColor.stringToColor(d.name + '49ou888');
         }
-        return color;
+        */
+        return this.getColor(d, colors);
       })
       .attr('stroke', '#666');
 
@@ -183,6 +194,5 @@ export class EnergyComponent implements OnInit {
       .text(function(d: any) {
         return d.name + '\n' + format(d.value);
       });
-
   }
 }

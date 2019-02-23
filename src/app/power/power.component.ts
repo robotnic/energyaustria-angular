@@ -41,8 +41,10 @@ export class PowerComponent implements OnInit {
     }
     this.ctrl = ctrl;
     const charts = await this.powerService.loadCharts(ctrl);
+    console.log('......load..........................................................................')
     this.mutateService.getMutate(charts).subscribe((response) => {
-      this.nvd3.updateWithData(response);
+      console.log(response);
+      this.nvd3.updateWithData(response.modified);
     });
   }
 
@@ -52,11 +54,12 @@ export class PowerComponent implements OnInit {
         this.load(data);
     });
 
-    this.load({date: '20181111', timetype: 'day', reload: false});
+    //this.load({date: '20181111', timetype: 'day', reload: false});
 
     this.options = {
       chart: {
         type: 'multiChart',
+        legend: { rightAlign: false, align: false },
         height: 650,
         margin: {
           top: 120,
@@ -75,7 +78,7 @@ export class PowerComponent implements OnInit {
         valueFormat: function (d) {
           return d3.format(',.4f')(d);
         },
-        duration: 500,
+        duration: 150,
 
         xAxis: {
           ticks:8,

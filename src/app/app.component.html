@@ -1,12 +1,16 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="right:20px">
+
+<div style="right:20px;position:absolute">
   <app-datepicker [(yyyymmdd)] = "yyyymmdd"></app-datepicker>
 </div>
-<button [routerLink]="['/power']" routerLinkActive="router-link-active" >power</button>
-<button [routerLink]="['/sankey']" routerLinkActive="router-link-active" >sankey</button>
-<button [routerLink]="['/energy']" routerLinkActive="router-link-active" >energy</button>
-<button [routerLink]="['/mutateconfig']" routerLinkActive="router-link-active" >config</button>
-<button [routerLink]="['/map']" routerLinkActive="router-link-active" >map</button>
+<button mat-button [routerLink]="['/power']" routerLinkActive="router-link-active" >power</button>
+<button mat-button [routerLink]="['/energy']" routerLinkActive="router-link-active" >energy</button>
+<button mat-button [routerLink]="['/mutateconfig']" routerLinkActive="router-link-active" >config</button>
+<button mat-button [routerLink]="['/map']" routerLinkActive="router-link-active" >map</button>
+<br/>
+<br/>
+<br/>
+<br/>
 <div class="outlet">
 <router-outlet></router-outlet>
 </div>

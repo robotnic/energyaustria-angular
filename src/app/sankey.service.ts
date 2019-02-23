@@ -44,6 +44,7 @@ export class SankeyService {
           this.makeNodes(colors);
           this.makeStatisticsNodes(statistics);
           this.makeLinks(colors, sum);
+          this.removeUnneededNodes();
           observer.next(this.saki);
         });
       });
@@ -60,6 +61,22 @@ export class SankeyService {
     });
     return observable;
   }
+  removeUnneededNodes() {
+    this.saki.nodes.forEach((node) => {
+      let keep = false;
+      this.saki.links.forEach((link) => {
+        // console.log(link, node.nodeId)
+        if (link.source === node.nodeId || link.target === node.nodeId) {
+          keep = true;
+        }
+      });
+      if (!keep) {
+        node.name = '';
+      }
+    });
+    console.log('remaining nodes', this.saki.nodes);
+  }
+
 
   makeDiff(charts) {
     const origList = charts.original;
@@ -93,12 +110,14 @@ export class SankeyService {
     let missingTargets = true;
     // tslint:disable-next-line:forin
     for (const s in statistics) {
+      var es = decodeURIComponent(s);
       // tslint:disable-next-line:forin
-      const i = this.pushNode(s);
+      const i = this.pushNode(es);
       // tslint:disable-next-line:forin
       for (const t in statistics[s]) {
         const j = this.pushNode(t);
-        this.makeStatisticsLink(i, j, parseInt(statistics[s][t] / 1000 * 2.6));
+        const value = statistics[s][t] * 0.277778 / 365; //TJ per year -> GWh pro day
+        this.makeStatisticsLink(i, j, value);
       }
       missingTargets = false;
     }
@@ -116,7 +135,7 @@ export class SankeyService {
       'type': 'base',
       'uom': 'Widget(s)'
     };
-    if (value > 26) {
+    if (value > 5) {
       links.push(link);
     }
 
@@ -150,17 +169,19 @@ export class SankeyService {
     const links = this.saki.links;
     // tslint:disable-next-line:forin
     for (const color in colors) {
+      const value = -sum[color].modified;
       let source = count++;
       let target = 0;
-      if (color === 'Curtailment' || color === 'Power2Gas') {
+      //if (color === 'Curtailment' || color === 'Power2Gas') {
+      if (value < 0) {
+        value = -value;
         target = source;
         source = 0;
       }
-      const value = Math.abs(sum[color].modified);
       const link = {
         'source': source,
         'target': target,
-        'value': value,
+        'value': value /4,  //4 values per hour
         'color': colors[color].color,
         'type': 'base',
         'uom': 'Widget(s)'
