@@ -10,6 +10,7 @@ import { PowerService } from './power.service';
 export class MutateService {
   data;
   observable;
+  colors;
   rules = {
     loadShift: {
       'from': ['Solar', 'Wind'],
@@ -54,5 +55,5 @@ export class MutateService {
   }
   doTheChanges(mutate, defaults) {
     return this.calculator.mutate(this.data, mutate, this.rules, defaults);
-  } 
+  }
 }

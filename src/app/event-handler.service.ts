@@ -38,17 +38,6 @@ export class EventHandlerService {
   }
   setMutate(mutate) {
     return this.setObserver('mutate', mutate);
-    /*
-    this.state['mutate'] = mutate;
-    if (this.observers['mutate']) {
-      this.observers['mutate'].forEach(function(observer) {
-        observer.next(mutate);
-      });
-    }
-    */
-  }
-  setQuickMode(active: boolean) {
-    return this.setObserver('quickmode', active);
   }
   setObserver(name, value) {
     this.state[name] = value;

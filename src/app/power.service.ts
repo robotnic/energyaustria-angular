@@ -23,7 +23,7 @@ import {
 export class PowerService {
   promises: any[];
   data = [];
-  colors: any;
+  defaults: any;
   constructor(private http: HttpClient) {}
 
   load() {
@@ -33,15 +33,15 @@ export class PowerService {
 
 
   async getDefaults() {
-    this.colors = await this.http.get('/api/default').toPromise();
-    return this.colors;
+    this.defaults = await this.http.get('/api/default').toPromise();
+    return this.defaults;
   }
 
   async loadCharts(ctrl) {
     let dateString = ctrl.datestring;
     let reload = ctrl.reload;
     let data: any[] = [];
-    this.colors = await this.http.get('/api/default').toPromise();
+    this.defaults = await this.http.get('/api/default').toPromise();
     const promise = new Promise((resolve, reject) => {
       let date = ctrl.date;
       if (dateString) {
@@ -94,21 +94,12 @@ export class PowerService {
         url += '?reload=true';
       }
       this.http.post(url, query).subscribe(response => {
-        const charts = this.parseData(response, axis, type, this.colors, valueCallback);
+        const charts = this.parseData(response, axis, type, this.defaults, valueCallback);
         resolve(charts);
       });
     });
     return promise;
   }
-
-  makeColor(string) {
-    let color = '#ffffff';
-    if (this.colors[string]) {
-      color = this.colors[string].color;
-    }
-    return color;
-  };
-
 
 
   parseData(data, axis, type, colors, valueCallback) {
@@ -158,7 +149,6 @@ export class PowerService {
       });
 
       const template = {
-        color: that.makeColor(item.YAxisTitle),
         key: item.YAxisTitle,
         originalKey: item.YAxisTitle,
         seriesIndex: index,

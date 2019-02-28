@@ -11,5 +11,8 @@
       <mat-form-field class="md-block" lex-gt-sm title="Electrolysis max Power {{mutate.Power2Gas}} GW">
         <input matInput (input) = "change()" type="number" placeholder="P2G" min="0" [(ngModel)]="mutate.Power2Gas" style="width:50px;" >
       </mat-form-field>
-        <button type="button" ng-click="mutate.Power2Gas" style="width:50px;background-color:white;border:1px solid black"  value="click" ng-mouseover="setOriginal()" ng-mouseout="setModified()">orig</button>
+        <button type="button" (mouseover)="over()" (mouseout)="out()" style="width:50px;background-color:white;border:1px solid black"  value="click" ng-mouseover="setOriginal()" ng-mouseout="setModified()">
+          quick
+          <span class="rollover">rollover</span>
+        </button>
   </div>

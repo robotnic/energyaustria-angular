@@ -110,7 +110,7 @@ export class SankeyService {
     let missingTargets = true;
     // tslint:disable-next-line:forin
     for (const s in statistics) {
-      var es = decodeURIComponent(s);
+      const es = decodeURIComponent(s);
       // tslint:disable-next-line:forin
       const i = this.pushNode(es);
       // tslint:disable-next-line:forin

@@ -13,6 +13,7 @@ import { PowerService } from '../power.service';
 import * as moment from 'moment';
 import { EventHandlerService } from '../event-handler.service';
 import { MutateService } from '../mutate.service';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -32,8 +33,9 @@ export class PowerComponent implements OnInit {
   options;
   data;
   ctrl;
+  colors;
 
-  constructor(private powerService: PowerService, private eventHandler: EventHandlerService, private mutateService: MutateService) {}
+  constructor(private powerService: PowerService, private eventHandler: EventHandlerService, private mutateService: MutateService, private http: HttpClient) {}
 
   load = async (ctrl) => {
     if (!ctrl) {
@@ -43,13 +45,23 @@ export class PowerComponent implements OnInit {
     const charts = await this.powerService.loadCharts(ctrl);
     console.log('......load..........................................................................')
     this.mutateService.getMutate(charts).subscribe((response) => {
+      this.setColors(response.modified);
       console.log(response);
       this.nvd3.updateWithData(response.modified);
     });
   }
 
+  setColors(data) {
+    console.log('setCoors', data);
+    data.forEach(item => {
+      console.log(item.key, this.colors[item.key])
+      item.color = this.colors[item.key];
+    });
+  }
 
-  ngOnInit() {
+
+  async ngOnInit() {
+    this.colors = await this.http.get('/assets/colors.json').toPromise();
     this.eventHandler.on('datechange').subscribe((data) => {
         this.load(data);
     });

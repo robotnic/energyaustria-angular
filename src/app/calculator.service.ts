@@ -12,7 +12,8 @@ export class CalculatorService {
 
 
   mutate(data, modifier, rules, defaults) {
-    const clonedata = this.loadShifter.addPower(this.clonedata, modifier, rules, defaults, this.powerByName['Curtailment']);
+    const clonedata2 = this.loadShifter.addPower(this.clonedata, modifier, rules, defaults, this.powerByName['Curtailment']);
+    const clonedata = this.loadShifter.addEV(clonedata2, modifier);
     const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, defaults, this.powerByName['Curtailment']);
     //console.log('Kurt', this.powerByName['Curtailment'])
     return {

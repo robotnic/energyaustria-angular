@@ -37,6 +37,7 @@ export class InstalledService {
   }
 
   calc(item, value, key) {
+    if (!this.installed) return;
     let delta = 0;
 //    const year = (new Date(item.x)).getFullYear();
 //    console.log(key, new Date(item.x), new Date(item.x).getFullYear());
@@ -44,7 +45,7 @@ export class InstalledService {
     const endOfYear = moment(item.x).endOf('year').unix();
     const time = moment(item.x).unix();
     const year = moment(item.x).year();
-    if (this.installed[year] && this.installed[year][key]){
+    if (this.installed[year] && this.installed[year +1]) {
       const startValue = this.installed[year][key];
       const endValue = this.installed[year + 1][key];
       const installed = (startValue + (time - startOfYear) * (endValue - startValue) / (endOfYear - startOfYear)) / 1000;

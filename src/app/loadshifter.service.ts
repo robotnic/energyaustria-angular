@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { InstalledService } from './installed.service';
-import { RouterTestingModule } from '@angular/router/testing';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +12,15 @@ export class LoadshifterService {
     const byName = {};
     clonedata.forEach(function(item) {
       byName[item.key] = item;
-    })
+    });
+    defaults['Power2Gas'].min = -mutate['Power2Gas'];
     rules.loadShift.to.forEach((to) => {
-      //console.log('TO',to);
-      //console.log(defaults[to])
       const min = defaults[to].min || 0;
       const max = defaults[to].max || 0;
       byName['Curtailment'].values.forEach((item, i) => {
         if (item.y < 0) {
 
-          let target =  byName[to].values[i];
-          //console.log(to, item.y, target.y);
+          const target =  byName[to].values[i];
           if ((target.y + item.y) < min) {
             const oldTarget = target.y;
             target.y = min;
@@ -34,15 +31,15 @@ export class LoadshifterService {
             item.y = 0;
           }
         }
-      })
-    })
+      });
+    });
     return clonedata;
   }
   addPower(data, mutate, rules, defaults, curtailment) {
     curtailment.values.forEach((item) => {
       item.y = 0;
     });
-    const clonedata = JSON.parse(JSON.stringify(data))
+    const clonedata = JSON.parse(JSON.stringify(data));
     clonedata.forEach((item) => {
       rules.loadShift.from.forEach((rule) => {
         if (item.key === rule) {
@@ -54,7 +51,7 @@ export class LoadshifterService {
       if (item.key === 'Curtailment') {
         item.values = curtailment.values;
       }
-    })
+    });
     return clonedata;
   }
 
@@ -65,5 +62,17 @@ export class LoadshifterService {
     });
   }
 
-
+  addEV(charts, mutate) {
+    charts.forEach(chart => {
+      chart.values.forEach((item, i) => {
+        if (chart.key === 'Transport') {
+          item.y = +4 * mutate.Transport / 100;
+        }
+        if (chart.key === 'Leistung [MW]') {
+          item.y += 4 * mutate.Transport / 100;
+        }
+      });
+    });
+    return charts;
+  }
 }
