@@ -20,10 +20,15 @@ export class EventHandlerService {
       }
       this.observers[eventtype].push(observer);
       if (this.state[eventtype]) {
+        console.log(this.state);
+        this.getStateHash();
         observer.next(this.state[eventtype]);
       }
     });
     return source  ;
+  }
+  off(eventtype) {
+    this.observers[eventtype].complete();
   }
   /*
   on = Observable.
@@ -46,5 +51,8 @@ export class EventHandlerService {
         observer.next(value);
       });
     }
+  }
+  getStateHash() {
+    console.log(this.state);
   }
 }

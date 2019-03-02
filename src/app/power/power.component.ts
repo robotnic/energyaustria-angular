@@ -3,11 +3,9 @@ import {
   OnInit,
   Injectable,
   ViewEncapsulation,
-  ViewChild
+  ViewChild,
+  OnDestroy
 } from '@angular/core';
-import {
-  initDomAdapter
-} from '@angular/platform-browser/src/browser';
 declare let d3: any;
 import { PowerService } from '../power.service';
 import * as moment from 'moment';
@@ -28,14 +26,18 @@ import { HttpClient } from '@angular/common/http';
 })
 @Injectable()
 
-export class PowerComponent implements OnInit {
+export class PowerComponent implements OnInit, OnDestroy {
   @ViewChild('nvd3') private nvd3: any;
   options;
   data;
   ctrl;
   colors;
+  subscription;
 
-  constructor(private powerService: PowerService, private eventHandler: EventHandlerService, private mutateService: MutateService, private http: HttpClient) {}
+  constructor(private powerService: PowerService,
+    private eventHandler: EventHandlerService,
+    private mutateService: MutateService,
+    private http: HttpClient) {}
 
   load = async (ctrl) => {
     if (!ctrl) {
@@ -44,7 +46,11 @@ export class PowerComponent implements OnInit {
     this.ctrl = ctrl;
     const charts = await this.powerService.loadCharts(ctrl);
     console.log('......load..........................................................................')
-    this.mutateService.getMutate(charts).subscribe((response) => {
+    if (this.subscription) {
+      console.log('unscubsribe');
+      this.subscription.unsubscribe();
+    }
+    this.subscription = this.mutateService.getMutate(charts).subscribe((response) => {
       this.setColors(response.modified);
       console.log(response);
       this.nvd3.updateWithData(response.modified);
@@ -52,9 +58,7 @@ export class PowerComponent implements OnInit {
   }
 
   setColors(data) {
-    console.log('setCoors', data);
     data.forEach(item => {
-      console.log(item.key, this.colors[item.key])
       item.color = this.colors[item.key];
     });
   }
@@ -63,7 +67,7 @@ export class PowerComponent implements OnInit {
   async ngOnInit() {
     this.colors = await this.http.get('/assets/colors.json').toPromise();
     this.eventHandler.on('datechange').subscribe((data) => {
-        this.load(data);
+      this.load(data);
     });
 
     //this.load({date: '20181111', timetype: 'day', reload: false});
@@ -133,5 +137,10 @@ export class PowerComponent implements OnInit {
       }
     };
 
+  }
+
+  ngOnDestroy() {
+    console.log('descroy');
+    this.subscription.unsubscribe();
   }
 }

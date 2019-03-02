@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { latLng, tileLayer, geoJSON } from 'leaflet';
 import { EventHandlerService } from '../event-handler.service';
-import { deflateRaw } from 'zlib';
 
 
 

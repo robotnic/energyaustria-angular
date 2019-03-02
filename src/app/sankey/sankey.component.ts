@@ -174,7 +174,7 @@ export class SankeyComponent implements OnInit {
       left: {},
       right: {}
     };
-    let count = this.saki.nodes.length;
+    const count = this.saki.nodes.length;
     this.allCharts = this.allCharts.filter((chart) => {
       if (kickKeys.indexOf(chart.key) !== -1) {
         return false;

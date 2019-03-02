@@ -35,7 +35,6 @@ export class EnergyComponent implements OnInit {
 
   async ngOnInit() {
     this.sankeyService.sankey().then(ob => ob.subscribe(data => {
-      console.log('-----------the data-----------', data)
       this.saki = data;
       this.DrawChart(data);
     }));
@@ -120,7 +119,6 @@ export class EnergyComponent implements OnInit {
       .selectAll('g');
     // d3.json('../assets/data.json', function (error, data: any) {
     const data = this.saki;
-    console.log('kaputt', data);
     this.sankey(data);
 
     link = link

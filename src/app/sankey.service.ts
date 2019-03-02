@@ -15,6 +15,7 @@ export class SankeyService {
     links: []
   };
   allNames = [];
+  subscription: any;
   constructor(
     private statisticsService: StatisticsService,
     private eventHandler: EventHandlerService,
@@ -24,7 +25,6 @@ export class SankeyService {
   async sankey() {
     return Observable.create(async observer => {
 //      const data = await this.doTheSankey();
-//      console.log(data);
       this.doTheSankey(observer);
     });
   }
@@ -54,7 +54,10 @@ export class SankeyService {
   async loadData(ctrl) {
     const observable = Observable.create(observer => {
       this.powerService.loadCharts(ctrl).then((charts) => {
-        this.mutateService.getMutate(charts).subscribe((mcharts) => {
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+        }
+        this.subscription = this.mutateService.getMutate(charts).subscribe((mcharts) => {
           observer.next(mcharts);
         });
       });
@@ -65,7 +68,6 @@ export class SankeyService {
     this.saki.nodes.forEach((node) => {
       let keep = false;
       this.saki.links.forEach((link) => {
-        // console.log(link, node.nodeId)
         if (link.source === node.nodeId || link.target === node.nodeId) {
           keep = true;
         }
@@ -74,7 +76,6 @@ export class SankeyService {
         node.name = '';
       }
     });
-    console.log('remaining nodes', this.saki.nodes);
   }
 
 
@@ -169,7 +170,7 @@ export class SankeyService {
     const links = this.saki.links;
     // tslint:disable-next-line:forin
     for (const color in colors) {
-      const value = -sum[color].modified;
+      let value = -sum[color].modified;
       let source = count++;
       let target = 0;
       //if (color === 'Curtailment' || color === 'Power2Gas') {

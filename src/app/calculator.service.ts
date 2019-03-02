@@ -18,8 +18,9 @@ export class CalculatorService {
     //console.log('Kurt', this.powerByName['Curtailment'])
     return {
       modified: loadshiftedData,
-      normalized: clonedata
-    }
+      normalized: clonedata,
+      original: null
+    };
   }
 
 

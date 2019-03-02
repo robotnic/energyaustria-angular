@@ -17,10 +17,8 @@ export class StatisticsService {
       this.load().subscribe((data) => {
         const statistics = {};
         this.types.forEach((type, i) => {
-          console.log(type);
           statistics[type] = this.translate(data[i]);
         });
-        console.log('dadaadaata', statistics);
         resolve(statistics);
       });
     });
@@ -32,8 +30,7 @@ export class StatisticsService {
       responses.push( this.httpClient.get(this.url + type));
     });
     // Observable.forkJoin (RxJS 5) changes to just forkJoin() in RxJS 6
-    let x = forkJoin(responses);
-    console.log(x);
+    const x = forkJoin(responses);
     return x;
   }
   getSankeyData() {
@@ -41,10 +38,9 @@ export class StatisticsService {
   }
   translate(data) {
     const newdata = {};
-    console.log('translate', data);
     // tslint:disable-next-line:forin
     for (const item in data) {
-      let name = item;
+      const name = item;
       switch (item) {
 //        case 'Naturgas': name = 'Gas'; break;
       }

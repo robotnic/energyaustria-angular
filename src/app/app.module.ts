@@ -15,10 +15,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 
-
-
-
-
 import 'd3';
 import 'nvd3';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
