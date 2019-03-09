@@ -1,19 +1,7 @@
-import {
-  Injectable
-} from '@angular/core';
-import {
-  Observable
-} from 'rxjs/internal/Observable';
-import {
-  HttpClient
-} from '@angular/common/http';
-import {
-  forkJoin
-} from 'rxjs';
-import * as moment from 'moment';
-import {
-  RouteConfigLoadStart
-} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
+import * as moment from 'moment'; 
 
 
 
@@ -38,6 +26,7 @@ export class PowerService {
   }
 
   async loadCharts(ctrl) {
+    console.log('ctrl', ctrl);
     let dateString = ctrl.datestring;
     let reload = ctrl.reload;
     let data: any[] = [];
@@ -75,6 +64,9 @@ export class PowerService {
 
   loadData(pid, dateString, axis, timetype, type, valueCallback, reload) {
     let multiplayer = 1;
+    let m = moment(dateString, "YYYYMMDD");
+
+    dateString = m.startOf('month').format('YYYYMMDD');
     const promise = new Promise((resolve, reject) => {
       // tslint:disable-next-line:quotemark
       const query = {

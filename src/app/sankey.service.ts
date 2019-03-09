@@ -24,7 +24,6 @@ export class SankeyService {
   ) {}
   async sankey() {
     return Observable.create(async observer => {
-//      const data = await this.doTheSankey();
       this.doTheSankey(observer);
     });
   }
@@ -78,7 +77,6 @@ export class SankeyService {
     });
   }
 
-
   makeDiff(charts) {
     const origList = charts.original;
     const modifiedList = charts.modified;
@@ -110,6 +108,7 @@ export class SankeyService {
     const targets = [];
     let missingTargets = true;
     // tslint:disable-next-line:forin
+    statistics = this.mutateStatistices(statistics);
     for (const s in statistics) {
       const es = decodeURIComponent(s);
       // tslint:disable-next-line:forin
@@ -117,11 +116,31 @@ export class SankeyService {
       // tslint:disable-next-line:forin
       for (const t in statistics[s]) {
         const j = this.pushNode(t);
-        const value = statistics[s][t] * 0.277778 / 365; //TJ per year -> GWh pro day
+        let value = statistics[s][t] * 0.277778 / 365; //TJ per year -> GWh pro day
         this.makeStatisticsLink(i, j, value);
       }
       missingTargets = false;
     }
+  }
+  mutateStatistices(statistics) {
+    const statatistics = JSON.parse(JSON.stringify(statistics));
+    const transport = this.eventHandler.getState().mutate.Transport;
+    console.log('STAT', statatistics.Traktion.Diesel, transport);
+    const delta = {};
+    for (let s in statatistics.Traktion) {
+      if (s === 'Benzin' || s === 'Diesel') {
+        console.log(s, statatistics.Traktion[s]);
+        const oldValue = statatistics.Traktion[s];
+        const factor = 1 - transport / 100;
+        const newValue = statatistics.Traktion[s] * factor;
+        delta[s] = oldValue - newValue;
+        console.log('delta', s, delta[s], factor);
+        statatistics.Traktion[s] = newValue;
+      }
+    }
+    console.log('dB', delta['Benzin']);
+    statatistics.Traktion['Elektrische Energie'] += (delta['Benzin'] + delta['Diesel']) /4;
+    return statatistics;
   }
   makeStatisticsLink(target, source, value) {
     const string2HexCodeColor = new String2HexCodeColor();
@@ -174,6 +193,13 @@ export class SankeyService {
       let source = count++;
       let target = 0;
       //if (color === 'Curtailment' || color === 'Power2Gas') {
+        /*
+        if (color === 'Transport') {
+          console.log(color, this.saki);
+          source = 0;
+          target = 17;
+        }
+        */
       if (value < 0) {
         value = -value;
         target = source;

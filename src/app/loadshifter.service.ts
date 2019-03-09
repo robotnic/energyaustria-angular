@@ -66,7 +66,7 @@ export class LoadshifterService {
     charts.forEach(chart => {
       chart.values.forEach((item, i) => {
         if (chart.key === 'Transport') {
-          item.y = +4 * mutate.Transport / 100;
+          item.y = 4 * mutate.Transport / 100;
         }
         if (chart.key === 'Leistung [MW]') {
           item.y += 4 * mutate.Transport / 100;

@@ -1,12 +1,141 @@
-  <div style="position:relative;width:800px">
-    <div *ngFor="let item of mutate.mm.loadShift.from">
-      <div class="item">{{item}}</div>
-    </div>
-    <div style="position:absolute;top:10px;right:10px">
-    <div *ngFor="let item of mutate.mm.loadShift.to">
-      <div class="item">{{item}}</div>
-    </div>
-    </div>
-  
-  
-  </div>
+<div *ngIf="defaults">
+
+
+<mat-card>
+<mat-card-header>
+  <mat-card-title>Stromerzeugung</mat-card-title>
+</mat-card-header>
+<mat-card-content>
+<table><tr *ngFor="let item of defaults | keyvalue">
+  <td>
+  {{item.key}}
+  </td>
+  <td>
+  <mat-form-field>
+    <input matInput placeholder="Farbe" [(ngModel)]="item.value.color">
+  </mat-form-field>
+  </td>
+  <td>
+  <mat-form-field>
+    <input matInput placeholder="Wirkungsgrad" [(ngModel)]="item.value.efficiency">
+  </mat-form-field>
+  </td>
+  <td>
+   <mat-form-field>
+    <input matInput placeholder="Max (GW)" [(ngModel)]="item.value.efficiency">
+  </mat-form-field>
+  </td>
+  <td>
+   <mat-form-field>
+    <input matInput placeholder="Min (GW)" [(ngModel)]="item.value.efficiency">
+  </mat-form-field>
+  </td>
+  <td>
+   <mat-form-field>
+    <input matInput placeholder="Euro/MWh" [(ngModel)]="item.value.energyprice">
+  </mat-form-field>
+  </td>
+
+</tr></table>
+
+<!--
+{{item.value|json}}
+-->
+</mat-card-content>
+</mat-card>
+<hr/>
+<mat-card>
+    <mat-card-header>
+    <mat-card-title>Wirkungsgrade</mat-card-title>
+  </mat-card-header>
+    <mat-card-content>
+
+  <mat-form-field>
+    <input matInput placeholder="Strom aus Gas">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Power to Gas">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="EV:ICE">
+  </mat-form-field>
+</mat-card-content>
+</mat-card>
+
+
+
+<mat-card>
+    <mat-card-header>
+    <mat-card-title>Flächenverbrauch</mat-card-title>
+  </mat-card-header>
+    <mat-card-content>
+
+
+  <mat-form-field>
+    <input matInput placeholder="PV m²/kWp Grundfläche">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="PV m²/kWp Modulfläche">
+  </mat-form-field>
+  </mat-card-content>
+</mat-card>
+
+
+
+
+
+<mat-card>
+    <mat-card-header>
+    <mat-card-title>Kosten</mat-card-title>
+  </mat-card-header>
+    <mat-card-content>
+
+
+  <mat-form-field>
+    <input matInput placeholder="PV €/MWh">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="PV €/kWp">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Wind €/MWh">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Wind €/kWp">
+  </mat-form-field>
+
+
+
+
+
+  <mat-form-field>
+    <input matInput placeholder="P2G €/kW">
+  </mat-form-field>
+</mat-card-content>
+</mat-card>
+
+
+<mat-card>
+    <mat-card-header>
+    <mat-card-title>Volkswirtschaft, Wertschöpfung im Inland %</mat-card-title>
+  </mat-card-header>
+    <mat-card-content>
+
+
+  <mat-form-field>
+    <input matInput placeholder="PV ">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Wind ">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Öl ">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Gas ">
+  </mat-form-field>
+</mat-card-content>
+</mat-card>
+</div>
+

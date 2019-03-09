@@ -44,18 +44,26 @@ export class DatepickerComponent implements OnInit {
   @Input() public yyyymmdd: string;
   date: any;
   days = Array(31).fill(0).map((x, i) => i + 1);
+  weeks = Array(52).fill(0).map((x, i) => i + 1);
   day = 12;
   month = 6;
   year = 2018;
   constructor(private eventHandler: EventHandlerService) {}
   ngOnInit() {
+    this.date = this.eventHandler.getState().datechange.date;
+    this.yyyymmdd = _moment(this.date).format('YYYYMMDD');
+    this.day = parseInt(this.yyyymmdd.substring(6, 8));
+    this.month = parseInt(this.yyyymmdd.substring(4, 6));
+    this.year = parseInt(this.yyyymmdd.substring(0, 4));
+    /*
     if (this.yyyymmdd) {
       this.date = (_moment(this.yyyymmdd, 'YYYYMMDD')).toDate();
     } else {
       this.date = (_moment()).toDate();
     }
-    this.onDate();
-    this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype});
+    */
+    //this.onDate();
+    //this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype});
   }
   forward(type) {
     this.date = _moment(this.date).add(1, type).toDate();
@@ -63,6 +71,12 @@ export class DatepickerComponent implements OnInit {
   }
   back(type) {
     this.date = _moment(this.date).subtract(1, type).toDate();
+    this.onDate();
+  }
+  reload() {
+    this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, reload: true});
+  }
+  change() {
     this.onDate();
   }
 

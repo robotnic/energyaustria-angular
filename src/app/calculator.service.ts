@@ -19,7 +19,7 @@ export class CalculatorService {
     return {
       modified: loadshiftedData,
       normalized: clonedata,
-      original: null
+      original: data,
     };
   }
 

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SankeyComponent } from './sankey.component';
+import { PowerdiffComponent } from './powerdiff.component';
 
-describe('SankeyComponent', () => {
-  let component: SankeyComponent;
-  let fixture: ComponentFixture<SankeyComponent>;
+describe('PowerdiffComponent', () => {
+  let component: PowerdiffComponent;
+  let fixture: ComponentFixture<PowerdiffComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SankeyComponent ]
+      declarations: [ PowerdiffComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SankeyComponent);
+    fixture = TestBed.createComponent(PowerdiffComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

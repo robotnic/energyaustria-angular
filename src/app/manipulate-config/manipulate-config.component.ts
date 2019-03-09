@@ -4,6 +4,7 @@ import { MutateService } from '../mutate.service';
 import { PowerService } from '../power.service';
 
 
+
 @Component({
   selector: 'app-manipulate-config',
   templateUrl: './manipulate-config.component.html',
@@ -11,9 +12,12 @@ import { PowerService } from '../power.service';
 })
 export class ManipulateConfigComponent implements OnInit {
   data;
+  defaults;
   constructor(private http: HttpClient, private mutate: MutateService, private power: PowerService) { }
 
   async ngOnInit() {
+    this.defaults = await this.http.get('/api/default').toPromise();
+    console.log('DEFAULTS', this.defaults)
     console.log(this.mutate.rules);
     let ctrl = {
       date: '20180101',

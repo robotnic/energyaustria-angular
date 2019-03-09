@@ -73,14 +73,17 @@ export class EnergyComponent implements OnInit {
     while(svg[0].firstChild){
         svg[0].removeChidld(svg[0].firstChild)
     });
-    */
-
-    const element = svg[0][0];
-    if (element && element.firstChild) {
-      while (element.firstChild) {
-        element.removeChild(element.firstChild);
+    try {
+      const element = svg[0][0];
+      if (element && element.firstChild) {
+        while (element.firstChild) {
+          element.removeChild(element.firstChild);
+        }
       }
-    }
+    } catch (e) {}
+    */
+    d3.selectAll("svg > *").remove();
+
     const formatNumber = d3.format(',.0f'),
       format = function(d: any) {
         return formatNumber(d) + ' GWh';
@@ -125,6 +128,7 @@ export class EnergyComponent implements OnInit {
       .data(data.links)
       .enter().append('path')
       .attr('d', d3Sankey.sankeyLinkHorizontal())
+      .attr('class','energysankey')
       .attr('stroke-width', function(d: any) {
         return Math.max(1, d.width);
       })

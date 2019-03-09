@@ -1,3 +1,12 @@
+/*
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { PowerService } from '../power.service';
+import { EventHandlerService } from '../event-handler.service';
+import { MutateService } from '../mutate.service';
+import { HttpClient } from '@angular/common/http';
+import * as moment from 'moment';
+*/
+
 import { Component, OnInit, Injectable, ViewEncapsulation, ViewChild, OnDestroy } from '@angular/core';
 declare let d3: any;
 import { PowerService } from '../power.service';
@@ -9,17 +18,15 @@ import { HttpClient } from '@angular/common/http';
 
 
 @Component({
-  selector: 'app-power',
-  templateUrl: './power.component.html',
-  styleUrls: ['./power.component.less',
-    './nv.d3.css'
-  ],
-  encapsulation: ViewEncapsulation.None
-
+  selector: 'app-powerdiff',
+  templateUrl: './powerdiff.component.html',
+  styleUrls: ['./powerdiff.component.less', './nv.d3.css']
 })
+ 
 @Injectable()
 
-export class PowerComponent implements OnInit, OnDestroy {
+export class PowerdiffComponent implements OnInit, OnDestroy {
+
   @ViewChild('nvd3') private nvd3: any;
   options;
   data;
@@ -45,7 +52,7 @@ export class PowerComponent implements OnInit, OnDestroy {
     }
     this.subscription = this.mutateService.getMutate(charts).subscribe((response) => {
       this.setColors(response.modified);
-      console.log(response);
+      this.makeDelta(response);
       this.nvd3.updateWithData(response.modified);
     });
   }
@@ -56,9 +63,24 @@ export class PowerComponent implements OnInit, OnDestroy {
     });
   }
 
+  makeDelta(response) {
+    response.normalized.forEach((item, i) => {
+      this.makeDiff(item, response.modified[i]);
+    });
+  }
+
+  makeDiff(orig, mod) {
+    mod.type = 'line';
+    if (mod.key === 'Transport' || mod.key === 'Curtailmentttttttttttttt') {
+//      mod.type = 'area';
+    }
+    orig.values.forEach((item, i) => {
+      mod.values[i].y -= item.y;
+    })
+  }
 
   async ngOnInit() {
-    this.colors = await this.http.get('/assets/colors.json').toPromise();
+       this.colors = await this.http.get('/assets/colors.json').toPromise();
     this.eventHandler.on('datechange').subscribe((data) => {
       this.load(data);
     });
@@ -93,17 +115,17 @@ export class PowerComponent implements OnInit, OnDestroy {
           ticks:8,
           showMaxMin: false,
           tickFormat: function(d) {
-            var t="0";
+            let t = "0";
             let timetype = 'week'
             switch(timetype){
               case 'day':
-                t= moment(d).format('HH:mm');  //d3.time.fmt(rmat('%x')(new Date(d))
+                t = moment(d).format('HH:mm');  //d3.time.fmt(rmat('%x')(new Date(d))
                 break;
               case 'week':
-                t= moment(d).format('ddd DD.MMM.YYYY HH:mm');  //d3.time.fmt(rmat('%x')(new Date(d))
+                t = moment(d).format('ddd DD.MMM.YYYY HH:mm');  //d3.time.fmt(rmat('%x')(new Date(d))
                 break;
               default:
-                t= moment(d).format('ddd DD.MMM.YYYY');  //d3.time.fmt(rmat('%x')(new Date(d))
+                t = moment(d).format('ddd DD.MMM.YYYY');  //d3.time.fmt(rmat('%x')(new Date(d))
             }
           return t;
             //return d3.time.fmt(rmat('%x')(new Date(moment(d).format('DD.MMM HH:mm'))));
@@ -136,4 +158,5 @@ export class PowerComponent implements OnInit, OnDestroy {
     console.log('descroy');
     this.subscription.unsubscribe();
   }
+
 }

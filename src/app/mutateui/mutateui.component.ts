@@ -19,7 +19,8 @@ export class MutateuiComponent implements OnInit {
 
   ngOnInit() {
     console.log('init');
-    this.eventHandler.setMutate(this.mutate);
+    //this.eventHandler.setMutate(this.mutate);
+    this.mutate = this.eventHandler.getState().mutate
   }
 
   change() {

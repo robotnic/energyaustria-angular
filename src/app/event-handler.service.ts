@@ -1,9 +1,7 @@
-import {
-  Injectable
-} from '@angular/core';
-import {
-  Observable
-} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import * as _moment from 'moment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +9,27 @@ import {
 export class EventHandlerService {
   events: any[];
   observers = {};
-  state = {};
-  constructor() {}
+  state = {
+    'datechange': {
+      'date': _moment().format('YYYYMMDD'),
+      'timetype': 'day',
+      'reload': false
+    },
+    'mutate': {
+      'Wind': 0,
+      'Solar': 0,
+      'Power2Gas': 0,
+      'Transport': 0,
+      'quickview': false
+    }
+  };
+  constructor() {
+    this.getStateHash();
+  }
   on(eventtype) {
     const source = Observable.create((observer) => {
-      if (!this.observers[eventtype]) {
-        this.observers[eventtype] = [];
-      }
-      this.observers[eventtype].push(observer);
+      this.observers[eventtype] = observer;
       if (this.state[eventtype]) {
-        console.log(this.state);
-        this.getStateHash();
         observer.next(this.state[eventtype]);
       }
     });
@@ -39,7 +47,12 @@ export class EventHandlerService {
   */
 
   setDate(dateobj) {
+    console.log('setDate', dateobj)
     return this.setObserver('datechange', dateobj);
+  }
+  getState() {
+    console.log('datechage', this.state.datechange.date);
+    return this.state;
   }
   setMutate(mutate) {
     return this.setObserver('mutate', mutate);
@@ -47,12 +60,45 @@ export class EventHandlerService {
   setObserver(name, value) {
     this.state[name] = value;
     if (this.observers[name]) {
-      this.observers[name].forEach(function(observer) {
-        observer.next(value);
-      });
+      console.log('next', name, value);
+        this.observers[name].next(value);
+        this.setStateHash();
     }
   }
-  getStateHash() {
+  setStateHash() {
     console.log(this.state);
+    var url = '';
+    for (let s in this.state) {
+      url += '&' + s + '='; 
+      for(let v in this.state[s]) {
+        url += v + ':' + this.state[s][v] + ';';
+      }
+    }
+    console.log(url);
+    location.hash = url.substring(1);
+  }
+  getStateHash() {
+    var state = {};
+    let hash = location.hash.substring(1);
+    let parts = hash.split('&');
+    if (parts[0]) {
+      parts.forEach(part => {
+        let kvss = part.split('=');
+        state[kvss[0]] = {};
+        kvss[1].split(';').forEach(kvs => {
+          if(kvs){
+            let kv = kvs.split(':');
+            let value: any = kv[1];
+            if (value === 'false') {
+              value = false;
+            }
+            state[kvss[0]][kv[0]] = value;
+          }
+        });
+        //state[kvs[0]] = {};
+      })
+      this.state = state;
+      console.log('state', state);
+    }
   }
 }

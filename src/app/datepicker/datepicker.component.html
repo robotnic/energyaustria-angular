@@ -1,25 +1,51 @@
 <div text-align="right">
+<mat-form-field  style="width:70px">
+  <mat-select matNativeControl required [(value)] = "timetype" (selectionChange)="onDate($event)">
+    <mat-option value="day">Tag</mat-option>
+    <mat-option value="week">Woche</mat-option>
+    <mat-option value="month">Monat</mat-option>
+  </mat-select>
+</mat-form-field>
 
-<!-- day-->  
+<!-- week-->  
+<span *ngIf="timetype === 'week'">
 <button mat-flat-button (click)="back('days')">
   <mat-icon inline="true">arrow_back_ios</mat-icon>
 </button>
 <mat-form-field  style="width:40px">
-  <select matNativeControl required [(ngModel)] = "day" placeholder="day">
+  <mat-select matNativeControl required [(ngModel)] = "day">
+    <mat-option *ngFor="let week of weeks" value="{{week}}">{{week}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<button mat-flat-button (click)="forward('days')">
+  <mat-icon inline="true">arrow_forward_ios</mat-icon>
+</button>
+</span>
+
+
+<!-- day-->  
+<span *ngIf="timetype === 'day'">
+<button mat-flat-button (click)="back('days')">
+  <mat-icon inline="true">arrow_back_ios</mat-icon>
+</button>
+<mat-form-field  style="width:40px">
+  <select matNativeControl required [(ngModel)] = "day">
     <option *ngFor="let day of days" value="{{day}}">{{day}}</option>
   </select>
 </mat-form-field>
 <button mat-flat-button (click)="forward('days')">
   <mat-icon inline="true">arrow_forward_ios</mat-icon>
 </button>
+</span>
 
 
 <!-- month-->  
+<span *ngIf="timetype !== 'week'">
 <button mat-flat-button (click)="back('month')">
   <mat-icon inline="true">arrow_back_ios</mat-icon>
 </button>
 <mat-form-field  style="width:70px">
-  <select matNativeControl required [(ngModel)] = "month" placeholder="month">
+  <select matNativeControl required [(ngModel)] = "month">
     <option value="1">Jänner</option>
     <option value="2">Februar</option>
     <option value="3">März</option>
@@ -37,6 +63,7 @@
 <button mat-flat-button (click)="forward('month')">
   <mat-icon inline="true">arrow_forward_ios</mat-icon>
 </button>
+</span>
 
 
 <!-- year-->  
@@ -44,7 +71,7 @@
   <mat-icon inline="true">arrow_back_ios</mat-icon>
 </button>
 <mat-form-field  style="width:70px">
-  <select matNativeControl required [(ngModel)] = "year" placeholder="year">
+  <select matNativeControl required [(ngModel)] = "year">
     <option value="2019">2019</option>
     <option value="2018">2018</option>
     <option value="2017">2017</option>
@@ -56,7 +83,7 @@
   <mat-icon inline="true">arrow_forward_ios</mat-icon>
 </button>
 <button mat-icon-button>
-  <mat-icon>refresh</mat-icon>
+  <mat-icon (click)="reload()">refresh</mat-icon>
 </button>
 <!--
 <mat-form-field>
