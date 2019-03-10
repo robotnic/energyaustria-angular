@@ -65,8 +65,7 @@ export class PowerService {
   loadData(pid, dateString, axis, timetype, type, valueCallback, reload) {
     let multiplayer = 1;
     let m = moment(dateString, "YYYYMMDD");
-
-    dateString = m.startOf('month').format('YYYYMMDD');
+    dateString = m.startOf(timetype).format('YYYYMMDD');
     const promise = new Promise((resolve, reject) => {
       // tslint:disable-next-line:quotemark
       const query = {

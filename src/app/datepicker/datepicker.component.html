@@ -8,23 +8,23 @@
 </mat-form-field>
 
 <!-- week-->  
-<span *ngIf="timetype === 'week'">
-<button mat-flat-button (click)="back('days')">
+<span [hidden] ="timetype !== 'week'">
+<button mat-flat-button (click)="back('weeks')">
   <mat-icon inline="true">arrow_back_ios</mat-icon>
 </button>
 <mat-form-field  style="width:40px">
-  <mat-select matNativeControl required [(ngModel)] = "day">
-    <mat-option *ngFor="let week of weeks" value="{{week}}">{{week}}</mat-option>
+  <mat-select required [(ngModel)] = "week">
+    <mat-option *ngFor="let weekstr of weeks" [value]="weekstr">{{weekstr}}</mat-option>
   </mat-select>
 </mat-form-field>
-<button mat-flat-button (click)="forward('days')">
+<button mat-flat-button (click)="forward('weeks')">
   <mat-icon inline="true">arrow_forward_ios</mat-icon>
 </button>
 </span>
 
 
 <!-- day-->  
-<span *ngIf="timetype === 'day'">
+<span [hidden]="timetype !== 'day'">
 <button mat-flat-button (click)="back('days')">
   <mat-icon inline="true">arrow_back_ios</mat-icon>
 </button>
@@ -40,7 +40,7 @@
 
 
 <!-- month-->  
-<span *ngIf="timetype !== 'week'">
+<span [hidden]="timetype === 'week'">
 <button mat-flat-button (click)="back('month')">
   <mat-icon inline="true">arrow_back_ios</mat-icon>
 </button>

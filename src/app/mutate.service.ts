@@ -27,7 +27,6 @@ export class MutateService {
         const allCharts = this.calculator.createCharts(data,  this.rules, defaults);
         this.data = allCharts;
         this.eventHandler.on('mutate').subscribe((mutate) => {
-  //        const modified = this.doTheChanges(mutate, defaults);
           const modified =  this.calculator.mutate(this.data, mutate, this.rules, defaults);
           modified.original = allCharts;
           observer.next(modified);

@@ -47,6 +47,7 @@ export class DatepickerComponent implements OnInit {
   weeks = Array(52).fill(0).map((x, i) => i + 1);
   day = 12;
   month = 6;
+  week = 6;
   year = 2018;
   constructor(private eventHandler: EventHandlerService) {}
   ngOnInit() {
@@ -71,17 +72,17 @@ export class DatepickerComponent implements OnInit {
   }
   back(type) {
     this.date = _moment(this.date).subtract(1, type).toDate();
+    console.log(this.date);
     this.onDate();
   }
   reload() {
     this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, reload: true});
   }
-  change() {
-    this.onDate();
-  }
 
   onDate() {
     this.yyyymmdd = _moment(this.date).format('YYYYMMDD');
+    this.week = _moment(this.date).week();
+    console.log('week', this.week);
     this.day = parseInt(this.yyyymmdd.substring(6, 8));
     this.month = parseInt(this.yyyymmdd.substring(4, 6));
     this.year = parseInt(this.yyyymmdd.substring(0, 4));

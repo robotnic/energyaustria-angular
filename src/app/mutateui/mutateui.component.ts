@@ -7,6 +7,7 @@ import { EventHandlerService } from '../event-handler.service';
   styleUrls: ['./mutateui.component.less']
 })
 export class MutateuiComponent implements OnInit {
+  timeout = null;
   mutate = {
     Wind: 0,
     Solar: 0,
@@ -25,7 +26,14 @@ export class MutateuiComponent implements OnInit {
 
   change() {
     console.log('change');
-    this.eventHandler.setMutate(this.mutate);
+    if (this.timeout) {
+      console.log('clear', this.timeout);
+      clearTimeout(this.timeout);
+    }
+    this.timeout = setTimeout(() => {
+      console.log('go', this.timeout);
+      this.eventHandler.setMutate(this.mutate);
+    }, 200);
   }
 
   over() {

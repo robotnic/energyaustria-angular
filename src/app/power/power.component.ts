@@ -45,7 +45,7 @@ export class PowerComponent implements OnInit, OnDestroy {
     }
     this.subscription = this.mutateService.getMutate(charts).subscribe((response) => {
       this.setColors(response.modified);
-      console.log(response);
+      console.log('fertig zum rendern', response);
       this.nvd3.updateWithData(response.modified);
     });
   }
