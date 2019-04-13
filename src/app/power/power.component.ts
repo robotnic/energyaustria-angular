@@ -6,8 +6,6 @@ import { EventHandlerService } from '../event-handler.service';
 import { MutateService } from '../mutate.service';
 import { HttpClient } from '@angular/common/http';
 
-
-
 @Component({
   selector: 'app-power',
   templateUrl: './power.component.html',
@@ -88,7 +86,6 @@ export class PowerComponent implements OnInit, OnDestroy {
           return d3.format(',.4f')(d);
         },
         duration: 150,
-
         xAxis: {
           ticks:8,
           showMaxMin: false,

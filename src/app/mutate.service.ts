@@ -14,7 +14,7 @@ export class MutateService {
   rules = {
     loadShift: {
       'from': ['Solar', 'Wind'],
-      'to': ['Kohle', 'Transport', 'Gas', 'Speicher', 'Biomasse', 'Pumpspeicher',  'Power2Gas']
+      'to': ['Kohle', 'Transport', 'Gas', 'Speicher', 'Biomasse', 'Import', 'Pumpspeicher', 'Power2Gas']
     },
     timeShift: {
       'from': ['Pumpspeicher', 'Speicher'],
@@ -27,15 +27,10 @@ export class MutateService {
         const allCharts = this.calculator.createCharts(data,  this.rules, defaults);
         this.data = allCharts;
         this.eventHandler.on('mutate').subscribe((mutate) => {
+          const normalized =  this.calculator.mutate(this.data, {}, this.rules, defaults);
           const modified =  this.calculator.mutate(this.data, mutate, this.rules, defaults);
-          modified.original = allCharts;
+          modified.normalized = normalized.modified;
           observer.next(modified);
-          /*
-          observer.next({
-            modified: modified,
-            original: allCharts
-          });
-          */
         });
       });
     });

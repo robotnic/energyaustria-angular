@@ -52,7 +52,7 @@ export class MapComponent implements OnInit {
       this.pv = geoJSON(installed, {style: function() { 
         return {
           'color': 'black',
-          'weight': 0.5
+          'weight': 0.8
         };
       }});
       this.pv.addTo(map);

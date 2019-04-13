@@ -14,11 +14,6 @@ export class PowerService {
   defaults: any;
   constructor(private http: HttpClient) {}
 
-  load() {
-
-
-  }
-
 
   async getDefaults() {
     this.defaults = await this.http.get('/api/default').toPromise();
@@ -36,7 +31,6 @@ export class PowerService {
       if (dateString) {
         date = dateString;
       }
- //     ctrl.loading = true;
       this.promises = [
         this.loadData('AGPT', date, 1, ctrl.timetype, 'area', null, reload),
         this.loadData('AL', date, 1, ctrl.timetype, 'line', null, reload),
@@ -59,8 +53,6 @@ export class PowerService {
     });
     return promise;
   }
-
-
 
   loadData(pid, dateString, axis, timetype, type, valueCallback, reload) {
     let multiplayer = 1;

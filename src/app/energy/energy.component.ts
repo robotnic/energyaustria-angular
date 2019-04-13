@@ -94,7 +94,6 @@ export class EnergyComponent implements OnInit {
     this.sankey = d3Sankey.sankey()
       .nodeWidth(15)
       .nodePadding(10)
-      .xScale(d3.time.scale())
       .extent([
         [1, 1],
         [width - 1, height - 6]

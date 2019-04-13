@@ -8,6 +8,7 @@ export class LoadshifterService {
   constructor(private installedService: InstalledService) { }
 
   shift(data, mutate, rules, defaults, curtailment) {
+    console.log('mutate', mutate);
     const clonedata = JSON.parse(JSON.stringify(data));
     const byName = {};
     clonedata.forEach(function(item) {
@@ -43,7 +44,8 @@ export class LoadshifterService {
     clonedata.forEach((item) => {
       rules.loadShift.from.forEach((rule) => {
         if (item.key === rule) {
-          this.add(item, mutate[rule], curtailment);
+          const add = mutate[rule] || 0;
+          this.add(item, add, curtailment, mutate.quickview);
         }
       });
     });
@@ -55,9 +57,9 @@ export class LoadshifterService {
     return clonedata;
   }
 
-  add(chart, value, curtailment) {
+  add(chart, value, curtailment, isQuickview) {
     chart.values.forEach((item, i) => {
-      const delta = this.installedService.calc(item, value, chart.key);
+      const delta = this.installedService.calc(item, value, chart.key, isQuickview);
       curtailment.values[i].y += delta;
     });
   }

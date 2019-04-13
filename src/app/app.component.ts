@@ -18,6 +18,9 @@ export class AppComponent {
       }
     });
   }
+  hash() {
+    return location.hash.replace(/^#+/, '');
+  }
 
   // collect that title data properties from all child routes
   // there might be a better way but this worked for me

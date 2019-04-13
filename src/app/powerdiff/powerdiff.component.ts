@@ -20,11 +20,11 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-powerdiff',
   templateUrl: './powerdiff.component.html',
-  styleUrls: ['./powerdiff.component.less', './nv.d3.css']
+  styleUrls: ['./powerdiff.component.less', './nv.d3.css'],
+    encapsulation: ViewEncapsulation.None
 })
- 
-@Injectable()
 
+@Injectable()
 export class PowerdiffComponent implements OnInit, OnDestroy {
 
   @ViewChild('nvd3') private nvd3: any;
@@ -44,16 +44,23 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
       ctrl = this.ctrl;
     }
     this.ctrl = ctrl;
-    const charts = await this.powerService.loadCharts(ctrl);
+    let charts = await this.powerService.loadCharts(ctrl);
+    charts = charts.filter(chart => {
+      if (chart.key === 'Preis [EUR/MWh]' || chart.key === 'Leistung [MW]' ) {
+        console.log('filtered', chart.key)
+        return false;
+      }
+      return true;
+    });
     console.log('......load..........................................................................')
     if (this.subscription) {
       console.log('unscubsribe');
       this.subscription.unsubscribe();
     }
     this.subscription = this.mutateService.getMutate(charts).subscribe((response) => {
-      this.setColors(response.modified);
       this.makeDelta(response);
-      this.nvd3.updateWithData(response.modified);
+      this.setColors(response.diff);
+      this.nvd3.updateWithData(response.diff);
     });
   }
 
@@ -64,19 +71,20 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
   }
 
   makeDelta(response) {
+    response.diff = JSON.parse(JSON.stringify(response.modified));
     response.normalized.forEach((item, i) => {
-      this.makeDiff(item, response.modified[i]);
+      this.makeDiff(item, response.diff[i]);
     });
   }
 
   makeDiff(orig, mod) {
     mod.type = 'line';
-    if (mod.key === 'Transport' || mod.key === 'Curtailmentttttttttttttt') {
-//      mod.type = 'area';
+    if (mod.key === 'Transport' || mod.key === 'Curtailment') {
+      mod.type = 'area';
     }
     orig.values.forEach((item, i) => {
       mod.values[i].y -= item.y;
-    })
+    });
   }
 
   async ngOnInit() {

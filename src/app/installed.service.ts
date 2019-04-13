@@ -10,10 +10,12 @@ export class InstalledService {
   installed = {};
   constructor(private httpClient: HttpClient) { 
     this.init(2015);
+    this.init(2016);
+    this.init(2017);
+    this.init(2018);
   }
   init(year) {
       this.getYear(year);
-    //http://localhost:5000/data/installed/2019 
   }
 
   getYear(year) {
@@ -36,7 +38,7 @@ export class InstalledService {
     });
   }
 
-  calc(item, value, key) {
+  calc(item, value, key, isQuickview) {
     if (!this.installed) return;
     let delta = 0;
 //    const year = (new Date(item.x)).getFullYear();
@@ -45,14 +47,42 @@ export class InstalledService {
     const endOfYear = moment(item.x).endOf('year').unix();
     const time = moment(item.x).unix();
     const year = moment(item.x).year();
-    if (this.installed[year] && this.installed[year +1]) {
+    const installedThen =  this.getInstalledAtTime(item.x, key);
+    const installedNow =  this.getInstalledAtTime(new Date(), key);
+    const factor = installedNow / installedThen;
+    if (isQuickview) {
+      factor = 1;  //no normalization to current installation
+    }
+    const y = item.y;
+    const addedSinceThen = y * factor - y;
+    const addedNow = item.y / installedThen * value; //add 1GW
+    item.y = y + addedSinceThen + addedNow;
+    /*
+    if (this.installed[year] && this.installed[year + 1]) {
       const startValue = this.installed[year][key];
       const endValue = this.installed[year + 1][key];
       const installed = (startValue + (time - startOfYear) * (endValue - startValue) / (endOfYear - startOfYear)) / 1000;
+      console.log(installed);
       const y = item.y;
       item.y = (installed + value) / installed * item.y;
       delta = y - item.y;
-    }
+      console.log('delta', delta)
+    }*/
+    delta = y - item.y;
     return delta;
+  }
+
+  getInstalledAtTime(t, key) {
+    let installed = 0;
+    const startOfYear = moment(t).startOf('year').unix();
+    const endOfYear = moment(t).endOf('year').unix();
+    const time = moment(t).unix();
+    const year = moment(t).year();
+    if (this.installed[year] && this.installed[year + 1]) {
+      const startValue = this.installed[year][key];
+      const endValue = this.installed[year + 1][key];
+      installed = (startValue + (time - startOfYear) * (endValue - startValue) / (endOfYear - startOfYear)) / 1000;
+    }
+    return installed;
   }
 }

@@ -78,25 +78,30 @@ export class EventHandlerService {
     location.hash = url.substring(1);
   }
   getStateHash() {
-    var state = {};
-    let hash = location.hash.substring(1);
-    let parts = hash.split('&');
+    const state = {};
+//    let hash = location.hash.substring(1);
+    const hash = location.hash.replace(/^#+/, '');
+    const parts = hash.split('&');
     if (parts[0]) {
       parts.forEach(part => {
-        let kvss = part.split('=');
+        const kvss = part.split('=');
         state[kvss[0]] = {};
         kvss[1].split(';').forEach(kvs => {
-          if(kvs){
-            let kv = kvs.split(':');
+          if (kvs) {
+            const kv = kvs.split(':');
             let value: any = kv[1];
             if (value === 'false') {
               value = false;
+            } else {
+              if (kvss[0] === 'mutate') {
+                value = parseInt(value);
+              }
             }
             state[kvss[0]][kv[0]] = value;
           }
         });
         //state[kvs[0]] = {};
-      })
+      });
       this.state = state;
       console.log('state', state);
     }

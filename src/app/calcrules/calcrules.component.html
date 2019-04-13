@@ -1,0 +1,8 @@
+
+<div *ngFor="let rule of rules | keyvalue">
+  <h4>{{rule.key}}</h4>
+  <div *ngFor="let direction of rule.value | keyvalue">
+    <b>{{direction.key}}</b>
+    <span *ngFor="let value of direction.value"> {{value}}, </span>
+  </div>
+</div>

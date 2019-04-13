@@ -16,6 +16,7 @@ export class SankeyService {
   };
   allNames = [];
   subscription: any;
+  allElectric = 0;
   constructor(
     private statisticsService: StatisticsService,
     private eventHandler: EventHandlerService,
@@ -41,8 +42,8 @@ export class SankeyService {
           this.allNames.length = 0;
           this.pushNode('Elektrische Energie');
           this.makeNodes(colors);
-          this.makeStatisticsNodes(statistics);
           this.makeLinks(colors, sum);
+          this.makeStatisticsNodes(statistics);
           this.removeUnneededNodes();
           observer.next(this.saki);
         });
@@ -81,25 +82,34 @@ export class SankeyService {
     const origList = charts.original;
     const modifiedList = charts.modified;
     const sum = {};
-    origList.forEach(function(orig) {
-      modifiedList.forEach(function(modified) {
+    this.allElectric = 0;
+    origList.forEach((orig) => {
+      sum[orig.key] = {
+        delta: 0,
+        orig: 0,
+        modified: 0
+      };
+      modifiedList.forEach((modified) => {
         if (orig.key === modified.key) {
           orig.values.forEach((item, i) => {
-            const delta = item.y - modified.values[i].y;
-            if (!sum[orig.key]) {
-              sum[orig.key] = {
-                delta: 0,
-                orig: 0,
-                modified: 0
-              };
+            let hours = 0;
+            if (modified.values[i - 1]) {
+              const one = modified.values[i - 1].x;
+              const two = modified.values[i].x;
+              hours = (two - one) / 3600 / 1000;
             }
-            sum[orig.key].delta -= delta;
-            sum[orig.key].orig -= item.y;
-            sum[orig.key].modified -= modified.values[i].y;
+            const delta = item.y - modified.values[i].y;
+            sum[orig.key].delta -= delta * hours;
+            sum[orig.key].orig -= item.y * hours;
+            sum[orig.key].modified -= modified.values[i].y * hours;
           });
         }
       });
+      if (orig.type === 'area') {
+        this.allElectric += sum[orig.key].modified;
+      }
     });
+    console.log('Total', this.allElectric);
     return sum;
   }
 
@@ -109,7 +119,20 @@ export class SankeyService {
     let missingTargets = true;
     // tslint:disable-next-line:forin
     statistics = this.mutateStatistices(statistics);
+    let electricityUsage = 0;
     for (const s in statistics) {
+      for (const t in statistics[s]) {
+        if (t === 'Elektrische Energie') {
+          console.log('s', s, t);
+          electricityUsage -= statistics[s][t] / 1000;
+        }
+      }
+    };
+    const electricityFactor = electricityUsage / this.allElectric /1.30; //because it didn't fit todo: find the bug
+ 
+    console.log('usage', electricityUsage / this.allElectric);
+    for (const s in statistics) {
+      console.log('s', s);
       const es = decodeURIComponent(s);
       // tslint:disable-next-line:forin
       const i = this.pushNode(es);
@@ -117,6 +140,8 @@ export class SankeyService {
       for (const t in statistics[s]) {
         const j = this.pushNode(t);
         let value = statistics[s][t] * 0.277778 / 365; //TJ per year -> GWh pro day
+        console.log(electricityFactor);
+        value = value / electricityFactor;
         this.makeStatisticsLink(i, j, value);
       }
       missingTargets = false;
@@ -126,20 +151,22 @@ export class SankeyService {
     const statatistics = JSON.parse(JSON.stringify(statistics));
     const transport = this.eventHandler.getState().mutate.Transport;
     console.log('STAT', statatistics.Traktion.Diesel, transport);
-    const delta = {};
-    for (let s in statatistics.Traktion) {
-      if (s === 'Benzin' || s === 'Diesel') {
-        console.log(s, statatistics.Traktion[s]);
-        const oldValue = statatistics.Traktion[s];
-        const factor = 1 - transport / 100;
-        const newValue = statatistics.Traktion[s] * factor;
-        delta[s] = oldValue - newValue;
-        console.log('delta', s, delta[s], factor);
-        statatistics.Traktion[s] = newValue;
+    const types = ['Traktion' , 'Standmotoren'];
+    types.forEach(type => {
+      const delta = {};
+      for (let s in statatistics[type]) {
+        if (s === 'Benzin' || s === 'Diesel') {
+          const oldValue = statatistics[type][s];
+          const factor = 1 - transport / 100;
+          const newValue = statatistics[type][s] * factor;
+          delta[s] = oldValue - newValue;
+          console.log('delta', s, delta[s], factor);
+          statatistics[type][s] = newValue;
+        }
       }
-    }
-    console.log('dB', delta['Benzin']);
-    statatistics.Traktion['Elektrische Energie'] += (delta['Benzin'] + delta['Diesel']) /4;
+      console.log('dB', delta['Benzin']);
+      statatistics.Traktion['Elektrische Energie'] += (delta['Benzin'] + delta['Diesel']) / 4;
+    })
     return statatistics;
   }
   makeStatisticsLink(target, source, value) {
@@ -186,29 +213,26 @@ export class SankeyService {
 
   makeLinks(colors, sum) {
     let count = 1;
+    let inbound = 0;
+    let out = 0;
     const links = this.saki.links;
     // tslint:disable-next-line:forin
     for (const color in colors) {
       let value = -sum[color].modified;
       let source = count++;
       let target = 0;
-      //if (color === 'Curtailment' || color === 'Power2Gas') {
-        /*
-        if (color === 'Transport') {
-          console.log(color, this.saki);
-          source = 0;
-          target = 17;
-        }
-        */
       if (value < 0) {
         value = -value;
         target = source;
         source = 0;
+        out += value;
+      } else {
+        inbound += value;
       }
       const link = {
         'source': source,
         'target': target,
-        'value': value /4,  //4 values per hour
+        'value': value, //4 values per hour
         'color': colors[color].color,
         'type': 'base',
         'uom': 'Widget(s)'
@@ -217,6 +241,6 @@ export class SankeyService {
         links.push(link);
       }
     }
-
+    console.log(inbound, out);
   }
 }
