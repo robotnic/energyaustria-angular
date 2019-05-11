@@ -8,6 +8,7 @@ import * as _moment from 'moment';
 })
 export class EventHandlerService {
   events: any[];
+  layers: [];
   observers = {};
   state = {
     'datechange': {
@@ -21,6 +22,9 @@ export class EventHandlerService {
       'Power2Gas': 0,
       'Transport': 0,
       'quickview': false
+    },
+    view: {
+      layers: '11111111111111111110'
     }
   };
   constructor() {
@@ -42,7 +46,7 @@ export class EventHandlerService {
   on = Observable.
     callback => {
       console.log('observe callback', callback)
-    }
+    } 
   })
   */
 
@@ -54,10 +58,22 @@ export class EventHandlerService {
     console.log('datechage', this.state.datechange.date);
     return this.state;
   }
+  setLayers(layers) {
+    let str = '';
+    layers.forEach(layer => {
+      if (layer) {
+        str += 0;
+      } else {
+        str += 1;
+      }
+    });
+    return this.setObserver('view', {layers: str});
+  }
   setMutate(mutate) {
     return this.setObserver('mutate', mutate);
   }
   setObserver(name, value) {
+    console.log('observers', name, this.observers)
     this.state[name] = value;
     if (this.observers[name]) {
       console.log('next', name, value);

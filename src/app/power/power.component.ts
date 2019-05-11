@@ -36,6 +36,7 @@ export class PowerComponent implements OnInit, OnDestroy {
     }
     this.ctrl = ctrl;
     const charts = await this.powerService.loadCharts(ctrl);
+    this.readLayers();
     console.log('......load..........................................................................')
     if (this.subscription) {
       console.log('unscubsribe');
@@ -43,6 +44,7 @@ export class PowerComponent implements OnInit, OnDestroy {
     }
     this.subscription = this.mutateService.getMutate(charts).subscribe((response) => {
       this.setColors(response.modified);
+      this.readLayers(response.modified);
       console.log('fertig zum rendern', response);
       this.nvd3.updateWithData(response.modified);
     });
@@ -60,13 +62,27 @@ export class PowerComponent implements OnInit, OnDestroy {
     this.eventHandler.on('datechange').subscribe((data) => {
       this.load(data);
     });
+    this.eventHandler.on('view').subscribe(data => {
+      console.log('layer', data);
+    });
+
 
     //this.load({date: '20181111', timetype: 'day', reload: false});
 
     this.options = {
       chart: {
         type: 'multiChart',
-        legend: { rightAlign: false, align: false },
+        legend: { 
+          rightAlign: false, 
+          align: false,
+          dispatch: {
+            stateChange: (e => {
+              console.log(111);
+              this.legendStateChanged(e);
+            })
+        }
+
+        },
         height: 650,
         margin: {
           top: 120,
@@ -85,7 +101,7 @@ export class PowerComponent implements OnInit, OnDestroy {
         valueFormat: function (d) {
           return d3.format(',.4f')(d);
         },
-        duration: 150,
+        duration: 50,
         xAxis: {
           ticks:8,
           showMaxMin: false,
@@ -126,6 +142,23 @@ export class PowerComponent implements OnInit, OnDestroy {
 
       }
     };
+
+  }
+
+  legendStateChanged(e) {
+    this.eventHandler.setLayers(e.disabled);
+  }
+  readLayers(data) {
+    const state = this.eventHandler.getState();
+    for (let i = 0; i < state.view.layers.length; i++) {
+      if (data && data[i]) {
+        if (state.view.layers[i] === '1') {
+          data[i].disabled = false;
+        } else {
+          data[i].disabled = true;
+        }
+      }
+    }
 
   }
 

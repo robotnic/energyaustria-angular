@@ -39,6 +39,7 @@ export const MY_FORMATS = {
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
 })
+
 export class DatepickerComponent implements OnInit {
   timetype = 'day';
   @Input() public yyyymmdd: string;
@@ -51,6 +52,8 @@ export class DatepickerComponent implements OnInit {
   year = 2018;
   constructor(private eventHandler: EventHandlerService) {}
   ngOnInit() {
+    console.log(this.eventHandler.getState().datechange.timetype);
+    this.timetype = this.eventHandler.getState().datechange.timetype;
     this.date = this.eventHandler.getState().datechange.date;
     this.yyyymmdd = _moment(this.date).format('YYYYMMDD');
     this.day = parseInt(this.yyyymmdd.substring(6, 8));

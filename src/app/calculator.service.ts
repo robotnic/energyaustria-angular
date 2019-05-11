@@ -21,9 +21,6 @@ export class CalculatorService {
     const clonedata = this.loadShifter.addEV(clonedata2, modifier);
     const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, defaults, this.powerByName['Curtailment']);
     const timeshiftedData = this.timeShifter.shift(clonedata, loadshiftedData, rules, defaults);
-    console.log('lsd', timeshiftedData);
-    console.log('tsd', timeshiftedData);
-    // console.log('Kurt', this.powerByName['Curtailment'])
     return {
       modified: timeshiftedData,
       normalized: clonedata2,
@@ -78,9 +75,11 @@ export class CalculatorService {
         }
       });
       const leistung = this.powerByName['Leistung [MW]'].values[i];
-      importValue.y = leistung.y - importValue.y;
-      if (importValue.y < 0) {
-        importValue.y = 0;
+      if (leistung) {
+        importValue.y = leistung.y - importValue.y;
+        if (importValue.y < 0) {
+          importValue.y = 0;
+        }
       }
       values.push(importValue);
     });
@@ -99,9 +98,11 @@ export class CalculatorService {
         }
       });
       const leistung = this.powerByName['Leistung [MW]'].values[i];
-      importValue.y = leistung.y - importValue.y;
-      if (importValue.y > 0) {
-        importValue.y = 0;
+      if (leistung) {
+        importValue.y = leistung.y - importValue.y;
+        if (importValue.y > 0) {
+          importValue.y = 0;
+        }
       }
       values.push(importValue);
     });

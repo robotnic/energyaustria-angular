@@ -7,6 +7,7 @@ import { PowerService } from './power.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class MutateService {
   data;
   observable;

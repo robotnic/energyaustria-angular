@@ -12,7 +12,7 @@ import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
 {path: 'power', component: PowerComponent, data: {title: 'Power'}},
-{path: 'powerdiff', component: PowerdiffComponent, data: {title: 'Power deference'}},
+{path: 'powerdiff', component: PowerdiffComponent, data: {title: 'Power change'}},
 {path: 'mutateconfig', component: ManipulateConfigComponent, data: {title: 'Config'}},
 {path: 'energy', component: EnergyComponent, data: {title: 'Energy'}},
 {path: 'storage', component: StorageComponent, data: {title: 'Füllstand'}},

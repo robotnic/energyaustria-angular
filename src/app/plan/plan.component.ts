@@ -9,15 +9,24 @@ import { CdkFooterRowDefBase } from '@angular/cdk/table';
 export class PlanComponent implements OnInit {
   rows = 10;
   cols = 3;
-  width = 5;
-  height = 4;
+  width = 6;
+  height = 3;
   blocks = [
     [1,2,3],
     [4,5,6],
     [7,8,9],
     [10,11,12],
-
+    [13,14,15],
+    [16,17,18],
   ];
+  meta = {
+    panel: {
+      name: 'Sanyo Extrem',
+      power: '310'
+    },
+    price: '300',
+    totalPanels: 0
+  };
   cart = [];
   geometry = {
     type: 'FeatureCollection',
@@ -25,33 +34,6 @@ export class PlanComponent implements OnInit {
   };
   selectRect;
   constructor() { }
-  down(evt) {
-    const svg = document.getElementById('svg');
-    console.log(svg);
-    this.selectRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    this.selectRect.setAttribute('x', evt.x);
-    this.selectRect.setAttribute('y', evt.y);
-    this.selectRect.setAttribute('stroke', 'black');
-    this.selectRect.setAttribute('fill', 'none');
-    svg.appendChild(this.selectRect);
-    console.log(this.selectRect);
-  }
-  move(evt) {
-    if (this.selectRect) {
-      const x = this.selectRect.getAttribute('x');
-      const y = this.selectRect.getAttribute('y');
-      const width = Math.abs(evt.x - x)
-      const height = Math.abs(evt.y - y)
-      this.selectRect.setAttribute('width', width);
-      this.selectRect.setAttribute('height', height);
-      console.log(x, y, width, height);
-      console.log('move', this.selectRect);
-    }
-  }
-  up() {
-    console.log('up', this.selectRect);
-  }
-
 
   click(evt, properties) {
     console.log(evt, properties);
@@ -79,12 +61,13 @@ export class PlanComponent implements OnInit {
             number: n++
           }
         };
+        this.meta.totalPanels++;
         this.geometry.features.push(feature);
       }
     }
     }
     }
-
+    this.meta.totalPanels *= this.blocks.length;
   }
 
 }

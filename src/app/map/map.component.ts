@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { latLng, tileLayer, geoJSON } from 'leaflet';
 import { EventHandlerService } from '../event-handler.service';
+import * as L from 'leaflet';
 
 
 
@@ -30,6 +31,8 @@ export class MapComponent implements OnInit {
   }
   onMapReady(map: Map) {
     // Do stuff with map
+    L.control.scale().addTo(map);
+
     this.httpClient.get(this.url).subscribe((data) => {
       this.eventHandler.on('mutate').subscribe(mutate => {
         this.draw(map, data, mutate.Solar);
@@ -56,5 +59,9 @@ export class MapComponent implements OnInit {
         };
       }});
       this.pv.addTo(map);
+  }
+
+  drawPV(){
+    let op = '[out:json];way(518660971);/*added by auto repair*/(._;>;);/*end of auto repair*/out ; '
   }
 }

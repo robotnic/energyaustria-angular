@@ -1,5 +1,5 @@
 {
-  "Elektrische Energie": "yellow",
+  "Elektrische Energie": "gold",
   "Pumpspeicher": "#64ABEA",
   "Curtailment": "black",
   "Power2Gas": "orange",
@@ -38,5 +38,7 @@
   "Brenntorf": "red",
   "Dampferzeugung": "orange",
   "Raumheizung%20und%20Klimaanlagen": "beige",
-  "Industrieöfen": "blue"
+  "Industrieöfen": "blue",
+  "Import":"lightgrey",
+  "Export":"white"
 }

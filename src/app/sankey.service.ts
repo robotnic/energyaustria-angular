@@ -123,7 +123,6 @@ export class SankeyService {
     for (const s in statistics) {
       for (const t in statistics[s]) {
         if (t === 'Elektrische Energie') {
-          console.log('s', s, t);
           electricityUsage -= statistics[s][t] / 1000;
         }
       }
@@ -132,7 +131,6 @@ export class SankeyService {
  
     console.log('usage', electricityUsage / this.allElectric);
     for (const s in statistics) {
-      console.log('s', s);
       const es = decodeURIComponent(s);
       // tslint:disable-next-line:forin
       const i = this.pushNode(es);
@@ -140,7 +138,6 @@ export class SankeyService {
       for (const t in statistics[s]) {
         const j = this.pushNode(t);
         let value = statistics[s][t] * 0.277778 / 365; //TJ per year -> GWh pro day
-        console.log(electricityFactor);
         value = value / electricityFactor;
         this.makeStatisticsLink(i, j, value);
       }
@@ -160,11 +157,9 @@ export class SankeyService {
           const factor = 1 - transport / 100;
           const newValue = statatistics[type][s] * factor;
           delta[s] = oldValue - newValue;
-          console.log('delta', s, delta[s], factor);
           statatistics[type][s] = newValue;
         }
       }
-      console.log('dB', delta['Benzin']);
       statatistics.Traktion['Elektrische Energie'] += (delta['Benzin'] + delta['Diesel']) / 4;
     })
     return statatistics;
@@ -213,8 +208,6 @@ export class SankeyService {
 
   makeLinks(colors, sum) {
     let count = 1;
-    let inbound = 0;
-    let out = 0;
     const links = this.saki.links;
     // tslint:disable-next-line:forin
     for (const color in colors) {
@@ -225,9 +218,6 @@ export class SankeyService {
         value = -value;
         target = source;
         source = 0;
-        out += value;
-      } else {
-        inbound += value;
       }
       const link = {
         'source': source,
@@ -237,10 +227,9 @@ export class SankeyService {
         'type': 'base',
         'uom': 'Widget(s)'
       };
-      if (value > 0) {
+      if (value > 5) {
         links.push(link);
       }
     }
-    console.log(inbound, out);
   }
 }

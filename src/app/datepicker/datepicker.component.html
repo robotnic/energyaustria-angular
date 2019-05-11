@@ -1,6 +1,6 @@
 <div text-align="right">
 <mat-form-field  style="width:70px">
-  <mat-select matNativeControl required [(value)] = "timetype" (selectionChange)="onDate($event)">
+  <mat-select matNativeControl required [(value)] = "timetype" (selectionChange)="onDate($event)" [(ngModel)]="timetype">
     <mat-option value="day">Tag</mat-option>
     <mat-option value="week">Woche</mat-option>
     <mat-option value="month">Monat</mat-option>

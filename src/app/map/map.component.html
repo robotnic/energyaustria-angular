@@ -1,9 +1,24 @@
 <p>
-  map works!
+  Wohin damit?
 </p>
 <div class="map"
      leaflet
     [leafletLayersControl]="layersControl"
      (leafletMapReady)="onMapReady($event)"
      [leafletOptions]="options">
+</div>
+<br/>
+<br/>
+<br/>
+<div>
+
+solar osmturbo query
+<pre>
+    (way(id:` + str + `);)->.autobahn;
+    way(around.autobahn:100)[landuse~"meadow|farmland"];
+    (._;>;);out meta;
+
+
+</pre>
+
 </div>

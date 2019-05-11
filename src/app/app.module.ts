@@ -27,6 +27,7 @@ import { CalcrulesComponent } from './calcrules/calcrules.component';
 import { StorageComponent } from './storage/storage.component';
 import { PlanComponent } from './plan/plan.component';
 import { HomeComponent } from './home/home.component';
+import { UnitsPipe } from './units.pipe';
 
 
 
@@ -43,7 +44,8 @@ import { HomeComponent } from './home/home.component';
     CalcrulesComponent,
     StorageComponent,
     PlanComponent,
-    HomeComponent
+    HomeComponent,
+    UnitsPipe
   ],
   imports: [
     BrowserModule,
