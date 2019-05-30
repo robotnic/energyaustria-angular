@@ -56,6 +56,7 @@ export class DatepickerComponent implements OnInit {
     this.timetype = this.eventHandler.getState().datechange.timetype;
     this.date = this.eventHandler.getState().datechange.date;
     this.yyyymmdd = _moment(this.date).format('YYYYMMDD');
+    this.week = _moment(this.date).week();
     this.day = parseInt(this.yyyymmdd.substring(6, 8));
     this.month = parseInt(this.yyyymmdd.substring(4, 6));
     this.year = parseInt(this.yyyymmdd.substring(0, 4));

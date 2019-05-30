@@ -60,6 +60,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
     this.subscription = this.mutateService.getMutate(charts).subscribe((response) => {
       this.makeDelta(response);
       this.setColors(response.diff);
+      this.readLayers(response.diff);
       this.nvd3.updateWithData(response.diff);
     });
   }
@@ -96,21 +97,32 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
     //this.load({date: '20181111', timetype: 'day', reload: false});
 
     this.options = {
+      duration: 300,
+      useInteractiveGuideline: true,
       chart: {
         type: 'multiChart',
-        legend: { rightAlign: false, align: false },
+        legend: {
+          rightAlign: false,
+          align: false,
+          dispatch: {
+            stateChange: (e => {
+              console.log(111);
+              this.legendStateChanged(e);
+            })
+          }
+        },
         height: 650,
         margin: {
           top: 120,
           right: 40,
-          bottom: 70,
+          bottom: 170,
           left: 75
         },
         x: function (d) {
           return d.x;
         },
         y: function (d) {
-          return d.y;
+          return d3.format(',.3f')(d.y);
         },
         showValues: true,
 
@@ -119,6 +131,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
         },
         duration: 150,
 
+        useInteractiveGuideline: true,
         xAxis: {
           ticks:8,
           showMaxMin: false,
@@ -162,6 +175,24 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
 
   }
 
+  legendStateChanged(e) {
+    console.log('changed-----------', e.disabled);
+    this.eventHandler.setLayers(e.disabled);
+  }
+  readLayers(data) {
+    const state = this.eventHandler.getState();
+    console.log('diffstate', state)
+    for (let i = 0; i < state.view.layers.length; i++) {
+      if (data && data[i]) {
+        if (state.view.layers[i] === '1') {
+          data[i].disabled = false;
+        } else {
+          data[i].disabled = true;
+        }
+      }
+    }
+    console.log('diffdata', data)
+  }
   ngOnDestroy() {
     console.log('descroy');
     this.subscription.unsubscribe();

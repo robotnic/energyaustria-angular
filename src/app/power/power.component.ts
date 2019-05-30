@@ -71,9 +71,10 @@ export class PowerComponent implements OnInit, OnDestroy {
 
     this.options = {
       chart: {
+
         type: 'multiChart',
-        legend: { 
-          rightAlign: false, 
+        legend: {
+          rightAlign: false,
           align: false,
           dispatch: {
             stateChange: (e => {
@@ -85,9 +86,9 @@ export class PowerComponent implements OnInit, OnDestroy {
         },
         height: 650,
         margin: {
+          right: 75,
           top: 120,
-          right: 40,
-          bottom: 70,
+          bottom: 270,
           left: 75
         },
         x: function (d) {
@@ -99,9 +100,11 @@ export class PowerComponent implements OnInit, OnDestroy {
         showValues: true,
 
         valueFormat: function (d) {
-          return d3.format(',.4f')(d);
+          console.log(d);
+          return d3.format('.5f')(d);
         },
         duration: 50,
+        useInteractiveGuideline: true,
         xAxis: {
           ticks:8,
           showMaxMin: false,
@@ -129,13 +132,13 @@ export class PowerComponent implements OnInit, OnDestroy {
         },
         yAxis1: {
           tickFormat: function (d) {
-            return d3.format(',.1f')(d);
+            return d3.format(',.2f')(d);
           },
           axisLabel: 'GW'
         },
         yAxis2: {
           tickFormat: function (d) {
-            return d3.format(',.1f')(d);
+            return d3.format(',.0f')(d);
           },
           axisLabel: '€/MWh'
         },

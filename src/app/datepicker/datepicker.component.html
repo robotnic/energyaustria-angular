@@ -13,7 +13,7 @@
   <mat-icon inline="true">arrow_back_ios</mat-icon>
 </button>
 <mat-form-field  style="width:40px">
-  <mat-select required [(ngModel)] = "week">
+  <mat-select required [(ngModel)] = "week" >
     <mat-option *ngFor="let weekstr of weeks" [value]="weekstr">{{weekstr}}</mat-option>
   </mat-select>
 </mat-form-field>
