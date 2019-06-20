@@ -15,7 +15,7 @@ export class InstalledService {
   loadInstalled(country) {
     const that = this;
     return new Promise(resolve => {
-      const url = '/theapi/installed/' + country;
+      const url = '/api/installed/' + country;
       if (that.interpolatedData[country]) {
         resolve(that.interpolatedData[country]);
       } else {

@@ -14,7 +14,7 @@ export class PowerService {
 
   async getDefaults() {
     if (!this.defaults) {
-      this.defaults = await this.http.get('/theapi/default').toPromise();
+      this.defaults = await this.http.get('/api/default').toPromise();
     }
     return this.defaults;
   }
@@ -47,7 +47,7 @@ export class PowerService {
     console.log('se', startQuery, endQuery);
     return new Promise < any[] > ((resolve, reject) => {
       console.log('THECTRL', ctrl);
-      const url = '/theapi/generated?start=' + startQuery + '&end=' + endQuery + '&area=' + ctrl.country;
+      const url = '/api/generated?start=' + startQuery + '&end=' + endQuery + '&area=' + ctrl.country;
       console.log(url);
       this.http.get(url).subscribe((data: any[]) => {
         if (data) {

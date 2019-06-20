@@ -14,7 +14,7 @@ export class StatisticsService {
       if (this.consumption[country]) {
           resolve(this.consumption[country]);
       } else {
-        this.httpClient.get('/theapi/consumtion/' + country + '/2016').subscribe(consumption => {
+        this.httpClient.get('/api/consumtion/' + country + '/2016').subscribe(consumption => {
           this.consumption[country] = consumption;
           resolve(consumption);
         });
@@ -24,6 +24,6 @@ export class StatisticsService {
 //    return this.httpClient.get('/theapi/consumtion/' + country + '/2016').toPromise();
   }
   public area() {
-    return this.httpClient.get('/theapi/area').toPromise();
+    return this.httpClient.get('/api/area').toPromise();
   }
 }

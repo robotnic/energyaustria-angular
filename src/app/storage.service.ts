@@ -17,7 +17,7 @@ export class StorageService {
       if (this.data[year]) {
         resolve(this.data[year]);
       }
-      this.http.get<any>('/theapi/filllevel/' + country + '/' + year).subscribe(data => {
+      this.http.get<any>('/api/filllevel/' + country + '/' + year).subscribe(data => {
         console.log('STORAGE DATA', data);
         this.data[year] = data;
         resolve(data);
