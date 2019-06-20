@@ -29,7 +29,7 @@ export class MutateService {
         this.data = allCharts;
         this.eventHandler.on('mutate').subscribe(async (mutate) => {
           console.log('mutate', mutate);
-          const normalized =  await this.calculator.mutate(this.data, {}, this.rules, defaults, country);
+          const normalized: any =  await this.calculator.mutate(this.data, {}, this.rules, defaults, country);
           const modified: any =  await this.calculator.mutate(this.data, mutate, this.rules, defaults, country);
           modified.normalized = normalized.modified;
           observer.next(modified);

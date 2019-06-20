@@ -8,12 +8,15 @@
     "logLevel": "debug"
   },
   "/theapi": {
-    "target": "http://localhost:9000",
+    "target": "https://entsoe.herokuapp.com:443",
     "secure": false,
     "pathRewrite": {
       "^/theapi": "/api"
     },
-    "logLevel": "debug"
- 
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "headers": {
+      "Connection": "keep-alive"
+    }
   }
 }
