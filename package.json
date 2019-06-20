@@ -35,6 +35,7 @@
     "momentjs": "^2.0.0",
     "ng2-nvd3": "^2.0.0",
     "ngx-moment": "^3.3.0",
+    "request": "^2.88.0",
     "rxjs": "~6.3.3",
     "string-to-hex-code-color": "^1.0.8",
     "tslib": "^1.9.0",
