@@ -1,1 +1,6 @@
+  <h2 *ngIf="data" [ngClass]="(loading)?'loading':'notloading'">
+    {{data[0].country}}
+    {{formatDate(data[0].start)}} -
+    {{formatDate(data[0].end)}}
+    </h2>
   <div><nvd3 #nvd3 [options]="options" [data]="data"></nvd3></div>

@@ -18,7 +18,7 @@ export class MapComponent implements OnInit {
   defaultOverlay = null;
   options = {
     layers: [
-      tileLayer("http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+      tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       })
     ],
@@ -29,7 +29,7 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
   }
-  onMapReady(map: Map) {
+  onMapReady(map) {
     // Do stuff with map
     L.control.scale().addTo(map);
 
@@ -43,13 +43,13 @@ export class MapComponent implements OnInit {
   draw(map, data, solar) {
       let total = 0;
       const installed = data.features.filter(feature=>{
-        let GW = feature.properties.area * 100 / 1000 / 1000 / 1000;
+        const GW = feature.properties.area * 100 / 1000 / 1000 / 1000;
         total += GW;
-        if(total < solar) {
+        if (total < solar) {
           return true;
         }
-      })
-      if(this.pv) {
+      });
+      if (this.pv) {
         this.pv.remove();
       }
       this.pv = geoJSON(installed, {style: function() { 

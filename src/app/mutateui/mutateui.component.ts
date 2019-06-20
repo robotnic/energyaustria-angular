@@ -9,7 +9,8 @@ import { EventHandlerService } from '../event-handler.service';
 export class MutateuiComponent implements OnInit {
   timeout = null;
   mutate = {
-    Wind: 0,
+    'Wind Onshore': 0,
+    'Wind Offshore': 0,
     Solar: 0,
     Power2Gas: 0,
     Transport: 0,
@@ -21,23 +22,22 @@ export class MutateuiComponent implements OnInit {
   ngOnInit() {
     console.log('init');
     this.mutate = this.eventHandler.getState().mutate;
+    console.log('init mutate ui', this.mutate);
   }
 
   change() {
-    console.log('change');
     if (this.timeout) {
-      console.log('clear', this.timeout);
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
-      console.log('go', this.timeout);
       this.eventHandler.setMutate(this.mutate);
     }, 200);
   }
 
   over() {
     this.origMutate = JSON.parse(JSON.stringify(this.mutate));
-    this.mutate.Wind = 0;
+    this.mutate['Wind Onshore'] = 0;
+    this.mutate['Wind Offshore'] = 0;
     this.mutate.Solar = 0;
     this.mutate.Power2Gas = 0;
     this.mutate.Transport = 0;
@@ -49,6 +49,25 @@ export class MutateuiComponent implements OnInit {
     this.mutate = this.origMutate;
     this.mutate.quickview = false;
     this.eventHandler.setMutate(this.mutate);
+  }
+  reset() {
+    let resetAlready = true;
+    for(const m in this.origMutate) {
+      console.log (this.origMutate[m]);
+      if (this.origMutate[m]) {
+        resetAlready = false;
+      }
+    }
+    for(const m in this.mutate) {
+      this.mutate[m] = 0;
+    }
+    this.origMutate = this.mutate;
+    if (resetAlready) {
+      location.hash = '';
+      location.reload();
+    } else {
+      this.eventHandler.setMutate(this.mutate);
+    }
   }
 
 }

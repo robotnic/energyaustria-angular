@@ -14,22 +14,23 @@ export class MutateService {
   colors;
   rules = {
     loadShift: {
-      'from': ['Solar', 'Wind'],
-      'to': ['Kohle', 'Transport', 'Gas', 'Speicher', 'Biomasse', 'Import', 'Pumpspeicher', 'Power2Gas']
+      'from': ['Solar', 'Wind Onshore', 'Wind Offshore'], 
+      'to': ['Fossil Hard coal','Fossil Brown coal/Lignite', 'Transport', 'Fossil Gas', 'Hydro Water Reservoir', 'Biomass', 'Hydro Pumped Storage', 'Nuclear', 'Import', 'Power2Gas']
     },
     timeShift: {
-      'from': ['Pumpspeicher', 'Speicher'],
-      'to': ['Transport', 'Kohle', 'Gas']
+      'from': ['Hydro Pumped Storage', 'Hydro Water Reservoir'],
+      'to': ['Transport', 'Fossil Hard coal', 'Fossil Brown coal/Lignite', 'Fossil Gas']
     }
   };
-  observe(data) {
+  observe(data, country) {
     this.observable = Observable.create(observer => {
       this.powerService.getDefaults().then((defaults) => {
         const allCharts = this.calculator.createCharts(data,  this.rules, defaults);
         this.data = allCharts;
-        this.eventHandler.on('mutate').subscribe((mutate) => {
-          const normalized =  this.calculator.mutate(this.data, {}, this.rules, defaults);
-          const modified =  this.calculator.mutate(this.data, mutate, this.rules, defaults);
+        this.eventHandler.on('mutate').subscribe(async (mutate) => {
+          console.log('mutate', mutate);
+          const normalized =  await this.calculator.mutate(this.data, {}, this.rules, defaults, country);
+          const modified: any =  await this.calculator.mutate(this.data, mutate, this.rules, defaults, country);
           modified.normalized = normalized.modified;
           observer.next(modified);
         });
@@ -45,10 +46,11 @@ export class MutateService {
   mutate() {
 
   }
-  getMutate(data) {
-    return this.observe(data);
+  getMutate(data, country) {
+    console.log('getmutate', country)
+    return this.observe(data, country);
   }
-  doTheChanges(mutate, defaults) {
-    return this.calculator.mutate(this.data, mutate, this.rules, defaults);
+  doTheChanges(mutate, defaults, country) {
+    return this.calculator.mutate(this.data, mutate, this.rules, defaults, country);
   }
 }

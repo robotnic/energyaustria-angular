@@ -4,13 +4,9 @@ import * as d3Sankey from 'd3-sankey';
 import { PowerService } from '../power.service';
 import { EventHandlerService } from '../event-handler.service';
 import { MutateService } from '../mutate.service';
-import { StatisticsService } from '../statistics.service';
-import { Observable } from 'rxjs';
 import { String2HexCodeColor } from 'string-to-hex-code-color';
-import { SankeyComponent } from '../sankey/sankey.component';
 import { SankeyService } from '../sankey.service';
 import { HttpClient } from '@angular/common/http';
-import { getClosureSafeProperty } from '@angular/core/src/util/property';
 
 @Component({
   selector: 'app-energy',
@@ -26,17 +22,17 @@ export class EnergyComponent implements OnInit {
   };
   allNames = [];
   constructor(
-    private eventHandler: EventHandlerService,
-    private powerService: PowerService,
-    private statisticsService: StatisticsService,
     private sankeyService: SankeyService,
-    private mutateService: MutateService,
     private http: HttpClient) {}
 
   async ngOnInit() {
     this.sankeyService.sankey().then(ob => ob.subscribe(data => {
-      this.saki = data;
-      this.DrawChart(data);
+      let saki = JSON.parse(JSON.stringify(data));
+      //console.log(JSON.stringify(data, null, 2));
+      //d3.selectAll("svg > *").remove();
+      //this.saki = data;
+      //this.sankey(data);
+      this.DrawChart(saki);
     }));
   }
 
@@ -62,10 +58,11 @@ export class EnergyComponent implements OnInit {
     return color;
   }
 
-
-
   private async DrawChart(sankeyData) {
-    const colors = await this.http.get('/assets/colors.json').toPromise();
+    if (!this.colors) {
+      this.colors = await this.http.get('/assets/colors.json').toPromise();
+    }
+    d3.selectAll("svg > *").remove();
     const svg = d3.select('#sankey'),
       width = +svg.attr('width'),
       height = +svg.attr('height');
@@ -82,22 +79,22 @@ export class EnergyComponent implements OnInit {
       }
     } catch (e) {}
     */
-    d3.selectAll("svg > *").remove();
 
-    const formatNumber = d3.format(',.0f'),
+    const formatNumber = d3.format(' .0f'),
       format = function(d: any) {
         return formatNumber(d) + ' GWh';
       },
       //color = d3.scaleOrdinal(d3.schemeCategory10);
       color = 'red';
-
-    this.sankey = d3Sankey.sankey()
-      .nodeWidth(15)
-      .nodePadding(10)
-      .extent([
-        [1, 1],
-        [width - 1, height - 6]
-      ]);
+    if (!this.sankey) {
+      this.sankey = d3Sankey.sankey()
+        .nodeWidth(15)
+        .nodePadding(10)
+        .extent([
+          [1, 1],
+          [width - 1, height - 6]
+        ]);
+    }
     //  .nodeAlign(d3Sankey.sankeyLeft)
     /*
     .nodeAlign(function(data){
@@ -121,19 +118,19 @@ export class EnergyComponent implements OnInit {
       .attr('font-size', 10)
       .selectAll('g');
     // d3.json('../assets/data.json', function (error, data: any) {
-    const data = this.saki;
-    this.sankey(data);
+    console.log(sankeyData);
+    this.sankey(sankeyData);
 
     link = link
-      .data(data.links)
+      .data(sankeyData.links)
       .enter().append('path')
       .attr('d', d3Sankey.sankeyLinkHorizontal())
-      .attr('class','energysankey')
+      .attr('class', 'energysankey')
       .attr('stroke-width', function(d: any) {
-        return Math.max(1, d.width);
+        return Math.max(0, d.width);
       })
       .attr('stroke', (d: any) => {
-        return this.getColor(d, colors);
+        return this.getColor(d, this.colors);
       });
 
     link.append('title')
@@ -142,7 +139,7 @@ export class EnergyComponent implements OnInit {
       });
 
     node = node
-      .data(data.nodes)
+      .data(sankeyData.nodes)
       .enter().append('g');
 
     node.append('rect')
@@ -168,7 +165,7 @@ export class EnergyComponent implements OnInit {
           color = string2HexCodeColor.stringToColor(d.name + '49ou888');
         }
         */
-        return this.getColor(d, colors);
+        return this.getColor(d, this.colors);
       })
       .attr('stroke', '#666');
 

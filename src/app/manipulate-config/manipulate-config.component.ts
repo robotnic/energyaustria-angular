@@ -24,7 +24,7 @@ export class ManipulateConfigComponent implements OnInit {
       timetype: 'day',
       reload: false
     }
-    this.data = await this.power.loadCharts(ctrl);
+    this.data = await this.power.loadENTSOECharts(ctrl);
     console.log(this.data);
     const summs = {}
     this.data.forEach(function(item) {

@@ -1,4 +1,13 @@
 <div text-align="right">
+
+<mat-form-field  style="width:120px">
+  <mat-select matNativeControl required [(value)] = "country" (selectionChange)="onDate($event)" [(ngModel)]="country" placeholder="country">
+    <mat-option value="{{key}}" *ngFor="let key of keys()">{{key}}</mat-option>
+  </mat-select>
+</mat-form-field>
+&#160;
+
+
 <mat-form-field  style="width:70px">
   <mat-select matNativeControl required [(value)] = "timetype" (selectionChange)="onDate($event)" [(ngModel)]="timetype">
     <mat-option value="day">Tag</mat-option>

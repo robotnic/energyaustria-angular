@@ -21,7 +21,7 @@ export class TimeshifterService {
 
     plan.to.forEach((toName) => {
       plan.from.forEach((fromName) => {
-        // console.log(fromName,'---->', toName);
+        console.log(fromName, toName);
         this.movePower(originalByName[fromName], viewdataByName[fromName], viewdataByName[toName], defaults);
       });
     });
@@ -33,9 +33,8 @@ export class TimeshifterService {
     origFromChart.values.forEach(function(value, i) {
       const delta = value.y - newFromChart.values[i].y;
       freeEnergy += delta;
-      if (newToChart && newToChart.values[i].y > 0 && freeEnergy > 0) {
+      if (newToChart && newToChart.values &&  newToChart.values[i] && newToChart.values[i].y > 0 && freeEnergy > 0) {
         const origY = newToChart.values[i].y;
-        //  console.log(delta, freeEnergy, origY, config[origFromChart.key].max);
         const maxPower = config[origFromChart.key].max;
 
         let shiftPower = freeEnergy; // newToChart.values[i].y;
@@ -49,7 +48,6 @@ export class TimeshifterService {
 
         const newDelta = origY - newToChart.values[i].y;
         newFromChart.values[i].y += newDelta;
-        // console.log(shiftPower, newDelta, freeEnergy, origY,newFromChart.values[i].y, config[origFromChart.key].max);
         freeEnergy -= newDelta;
       }
     });

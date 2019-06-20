@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
-import * as moment from 'moment'; 
-
-
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +12,63 @@ export class PowerService {
   defaults: any;
   constructor(private http: HttpClient) {}
 
-
   async getDefaults() {
-    this.defaults = await this.http.get('/api/default').toPromise();
+    if (!this.defaults) {
+      this.defaults = await this.http.get('/theapi/default').toPromise();
+    }
     return this.defaults;
   }
 
+  async loadENTSOECharts(ctrl) {
+    console.log('CTRL', ctrl)
+    var s = new Date(ctrl.date + '0000');
+    console.log(s);
+    var start = moment(ctrl.date);
+    var end = moment(ctrl.date);
+
+//    ctrl.timetype = 'day';
+    console.log('start', start.format('YYYYMMDDHHmm'), ctrl.timetype);
+    switch (ctrl.timetype) {
+      case 'day':
+        start = start.startOf('day');
+        end = start.clone().add(1, 'd');
+        break;
+      case 'week':
+        start = start.startOf('week').subtract(1, 'day');
+        end = start.clone().add(1, 'week');
+        break;
+      case 'month':
+        start = start.startOf('month');
+        end = start.clone().add(1, 'month');
+        break;
+    }
+    const startQuery = start.format('YYYYMMDDHHmm');
+    const endQuery = end.format('YYYYMMDDHHmm');
+    console.log('se', startQuery, endQuery);
+    return new Promise < any[] > ((resolve, reject) => {
+      console.log('THECTRL', ctrl);
+      const url = '/theapi/generated?start=' + startQuery + '&end=' + endQuery + '&area=' + ctrl.country;
+      console.log(url);
+      this.http.get(url).subscribe((data: any[]) => {
+        if (data) {
+          data.forEach(item => {
+            item.yAxis = 1;
+          });
+          resolve(data);
+        } else {
+          //resolve(null);
+        }
+      });
+    });
+  }
+/* 
   async loadCharts(ctrl) {
     console.log('ctrl', ctrl);
-    let dateString = ctrl.datestring;
-    let reload = ctrl.reload;
+    const dateString = ctrl.datestring;
+    const reload = ctrl.reload;
     let data: any[] = [];
-    this.defaults = await this.http.get('/api/default').toPromise();
-    const promise = new Promise((resolve, reject) => {
+    this.defaults = await this.http.get('/theapi/default').toPromise();
+    return new Promise < any[] > ((resolve, reject) => {
       let date = ctrl.date;
       if (dateString) {
         date = dateString;
@@ -34,7 +76,7 @@ export class PowerService {
       this.promises = [
         this.loadData('AGPT', date, 1, ctrl.timetype, 'area', null, reload),
         this.loadData('AL', date, 1, ctrl.timetype, 'line', null, reload),
-        this.loadData('EXAAD1P', date, 2, ctrl.timetype, 'line', function (y) {
+        this.loadData('EXAAD1P', date, 2, ctrl.timetype, 'line', function(y) {
           return y * 1000;
         }, reload)
       ];
@@ -42,21 +84,20 @@ export class PowerService {
       //      $q.all(promises).then(function(result){
       forkJoin(this.promises)
         .subscribe((responses) => {
-//          ctrl.loading = false;
-          responses.forEach(function (list) {
+          //          ctrl.loading = false;
+          responses.forEach(function(list) {
             data = data.concat(list);
           });
           resolve(data);
-        }, function (error) {
+        }, function(error) {
           reject(error);
         });
     });
-    return promise;
   }
 
   loadData(pid, dateString, axis, timetype, type, valueCallback, reload) {
     let multiplayer = 1;
-    let m = moment(dateString, "YYYYMMDD");
+    let m = moment(dateString, 'YYYYMMDD');
     dateString = m.startOf(timetype).format('YYYYMMDD');
     const promise = new Promise((resolve, reject) => {
       // tslint:disable-next-line:quotemark
@@ -84,19 +125,18 @@ export class PowerService {
     return promise;
   }
 
-
   parseData(data, axis, type, colors, valueCallback) {
     const that = this;
     const charts = [];
     const timestamps = [];
-    data.d.ResponseData[1].Times.forEach(function (time, i) {
+    data.d.ResponseData[1].Times.forEach(function(time, i) {
       const date = data.d.ResponseData[1].Times[i];
       const timestamp = parseInt(moment(date.DateLocalString + ' ' + date.TimeLocalFromString, "DD-MM-YYYY HH:mm").format('x'));
       timestamps.push((timestamp));
     });
     if (colors) {
       for (let c in colors) {
-        data.d.ResponseData[1].DataStreams.forEach(function (item, index) {
+        data.d.ResponseData[1].DataStreams.forEach(function(item, index) {
           //format changed 
           if (item.YAxisTitle.substring(0, 5) === 'Preis') {
             item.YAxisTitle = 'Preis [EUR/MWh]';
@@ -111,7 +151,7 @@ export class PowerService {
 
     function parseChart(item, timestamps, index, axis, type) {
       let values = [];
-      item.ValueStrings.forEach(function (value, i) {
+      item.ValueStrings.forEach(function(value, i) {
         let xy = {
           x: timestamps[i],
           y: parseValue(value)
@@ -120,7 +160,7 @@ export class PowerService {
       });
 
       //hot fixes
-      values.sort(function (a, b) {
+      values.sort(function(a, b) {
         if (a.x < b.x) {
           return -1;
         };
@@ -155,6 +195,6 @@ export class PowerService {
       return value;
     }
 
-
   }
+  */
 }

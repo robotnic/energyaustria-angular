@@ -14,7 +14,7 @@ import { MatButtonModule, MatInputModule, MatDatepickerModule, MatIconModule,
   MatSelectModule, MatCardModule, MatTabsModule} from '@angular/material';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-
+// ts-ignore
 import 'd3';
 import 'nvd3';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,6 +28,7 @@ import { StorageComponent } from './storage/storage.component';
 import { PlanComponent } from './plan/plan.component';
 import { HomeComponent } from './home/home.component';
 import { UnitsPipe } from './units.pipe';
+import { InstalledComponent } from './installed/installed.component';
 
 
 
@@ -45,7 +46,8 @@ import { UnitsPipe } from './units.pipe';
     StorageComponent,
     PlanComponent,
     HomeComponent,
-    UnitsPipe
+    UnitsPipe,
+    InstalledComponent
   ],
   imports: [
     BrowserModule,

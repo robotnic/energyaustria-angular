@@ -1,20 +1,64 @@
 <div style="text-align:center">
-  <svg id="sankey" width="960" height="600"></svg>
+  <svg id="sankey" width="1460" height="800"></svg>
 </div>
 <br/>
 <br/>
 <br/>
-In diesem Diagramm werden der Aktuelle Elektrizitätserzeugung und die durchschnittlichen Werte für andere Energien dargestellt. 
+
 <dl>          
+    <dt>Transport </dt>
+    <dd>
+      <p>
+    That's power from unknown source. In future versions of this software, 
+    this may be distributed to coal and gas based on installed capacity and availability based on
+    4.7.4. Unavailability of Generation Units [15.1.A&B].
+    </p>
+      </dd>
     <dt>Curtailment </dt>
-    <dd>Energie die zwar zur Verfügung steht aber nicht gebraucht wird. Die Anlagen werden abgeriegelt.</dd>
+    <dd><p>Energy that is available, but is not used because of missing cunsumers.</p> 
+    </dd>
              
-    <dt>Chemische vs. elektische Energie</dt>
-    <dd>Im Diagram wird der Endenergieverbauch dargestellt. Die Umwandlung in Strom mit allen Verlusten, ist schon passiert.</dd>
-                 
-    <dt>Power2Gas</dt>
-    <dd>Hier der elektrizitätsverbruach der P2G Anlagen dargestellt. Umwandlungsverluste sind also noch nicht eingerechnet</dd>
-                 
     <dt>EV</dt>
-    <dd>Die Umstellung auf Elektrofahrzeuge senkt den Endenergieverbauch. Umwandlungsverluste sind in der Graphic nicht dargestellt.</dd>
+    <dd>
+    <p>1:4 - Chemical vs. Electric Energie</p>
+    <p>
+    In this Sankey diagram we combine a stastic diagram with actual electricty generation.
+    It's the energy bought by the end users. 
+    Second law of thermodynamics for electricity is done by the seller.
+    In this software 1 kWh electrocal energy is used to replace 4kW electrochemical power.
+    This applies to all changes you make to "EV%".
+      </p>
+      <pre>
+        10 kWh per liter.
+
+        benzin
+        https://www.spritmonitor.de/de/uebersicht/0-Alle_Hersteller/0-Alle_Modelle.html?fueltype=2&powerunit=2
+        7.73 per liter/ 100 km
+
+        diesel
+        https://www.spritmonitor.de/de/uebersicht/0-Alle_Hersteller/0-Alle_Modelle.html?fueltype=1&powerunit=2
+        6,95 per liter/ 100 km
+
+
+        electricity
+        https://www.spritmonitor.de/de/uebersicht/0-Alle_Hersteller/0-Alle_Modelle.html?fueltype=5&powerunit=2
+        15.88 kWh / 100 km
+
+
+        calculate
+        https://www.google.com/search?ei=jncKXc7xLYP8kwXngKnACQ&q=%287.73+%2B+6.95%29%2F2*10+kWh+%2F15.88+kWh&oq=%287.73+%2B+6.95%29%2F2*10+kWh+%2F15.88+kWh&gs_l=psy-ab.3...6226.6226..7243...0.0..0.106.106.0j1......0....1..gws-wiz.......0i71.usseX84NOnE
+        (((7.73 + 6.95) / 2) * (10 kWh)) / (15.88 kWh) =
+        4.62216625 
+       -> 4 hardcoded
+    </pre>
+    <dt>Power2Gas</dt> 
+    <dd>
+      <p>
+    If there is unused energy (curtailment), it hurts a lot. You have this huge solar plant, but nobody want's your energy.
+    To convert excess electic energy to chemical energy brings lots of losses.
+    On the positive side is, that the energy density is very high.
+    Storage for Methan is cheap and available.
+    </p>
+    </dd>
+                 
 </dl>

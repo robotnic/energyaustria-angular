@@ -33,6 +33,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
   ctrl;
   colors;
   subscription;
+  loading = false;
 
   constructor(private powerService: PowerService,
     private eventHandler: EventHandlerService,
@@ -44,10 +45,14 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
       ctrl = this.ctrl;
     }
     this.ctrl = ctrl;
-    let charts = await this.powerService.loadCharts(ctrl);
+    this.loading = true;
+    let charts = await this.powerService.loadENTSOECharts(ctrl);
+    this.loading = false;
+    console.log('CHARTS', charts);
+    // ts-ignore
     charts = charts.filter(chart => {
       if (chart.key === 'Preis [EUR/MWh]' || chart.key === 'Leistung [MW]' ) {
-        console.log('filtered', chart.key)
+        console.log('filtered', chart.key);
         return false;
       }
       return true;
@@ -57,7 +62,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
       console.log('unscubsribe');
       this.subscription.unsubscribe();
     }
-    this.subscription = this.mutateService.getMutate(charts).subscribe((response) => {
+    this.subscription = this.mutateService.getMutate(charts, ctrl.country).subscribe((response) => {
       this.makeDelta(response);
       this.setColors(response.diff);
       this.readLayers(response.diff);
@@ -79,13 +84,16 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
   }
 
   makeDiff(orig, mod) {
-    mod.type = 'line';
-    if (mod.key === 'Transport' || mod.key === 'Curtailment') {
-      mod.type = 'area';
-    }
     orig.values.forEach((item, i) => {
       mod.values[i].y -= item.y;
+      if (isNaN(mod.values[i].x)) {
+        console.log('NaN', mod.values);
+      }
     });
+    mod.type = 'line';
+    if (mod.key === 'Transport' || mod.key === 'Curtailment') {
+      //mod.type = 'area';  //looks nice, but doesn't work
+    }
   }
 
   async ngOnInit() {
@@ -115,7 +123,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
         margin: {
           top: 120,
           right: 40,
-          bottom: 170,
+          bottom: 230,
           left: 75
         },
         x: function (d) {
@@ -194,7 +202,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
     console.log('diffdata', data)
   }
   ngOnDestroy() {
-    console.log('descroy');
+    console.log('destroy');
     this.subscription.unsubscribe();
   }
 

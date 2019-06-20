@@ -2,17 +2,20 @@
     <mat-form-field class="md-block" title="Add {{mutate.Solar}} GWp Photovoltic. This equals to {{mutate.Solar*0.4}} photovoltaic panels per Austrian">
         <input matInput (input) = "change()" placeholder="Solar" type="number" min="0" [(ngModel)] ="mutate.Solar" style="width:50px;">
       </mat-form-field>
-      <mat-form-field class="md-block" lex-gt-sm title="Add {{mutate.Wind}} GW Wind. This equals to {{mutate.Wind*200}} big Windturbines">
-        <input matInput (input) = "change()" placeholder="Wind" type="number" min="0" [(ngModel)]="mutate.Wind" style="width:50px;">
+      <mat-form-field class="md-block" lex-gt-sm title="Add {{mutate['Wind Onshore']}} GW Wind. This equals to {{mutate['Wind Onshore']*200}} big Windturbines">
+        <input matInput (input) = "change()" placeholder="Onshore" type="number" min="0" [(ngModel)]="mutate['Wind Onshore']" style="width:50px;">
       </mat-form-field>
-      <mat-form-field class="md-block" lex-gt-sm title="Electric Transport percentage. Replace Diesel and Benzin">
+      <mat-form-field class="md-block" lex-gt-sm title="Add {{mutate['Wind Offshore']}} GW Wind. This equals to {{mutate['Wind Offshore']*200}} big Windturbines">
+        <input matInput (input) = "change()" placeholder="Offshore" type="number" min="0" [(ngModel)]="mutate['Wind Offshore']" style="width:50px;">
+      </mat-form-field>
+      <mat-form-field class="md-block" lex-gt-sm title="Replace Diesel and Benzin by electricity">
         <input matInput (input) = "change()" placeholder="EV%" type="number" min="0" max="100" step="5" [(ngModel)]="mutate.Transport" >
       </mat-form-field>
       <mat-form-field class="md-block" lex-gt-sm title="Electrolysis max Power {{mutate.Power2Gas}} GW">
         <input matInput (input) = "change()" type="number" placeholder="P2G" min="0" [(ngModel)]="mutate.Power2Gas" style="width:50px;" >
       </mat-form-field>
-        <button type="button" (mouseover)="over()" (mouseout)="out()" style="width:50px;background-color:white;border:1px solid black"  value="click" ng-mouseover="setOriginal()" ng-mouseout="setModified()">
-          quick
+        <button type="button" (mouseover)="over()" (mouseout)="out()" (click)="reset()" style="width:50px;background-color:white;border:1px solid black"  value="click" ng-mouseover="setOriginal()" ng-mouseout="setModified()">
+          Reset
           <span class="rollover">rollover</span>
         </button>
   </div>

@@ -6,6 +6,9 @@ import { EventHandlerService } from './event-handler.service';
 import { MutateService } from './mutate.service';
 import { String2HexCodeColor } from 'string-to-hex-code-color';
 
+var benzin = 'Motor Gasoline (w/o bio)';
+var diesel = 'Gas/Diesel Oil (w/o bio)';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,40 +32,84 @@ export class SankeyService {
     });
   }
   async doTheSankey(observer) {
-    const colors = await this.powerService.getDefaults();
+    const origColors = await this.powerService.getDefaults();
+    const colors = JSON.parse(JSON.stringify(origColors));
     delete colors['Leistung [MW]'];
     delete colors['Preis [EUR/MWh]'];
-    const statistics = await this.statisticsService.init();
     this.eventHandler.on('datechange').subscribe((data) => {
-      this.loadData(data).then((ob) => {
-        ob.subscribe((charts) => {
-          const sum = this.makeDiff(charts);
-          this.saki.links.length = 0;
-          this.saki.nodes.length = 0;
-          this.allNames.length = 0;
-          this.pushNode('Elektrische Energie');
-          this.makeNodes(colors);
-          this.makeLinks(colors, sum);
-          this.makeStatisticsNodes(statistics);
-          this.removeUnneededNodes();
-          observer.next(this.saki);
+      console.log('SHO FAST', data);
+      this.statisticsService.init(data.country).then((statistics) => {
+        delete statistics['Summe'];
+        for (let s in statistics) {
+          delete statistics[s].Insgesamt;
+        }
+        statistics = this.reduceLinks(statistics);
+        console.log('datechange', data)
+        this.loadData(data).then((ob) => {
+          ob.subscribe((charts) => {
+            const sum = this.makeDiff(charts);
+            this.saki = {
+              links: [],
+              nodes: []
+            };
+            this.allNames.length = 0;
+            this.pushNode('Electricity');
+            this.makeNodes(colors);
+            this.makeLinks(colors, sum);
+            this.makeStatisticsNodes(statistics, data.timetype);
+            // this.bigestLinks(2);
+            this.removeUnneededNodes();
+            console.log('this.saki', this.saki);
+            observer.next(this.saki);
+          });
         });
       });
     });
   }
 
+  reduceLinks(statistics) {
+    // tslint:disable-next-line:forin
+    const biggestNumbers = [];
+    for (const s in statistics) {
+      // tslint:disable-next-line:forin
+      for (const l in statistics[s]) {
+        biggestNumbers.push(statistics[s][l]);
+      }
+    }
+    biggestNumbers.sort((a, b) => b - a);
+    biggestNumbers.length = 50;
+    const biggest = biggestNumbers.pop();
+    for (const s in statistics) {
+      // tslint:disable-next-line:forin
+      for (const l in statistics[s]) {
+        if (statistics[s][l] < biggest) {
+          delete statistics[s][l];
+        }
+      }
+    }
+    console.log('sorted', biggestNumbers);
+    return statistics;
+  }
+
   async loadData(ctrl) {
     const observable = Observable.create(observer => {
-      this.powerService.loadCharts(ctrl).then((charts) => {
+      this.powerService.loadENTSOECharts(ctrl).then((charts) => {
         if (this.subscription) {
           this.subscription.unsubscribe();
         }
-        this.subscription = this.mutateService.getMutate(charts).subscribe((mcharts) => {
+        this.subscription = this.mutateService.getMutate(charts, ctrl.country).subscribe((mcharts) => {
           observer.next(mcharts);
         });
       });
     });
     return observable;
+  }
+  bigestLinks(number) {
+      this.saki.links = this.saki.links.sort((a, b) => {
+        return b.value - a.value;
+      });
+      this.saki.links = this.saki.links.slice(0, number);
+      console.log('links', this.saki.links);
   }
   removeUnneededNodes() {
     this.saki.nodes.forEach((node) => {
@@ -76,6 +123,19 @@ export class SankeyService {
         node.name = '';
       }
     });
+    /*
+    this.saki.nodes.forEach((node, i) => {
+      if (i > 20) {
+        node.name = '';
+      }
+    });
+    */
+   /*
+    this.saki.nodes = this.saki.nodes.filter(node => {
+      return node.name !== '';
+    });
+    */
+    console.log(this.saki.nodes);
   }
 
   makeDiff(charts) {
@@ -101,6 +161,7 @@ export class SankeyService {
             const delta = item.y - modified.values[i].y;
             sum[orig.key].delta -= delta * hours;
             sum[orig.key].orig -= item.y * hours;
+            //console.log(modified.values[i].y * hours, 'GWh', orig.key, hours, one, two);
             sum[orig.key].modified -= modified.values[i].y * hours;
           });
         }
@@ -113,7 +174,7 @@ export class SankeyService {
     return sum;
   }
 
-  makeStatisticsNodes(statistics) {
+  makeStatisticsNodes(statistics, timetype) {
     const sources = [];
     const targets = [];
     let missingTargets = true;
@@ -122,14 +183,15 @@ export class SankeyService {
     let electricityUsage = 0;
     for (const s in statistics) {
       for (const t in statistics[s]) {
-        if (t === 'Elektrische Energie') {
+        if (t === 'Electricity') {
           electricityUsage -= statistics[s][t] / 1000;
         }
       }
     };
-    const electricityFactor = electricityUsage / this.allElectric /1.30; //because it didn't fit todo: find the bug
+    const electricityFactor = 1; //electricityUsage / this.allElectric /1.30; //because it didn't fit todo: find the bug
  
     console.log('usage', electricityUsage / this.allElectric);
+    let theLinks = [];
     for (const s in statistics) {
       const es = decodeURIComponent(s);
       // tslint:disable-next-line:forin
@@ -137,22 +199,33 @@ export class SankeyService {
       // tslint:disable-next-line:forin
       for (const t in statistics[s]) {
         const j = this.pushNode(t);
-        let value = statistics[s][t] * 0.277778 / 365; //TJ per year -> GWh pro day
+        let value = statistics[s][t]  / 365 ; //GWh per year -> GWh pro day
+        if (timetype === 'week') {
+          value = value * 7;
+        }
         value = value / electricityFactor;
-        this.makeStatisticsLink(i, j, value);
+//        this.makeStatisticsLink(i, j, value);
+        theLinks.push({
+          i: i,
+          j: j,
+          value: value
+        });
       }
       missingTargets = false;
     }
+    theLinks.forEach(link => {
+      this.makeStatisticsLink(link.i, link.j, link.value);
+    });
   }
   mutateStatistices(statistics) {
     const statatistics = JSON.parse(JSON.stringify(statistics));
     const transport = this.eventHandler.getState().mutate.Transport;
-    console.log('STAT', statatistics.Traktion.Diesel, transport);
-    const types = ['Traktion' , 'Standmotoren'];
+//    console.log('STAT', statatistics.Traktion.Diesel, transport);
+    const types = ['Road'];
     types.forEach(type => {
       const delta = {};
       for (let s in statatistics[type]) {
-        if (s === 'Benzin' || s === 'Diesel') {
+        if (s === benzin || s === diesel) {
           const oldValue = statatistics[type][s];
           const factor = 1 - transport / 100;
           const newValue = statatistics[type][s] * factor;
@@ -160,8 +233,11 @@ export class SankeyService {
           statatistics[type][s] = newValue;
         }
       }
-      statatistics.Traktion['Elektrische Energie'] += (delta['Benzin'] + delta['Diesel']) / 4;
-    })
+      if (!statatistics.Road['Electricity']) {
+        statatistics.Road['Electricity'] = 0;
+      }
+      statatistics.Road['Electricity'] += (delta[benzin] + delta[diesel]) / 4;  // fix me, remove factor
+    });
     return statatistics;
   }
   makeStatisticsLink(target, source, value) {
@@ -177,7 +253,7 @@ export class SankeyService {
       'type': 'base',
       'uom': 'Widget(s)'
     };
-    if (value > 5) {
+    if (link.value ) {
       links.push(link);
     }
 
@@ -215,19 +291,19 @@ export class SankeyService {
       let source = count++;
       let target = 0;
       if (value < 0) {
-        value = -value;
+        value = -value ;
         target = source;
         source = 0;
       }
       const link = {
         'source': source,
         'target': target,
-        'value': value, //4 values per hour
+        'value': value , //4 values per hour
         'color': colors[color].color,
         'type': 'base',
         'uom': 'Widget(s)'
       };
-      if (value > 5) {
+      if (link.value ) {
         links.push(link);
       }
     }

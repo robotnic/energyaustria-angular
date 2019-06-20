@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Injectable, ViewChild } from '@angular/core';
 import { StorageService } from '../storage.service';
 import * as moment from 'moment';
+import { EventHandlerService } from '../event-handler.service';
 
 declare let d3: any;
 
@@ -21,34 +22,26 @@ export class StorageComponent implements OnInit {
 
   options;
   data = [];
-  constructor(private storage: StorageService) { }
+  constructor(private storage: StorageService, private eventHandler: EventHandlerService) { }
 
   ngOnInit() {
-    this.storage.load(2017).then((data) => {
+    this.eventHandler.on('datechange').subscribe((data) => {
+      console.log('DADADA', data);
+      this.load(data.country, data.date.substring(0, 4));
+    });
+  }
+  load(country, year) {
+    this.data = [];
+    this.storage.load(country, year).then((data) => {
+      data['xAxis'] = 1;
+      data['color'] = 'red';
+      this.data.push(data);
       console.log('have it', data);
-      data.forEach(item => {
-        item.type = 'area';
-        item.yAxis = 1;
-        item.key = item.key[0].de;
-        const newValues = [];
-        item.values.forEach(enry => {
-          const o = {
-            x: enry[0],
-            y: enry[1]
-          };
-          newValues.push(o);
-        })
-        item.values = newValues;
-      });
-      data = data.filter(item => {
-        return item.key === 'Österreich';
-      });
-      console.log('have it', data);
-      this.nvd3.updateWithData(data);
+      this.nvd3.updateWithData(this.data);
     });
     this.options = {
       chart: {
-        type: 'multiChart',
+        type: 'lineChart',
         legend: { rightAlign: false, align: false },
         height: 650,
         margin: {
@@ -70,8 +63,7 @@ export class StorageComponent implements OnInit {
           tickFormat: function(d) {
             return moment(d).format('ddd DD.MMM.YYYY');  //d3.time.fmt(rmat('%x')(new Date(d))
             //return d3.time.fmt(rmat('%x')(new Date(moment(d).format('DD.MMM HH:mm'))));
-          },
-          rotateLabels: 20,
+          }
         },
         yAxis: {
           axisLabel: 'Y Axis',

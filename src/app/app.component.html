@@ -3,6 +3,10 @@
 <div style="right:20px;position:absolute">
   <app-datepicker [(yyyymmdd)] = "yyyymmdd"></app-datepicker>
 </div>
+<div style="left:0px;top:0px;position:absolute">
+<img  [routerLink]="['/']" routerLinkActive="router-link-active" fragment="{{hash()}}" src="/assets/E.png" style="height:61px"/>
+</div>
+<div style="left:00px;top:10px;position:absolute; padding-left:70px">
 <button mat-button [routerLink]="['/power']" routerLinkActive="router-link-active" fragment="{{hash()}}">power</button>
 <button mat-button [routerLink]="['/powerdiff']" routerLinkActive="router-link-active"  fragment="{{hash()}}">powerdiff</button>
 <button mat-button [routerLink]="['/energy']" routerLinkActive="router-link-active"  fragment="{{hash()}}">energy</button>
@@ -10,8 +14,11 @@
 <button mat-button [routerLink]="['/storage']" routerLinkActive="router-link-active"  fragment="{{hash()}}">füllstand</button>
 <button mat-button [routerLink]="['/map']" routerLinkActive="router-link-active"  fragment="{{hash()}}">map</button>
 <button mat-button [routerLink]="['/calcrules']" routerLinkActive="router-link-active"  fragment="{{hash()}}">rules</button>
+<button mat-button [routerLink]="['/installed']" routerLinkActive="router-link-active"  fragment="{{hash()}}">installed</button>
+</div>
 <br/>
 <br/>
+<hr/>
 <div class="outlet">
 <router-outlet></router-outlet>
 </div>

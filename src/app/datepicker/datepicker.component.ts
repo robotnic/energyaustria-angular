@@ -9,6 +9,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 // the `default as` syntax.
 import * as _moment from 'moment';
 import { EventHandlerService } from '../event-handler.service';
+import { StatisticsService } from '../statistics.service';
 // tslint:disable-next-line:no-duplicate-imports
 
 // See the Moment.js docs for the meaning of these formats:
@@ -50,11 +51,21 @@ export class DatepickerComponent implements OnInit {
   month = 6;
   week = 6;
   year = 2018;
-  constructor(private eventHandler: EventHandlerService) {}
+  country = 'Austria';
+  areas;
+  constructor(private eventHandler: EventHandlerService, private statisticsService: StatisticsService) {}
   ngOnInit() {
+    this.load();
+    this.eventHandler.on('datechange').subscribe(date => {
+      console.log('\n\nsomething changed\n\n', date);
+    });
+  }
+  load() {
+    const state = this.eventHandler.getState();
     console.log(this.eventHandler.getState().datechange.timetype);
-    this.timetype = this.eventHandler.getState().datechange.timetype;
-    this.date = this.eventHandler.getState().datechange.date;
+    this.timetype = state.datechange.timetype;
+    this.date = state.datechange.date;
+    this.country = state.datechange.country;
     this.yyyymmdd = _moment(this.date).format('YYYYMMDD');
     this.week = _moment(this.date).week();
     this.day = parseInt(this.yyyymmdd.substring(6, 8));
@@ -69,6 +80,17 @@ export class DatepickerComponent implements OnInit {
     */
     //this.onDate();
     //this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype});
+    console.log('country?', this.country);
+    this.statisticsService.area().then(areas => {
+      this.areas = areas;
+    });
+  }
+  keys(): Array<string> {
+    if (this.areas) {
+      return Object.keys(this.areas);
+    } else {
+      return [];
+    }
   }
   forward(type) {
     this.date = _moment(this.date).add(1, type).toDate();
@@ -92,6 +114,6 @@ export class DatepickerComponent implements OnInit {
     this.year = parseInt(this.yyyymmdd.substring(0, 4));
     console.log('year', this.year)
     console.log('DAY', this.day);
-    this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, reload: false});
+    this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, country: this.country, reload: false});
   }
 }

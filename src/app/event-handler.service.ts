@@ -10,22 +10,25 @@ export class EventHandlerService {
   events: any[];
   layers: [];
   observers = {};
-  state = {
+  state: any = {
     'datechange': {
-      'date': _moment().format('YYYYMMDD'),
+      'date': _moment().subtract(1, 'd').format('YYYYMMDD'),
       'timetype': 'day',
-      'reload': false
+      'reload': false,
+      'country': 'Austria'
     },
     'mutate': {
-      'Wind': 0,
+      'Wind Onshore': 0,
+      'Wind Offshore': 0,
       'Solar': 0,
       'Power2Gas': 0,
       'Transport': 0,
       'quickview': false
     },
-    view: {
-      layers: '11111111111111111110'
-    }
+    'view': {
+      'layers': '111111111111111111110'
+    },
+    'state': null
   };
   constructor() {
     this.getStateHash();
@@ -51,11 +54,9 @@ export class EventHandlerService {
   */
 
   setDate(dateobj) {
-    console.log('setDate', dateobj)
     return this.setObserver('datechange', dateobj);
   }
   getState() {
-    console.log('datechage', this.state.datechange.date);
     return this.state;
   }
   setLayers(layers) {
@@ -73,16 +74,13 @@ export class EventHandlerService {
     return this.setObserver('mutate', mutate);
   }
   setObserver(name, value) {
-    console.log('observers', name, this.observers)
     this.state[name] = value;
     if (this.observers[name]) {
-      console.log('next', name, value);
-        this.observers[name].next(value);
-        this.setStateHash();
+      this.observers[name].next(value);
+      this.setStateHash();
     }
   }
   setStateHash() {
-    console.log(this.state);
     var url = '';
     for (let s in this.state) {
       url += '&' + s + '='; 
@@ -90,18 +88,16 @@ export class EventHandlerService {
         url += v + ':' + this.state[s][v] + ';';
       }
     }
-    console.log(url);
     location.hash = url.substring(1);
   }
   getStateHash() {
-    const state = {};
 //    let hash = location.hash.substring(1);
     const hash = location.hash.replace(/^#+/, '');
     const parts = hash.split('&');
     if (parts[0]) {
       parts.forEach(part => {
         const kvss = part.split('=');
-        state[kvss[0]] = {};
+        this.state[kvss[0]] = {};
         kvss[1].split(';').forEach(kvs => {
           if (kvs) {
             const kv = kvs.split(':');
@@ -113,13 +109,12 @@ export class EventHandlerService {
                 value = parseInt(value);
               }
             }
-            state[kvss[0]][kv[0]] = value;
+            this.state[kvss[0]][decodeURIComponent(kv[0])] = decodeURIComponent(value);
           }
         });
         //state[kvs[0]] = {};
       });
-      this.state = state;
-      console.log('state', state);
+//      this.state = state;
     }
   }
 }

@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { InstalledService } from './installed.service';
+import { StatisticsService } from './statistics.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadshifterService {
-  constructor(private installedService: InstalledService) { }
+  constructor(
+    private installedService: InstalledService,
+    private statisticsService: StatisticsService
+  ) {}
 
-  shift(data, mutate, rules, defaults, curtailment) {
-    console.log('mutate', mutate);
+  shift(data, mutate, rules, defaults, stat) {
+    console.log('-----------stat', stat);
     const clonedata = JSON.parse(JSON.stringify(data));
     const byName = {};
     clonedata.forEach(function(item) {
@@ -20,61 +24,76 @@ export class LoadshifterService {
       const max = defaults[to].max || 0;
       byName['Curtailment'].values.forEach((item, i) => {
         if (item.y < 0) {
-
-          const target =  byName[to].values[i];
-          if ((target.y + item.y) < min) {
-            const oldTarget = target.y;
-            target.y = min;
-            const delta = oldTarget - target.y;
-            item.y = item.y + delta;
-          } else {
-            target.y += item.y;
-            item.y = 0;
+          if (byName[to]) {
+            const target = byName[to].values[i];
+            if (target) {
+              if ((target.y + item.y) < min) {
+                const oldTarget = target.y;
+                target.y = min;
+                const delta = oldTarget - target.y;
+                item.y = item.y + delta;
+              } else {
+                target.y += item.y;
+                item.y = 0;
+              }
+            }
           }
         }
       });
     });
     return clonedata;
   }
-  addPower(data, mutate, rules, defaults, curtailment) {
-    curtailment.values.forEach((item) => {
-      item.y = 0;
-    });
-    const clonedata = JSON.parse(JSON.stringify(data));
-    clonedata.forEach((item) => {
-      rules.loadShift.from.forEach((rule) => {
-        if (item.key === rule) {
-          const add = mutate[rule] || 0;
-          this.add(item, add, curtailment, mutate.quickview);
-        }
+  addPower(data, mutate, rules, defaults, curtailment, country) {
+    return new Promise(resolve => {
+      curtailment.values.forEach((item) => {
+        item.y = 0;
+      });
+      const promises = [];
+      const clonedata = JSON.parse(JSON.stringify(data));
+      clonedata.forEach((item) => {
+        rules.loadShift.from.forEach((rule) => {
+          if (item.key === rule) {
+            const add = mutate[rule] || 0;
+            promises.push(this.add(item, add, curtailment, mutate.quickview, country));
+          }
+        });
+      });
+      Promise.all(promises).then(result => {
+        clonedata.forEach(function(item) {
+          if (item.key === 'Curtailment') {
+            item.values = curtailment.values;
+          }
+        });
+        resolve(clonedata);
       });
     });
-    clonedata.forEach(function(item) {
-      if (item.key === 'Curtailment') {
-        item.values = curtailment.values;
-      }
-    });
-    return clonedata;
   }
 
-  add(chart, value, curtailment, isQuickview) {
-    chart.values.forEach((item, i) => {
-      const delta = this.installedService.calc(item, value, chart.key, isQuickview);
-      curtailment.values[i].y += delta;
-    });
-  }
-
-  addEV(charts, mutate) {
-    charts.forEach(chart => {
-      chart.values.forEach((item, i) => {
-        if (chart.key === 'Transport') {
-          item.y = 4 * mutate.Transport / 100;
-        }
-        if (chart.key === 'Leistung [MW]') {
-          item.y += 4 * mutate.Transport / 100;
-        }
+  add(chart, value, curtailment, isQuickview, country) {
+    return new Promise(resolve => {
+      this.installedService.loadInstalled(country).then(installed => {
+        chart.values.forEach((item, i) => {
+          const delta = this.installedService.calc(item, value, chart.key, isQuickview, country, installed);
+          if (!isNaN(delta)) {
+            curtailment.values[i].y += delta;
+          }
+        });
+        resolve(true);
       });
     });
-    return charts;
+  }
+
+  addEV(charts, mutate, country, transportEveragePower) {
+        charts.forEach(chart => {
+          chart.values.forEach((item, i) => {
+            if (chart.key === 'Transport') {
+              item.y = transportEveragePower * mutate.Transport / 100;
+            }
+            if (chart.key === 'Leistung [MW]') {
+              item.y += transportEveragePower * mutate.Transport / 100;
+            }
+          });
+        });
+        return charts;
   }
 }

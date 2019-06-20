@@ -8,14 +8,18 @@ import { Observable } from 'rxjs';
 export class StorageService {
 
   constructor( private http: HttpClient) {}
-  data;
-  load(year) {
-    return  new Promise((resolve, reject) => {
-      if (this.data) {
-        resolve(this.data);
+  data = {
+    xAxis: null,
+    color: null
+  };
+  load(country, year) {
+    return  new Promise<any[]>((resolve, reject) => {
+      if (this.data[year]) {
+        resolve(this.data[year]);
       }
-      this.http.get('/api/storage/' + year).subscribe(data => {
-        this.data = data;
+      this.http.get<any>('/theapi/filllevel/' + country + '/' + year).subscribe(data => {
+        console.log('STORAGE DATA', data);
+        this.data[year] = data;
         resolve(data);
       });
     });
