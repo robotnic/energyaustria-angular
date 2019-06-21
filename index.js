@@ -23,7 +23,7 @@ app.all('/api/**', function(req, res) {
 app.use(express.static('dist/energy'));
 
 app.get('*', (req, res) => {
-  res.sendFile('./dist/energy/index.html');
+  res.sendFile(__dirname + '/dist/energy/index.html');
 });
 
 
