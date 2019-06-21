@@ -107,7 +107,7 @@ export class PowerComponent implements OnInit, OnDestroy {
         valueFormat: function(d) {
           return d3.format('.5f')(d);
         },
-        duration: 0,
+        duration: 500,
         useInteractiveGuideline: true,
         interactiveLayer: {
           tooltip: {
