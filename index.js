@@ -22,6 +22,10 @@ app.all('/api/**', function(req, res) {
 
 app.use(express.static('dist/energy'));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/energy/index.html'));
+});
+
 
 app.listen(PORT, function () {
   console.log('Example app listening on port ' + PORT + '!');
