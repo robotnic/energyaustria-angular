@@ -287,24 +287,26 @@ export class SankeyService {
     const links = this.saki.links;
     // tslint:disable-next-line:forin
     for (const color in colors) {
-      let value = -sum[color].modified;
-      let source = count++;
-      let target = 0;
-      if (value < 0) {
-        value = -value ;
-        target = source;
-        source = 0;
-      }
-      const link = {
-        'source': source,
-        'target': target,
-        'value': value , //4 values per hour
-        'color': colors[color].color,
-        'type': 'base',
-        'uom': 'Widget(s)'
-      };
-      if (link.value ) {
-        links.push(link);
+      if (sum[color]) {
+        let value = -sum[color].modified;
+        let source = count++;
+        let target = 0;
+        if (value < 0) {
+          value = -value ;
+          target = source;
+          source = 0;
+        }
+        const link = {
+          'source': source,
+          'target': target,
+          'value': value , //4 values per hour
+          'color': colors[color].color,
+          'type': 'base',
+          'uom': 'Widget(s)'
+        };
+        if (link.value ) {
+          links.push(link);
+        }
       }
     }
   }
