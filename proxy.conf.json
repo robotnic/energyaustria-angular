@@ -1,5 +1,5 @@
 {
-  "/api": {
+  "/aapi": {
     "target": "http://localhost:5000",
     "secure": false,
     "pathRewrite": {
@@ -7,11 +7,11 @@
     },
     "logLevel": "debug"
   },
-  "/theapi": {
+  "/api": {
     "target": "https://entsoe.herokuapp.com:443",
     "secure": false,
     "pathRewrite": {
-      "^/theapi": "/api"
+      "^/api": "/api"
     },
     "logLevel": "debug",
     "changeOrigin": true,

@@ -51,7 +51,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
     console.log('CHARTS', charts);
     // ts-ignore
     charts = charts.filter(chart => {
-      if (chart.key === 'Preis [EUR/MWh]' || chart.key === 'Leistung [MW]' ) {
+      if (chart.key === 'Preis [EUR/MWh]' || chart.key === 'LLeistung [MW]' ) {
         console.log('filtered', chart.key);
         return false;
       }
