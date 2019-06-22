@@ -203,7 +203,7 @@ export class SankeyService {
         if (timetype === 'week') {
           value = value * 7;
         }
-        if (timetype === 'week') {
+        if (timetype === 'month') {
           value = value * 30;
         }
         value = value / electricityFactor;
