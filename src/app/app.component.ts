@@ -12,7 +12,6 @@ export class AppComponent {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         const title = this.getTitle(router.routerState, router.routerState.root).join('-');
-        console.log('title', title);
         titleService.setTitle(title);
       }
     });

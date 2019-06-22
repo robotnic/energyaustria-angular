@@ -105,11 +105,11 @@ export class SankeyService {
     return observable;
   }
   bigestLinks(number) {
-      this.saki.links = this.saki.links.sort((a, b) => {
-        return b.value - a.value;
-      });
-      this.saki.links = this.saki.links.slice(0, number);
-      console.log('links', this.saki.links);
+    this.saki.links = this.saki.links.sort((a, b) => {
+      return b.value - a.value;
+    });
+    this.saki.links = this.saki.links.slice(0, number);
+    console.log('links', this.saki.links);
   }
   removeUnneededNodes() {
     this.saki.nodes.forEach((node) => {
@@ -130,11 +130,11 @@ export class SankeyService {
       }
     });
     */
-   /*
-    this.saki.nodes = this.saki.nodes.filter(node => {
-      return node.name !== '';
-    });
-    */
+    /*
+     this.saki.nodes = this.saki.nodes.filter(node => {
+       return node.name !== '';
+     });
+     */
     console.log(this.saki.nodes);
   }
 
@@ -189,7 +189,7 @@ export class SankeyService {
       }
     };
     const electricityFactor = 1; //electricityUsage / this.allElectric /1.30; //because it didn't fit todo: find the bug
- 
+
     console.log('usage', electricityUsage / this.allElectric);
     let theLinks = [];
     for (const s in statistics) {
@@ -199,12 +199,12 @@ export class SankeyService {
       // tslint:disable-next-line:forin
       for (const t in statistics[s]) {
         const j = this.pushNode(t);
-        let value = statistics[s][t]  / 365 ; //GWh per year -> GWh pro day
+        let value = statistics[s][t] / 365; //GWh per year -> GWh pro day
         if (timetype === 'week') {
           value = value * 7;
         }
         value = value / electricityFactor;
-//        this.makeStatisticsLink(i, j, value);
+        //        this.makeStatisticsLink(i, j, value);
         theLinks.push({
           i: i,
           j: j,
@@ -220,7 +220,7 @@ export class SankeyService {
   mutateStatistices(statistics) {
     const statatistics = JSON.parse(JSON.stringify(statistics));
     const transport = this.eventHandler.getState().mutate.Transport;
-//    console.log('STAT', statatistics.Traktion.Diesel, transport);
+    //    console.log('STAT', statatistics.Traktion.Diesel, transport);
     const types = ['Road'];
     types.forEach(type => {
       const delta = {};
@@ -236,7 +236,7 @@ export class SankeyService {
       if (!statatistics.Road['Electricity']) {
         statatistics.Road['Electricity'] = 0;
       }
-      statatistics.Road['Electricity'] += (delta[benzin] + delta[diesel]) / 4;  // fix me, remove factor
+      statatistics.Road['Electricity'] += (delta[benzin] + delta[diesel]) / 4; // fix me, remove factor
     });
     return statatistics;
   }
@@ -253,7 +253,7 @@ export class SankeyService {
       'type': 'base',
       'uom': 'Widget(s)'
     };
-    if (link.value ) {
+    if (link.value) {
       links.push(link);
     }
 
@@ -287,26 +287,28 @@ export class SankeyService {
     const links = this.saki.links;
     // tslint:disable-next-line:forin
     for (const color in colors) {
+      let value = 0;
       if (sum[color]) {
-        let value = -sum[color].modified;
-        let source = count++;
-        let target = 0;
-        if (value < 0) {
-          value = -value ;
-          target = source;
-          source = 0;
-        }
-        const link = {
-          'source': source,
-          'target': target,
-          'value': value , //4 values per hour
-          'color': colors[color].color,
-          'type': 'base',
-          'uom': 'Widget(s)'
-        };
-        if (link.value ) {
-          links.push(link);
-        }
+        value = -sum[color].modified;
+      }
+      console.log(color, value);
+      let source = count++;
+      let target = 0;
+      if (value < 0) {
+        value = -value;
+        target = source;
+        source = 0;
+      }
+      const link = {
+        'source': source,
+        'target': target,
+        'value': value, //4 values per hour
+        'color': colors[color].color,
+        'type': 'base',
+        'uom': 'Widget(s)'
+      };
+      if (link.value) {
+        links.push(link);
       }
     }
   }
