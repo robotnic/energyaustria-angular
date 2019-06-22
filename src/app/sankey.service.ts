@@ -203,6 +203,9 @@ export class SankeyService {
         if (timetype === 'week') {
           value = value * 7;
         }
+        if (timetype === 'week') {
+          value = value * 30;
+        }
         value = value / electricityFactor;
         //        this.makeStatisticsLink(i, j, value);
         theLinks.push({
