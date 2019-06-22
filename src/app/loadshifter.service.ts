@@ -12,7 +12,6 @@ export class LoadshifterService {
   ) {}
 
   shift(data, mutate, rules, defaults, stat) {
-    console.log('-----------stat', stat);
     const clonedata = JSON.parse(JSON.stringify(data));
     const byName = {};
     clonedata.forEach(function(item) {

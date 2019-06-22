@@ -28,6 +28,10 @@ export class CalculatorService {
 
   mutate(data, modifier, rules, defaults, country) {
     return new Promise(async resolve => {
+      if (!data) {
+        resolve(null);
+        return;
+      }
       this.loadShifter.addPower(this.clonedata, modifier, rules, defaults, this.powerByName['Curtailment'], country).then(clonedata2 => {
         this.statisticsService.init(country).then(stat => {
           const petrolPower = this.getPetrolPower(stat);
@@ -46,6 +50,9 @@ export class CalculatorService {
 
   createCharts(data, rules, defaults) {
     console.log('-------------------create charts-------------');
+    if (!data) {
+      return null;
+    }
     //    const clonedata = JSON.parse(JSON.stringify(data));
     this.clonedata = [];
     this.powerByName = {};

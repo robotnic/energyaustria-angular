@@ -20,14 +20,12 @@ export class PowerService {
   }
 
   async loadENTSOECharts(ctrl) {
-    console.log('CTRL', ctrl)
     var s = new Date(ctrl.date + '0000');
-    console.log(s);
     var start = moment(ctrl.date);
     var end = moment(ctrl.date);
 
 //    ctrl.timetype = 'day';
-    console.log('start', start.format('YYYYMMDDHHmm'), ctrl.timetype);
+//    console.log('start', start.format('YYYYMMDDHHmm'), ctrl.timetype);
     switch (ctrl.timetype) {
       case 'day':
         start = start.startOf('day');
@@ -44,11 +42,8 @@ export class PowerService {
     }
     const startQuery = start.format('YYYYMMDDHHmm');
     const endQuery = end.format('YYYYMMDDHHmm');
-    console.log('se', startQuery, endQuery);
     return new Promise < any[] > ((resolve, reject) => {
-      console.log('THECTRL', ctrl);
       const url = '/api/generated?start=' + startQuery + '&end=' + endQuery + '&area=' + ctrl.country;
-      console.log(url);
       this.http.get(url).subscribe((data: any[]) => {
         if (data) {
           data.forEach(item => {
@@ -56,7 +51,7 @@ export class PowerService {
           });
           resolve(data);
         } else {
-          //resolve(null);
+          resolve(null);
         }
       });
     });

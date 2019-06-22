@@ -28,11 +28,14 @@ export class MutateService {
         const allCharts = this.calculator.createCharts(data,  this.rules, defaults);
         this.data = allCharts;
         this.eventHandler.on('mutate').subscribe(async (mutate) => {
-          console.log('mutate', mutate);
           const normalized: any =  await this.calculator.mutate(this.data, {}, this.rules, defaults, country);
           const modified: any =  await this.calculator.mutate(this.data, mutate, this.rules, defaults, country);
-          modified.normalized = normalized.modified;
-          observer.next(modified);
+          if (normalized) {
+            modified.normalized = normalized.modified;
+            observer.next(modified);
+          } else {
+            observer.next(null);
+          }
         });
       });
     });
@@ -47,10 +50,12 @@ export class MutateService {
 
   }
   getMutate(data, country) {
-    console.log('getmutate', country)
+    console.log('getmutate', country, data);
     return this.observe(data, country);
   }
+  /*
   doTheChanges(mutate, defaults, country) {
     return this.calculator.mutate(this.data, mutate, this.rules, defaults, country);
   }
+  */
 }

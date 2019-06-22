@@ -40,6 +40,7 @@ export class PowerComponent implements OnInit, OnDestroy {
     this.ctrl = ctrl;
     this.loading++;
     const charts = await this.powerService.loadENTSOECharts(ctrl);
+    console.log('charts', charts);
     this.loading--;
     //    console.log('CHARTS', charts1);
     //    const charts = await this.powerService.loadCharts(ctrl);
@@ -51,11 +52,15 @@ export class PowerComponent implements OnInit, OnDestroy {
     }
     console.log('cc', ctrl.country)
     this.subscription = this.mutateService.getMutate(charts, ctrl.country).subscribe((response) => {
-      this.setColors(response.modified);
-      this.readLayers(response.modified);
-      console.log('fertig zum rendern', response);
-      this.data = response.modified;
-      this.nvd3.updateWithData(response.modified);
+      if (response) {
+        this.setColors(response.modified);
+        this.readLayers(response.modified);
+        console.log('fertig zum rendern', response);
+        this.data = response.modified;
+        this.nvd3.updateWithData(response.modified);
+      } else {
+        this.nvd3.updateWithData([]);
+      }
     });
   }
 
