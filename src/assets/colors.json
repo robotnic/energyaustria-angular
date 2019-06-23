@@ -47,7 +47,7 @@
   "Dampferzeugung": "orange",
   "Raumheizung%20und%20Klimaanlagen": "beige",
   "Industrieöfen": "blue",
-  "Import":"white",
+  "Import":"whiteSmoke",
   "Export":"lightgrey",
   "Residential":"blue",
   "Electricity":"gold",
