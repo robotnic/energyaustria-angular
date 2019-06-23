@@ -10,9 +10,9 @@
 
 <mat-form-field  style="width:70px">
   <mat-select matNativeControl required [(value)] = "timetype" (selectionChange)="onDate($event)" [(ngModel)]="timetype">
-    <mat-option value="day">Tag</mat-option>
-    <mat-option value="week">Woche</mat-option>
-    <mat-option value="month">Monat</mat-option>
+    <mat-option value="day">day</mat-option>
+    <mat-option value="week">week</mat-option>
+    <mat-option value="month">month</mat-option>
   </mat-select>
 </mat-form-field>
 
@@ -55,18 +55,18 @@
 </button>
 <mat-form-field  style="width:70px">
   <select matNativeControl required [(ngModel)] = "month">
-    <option value="1">Jänner</option>
-    <option value="2">Februar</option>
-    <option value="3">März</option>
-    <option value="4">April</option>
-    <option value="5">Mai</option>
-    <option value="6">Juni</option>
-    <option value="7">Juli</option>
-    <option value="8">August</option>
-    <option value="9">September</option>
-    <option value="10">Oktober</option>
-    <option value="11">November</option>
-    <option value="12">Dezember</option>
+    <option value = "1"> January </ option>
+    <option value = "2"> February </ option>
+    <option value = "3"> March </ option>
+    <option value = "4"> April </ option>
+    <option value = "5"> May </ option>
+    <option value = "6"> June </ option>
+    <option value = "7"> July </ option>
+    <option value = "8"> August </ option>
+    <option value = "9"> September </ option>
+    <option value = "10"> October </ option>
+    <option value = "11"> November </ option>
+    <option value = "12"> December </ option>
   </select>
 </mat-form-field>
 <button mat-flat-button (click)="forward('month')">
