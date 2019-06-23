@@ -12,6 +12,7 @@
   "Transport": "orangered",
   "Nuclear": "red",
   "Fossil Gas": "orange",
+  "Fossil Oil": "brown",
   "Biomass": "darkgreen",
   "Solid biomass": "darkgreen",
   "Wind Onshore": "#AECDAC",
@@ -50,5 +51,7 @@
   "Export":"lightgrey",
   "Residential":"blue",
   "Electricity":"gold",
+  "Marine":"blue",
+  "Other":"lime",
   "Leistung [MW]":"black"
 }

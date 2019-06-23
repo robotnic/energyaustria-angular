@@ -21,7 +21,10 @@ export class TimeshifterService {
 
     plan.to.forEach((toName) => {
       plan.from.forEach((fromName) => {
-        this.movePower(originalByName[fromName], viewdataByName[fromName], viewdataByName[toName], defaults);
+        console.log(fromName, toName);
+        if (originalByName[fromName] && viewdataByName[fromName] && viewdataByName[toName] && defaults) {
+          this.movePower(originalByName[fromName], viewdataByName[fromName], viewdataByName[toName], defaults);
+        }
       });
     });
     return  viewdata ;

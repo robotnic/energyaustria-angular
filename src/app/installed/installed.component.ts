@@ -40,13 +40,25 @@ export class InstalledComponent implements OnInit {
       this.data.length = 0;
       const inter = {}
       // tslint:disable-next-line:forin
+      const types = [];
+      // tslint:disable-next-line:forin
+      for (const year in installed) {
+        console.log(year);
+        for (const type in installed[year]) {
+          console.log(type);
+          if (types.indexOf(type) === -1) {
+            types.push(type);
+          }
+        }
+      }
       for (const year in installed) {
         const values = [];
         // tslint:disable-next-line:forin
-        for (const type in installed[year]) {
+        for (const t in types) {
+          const type = types[t];
           const value = {
             x: year,
-            y: installed[year][type],
+            y: installed[year][type] || 0,
             color: this.colors[type]
           };
           if (!inter[type]) {
@@ -58,10 +70,12 @@ export class InstalledComponent implements OnInit {
           inter[type].values.push(value);
         }
       }
+      console.log(inter);
       // tslint:disable-next-line:forin
       for (const item in inter) {
         this.data.push(inter[item]);
       }
+      console.log(this.data);
      // this.options = nv.models.multiBarChart();
       this.options = {
         chart: {
