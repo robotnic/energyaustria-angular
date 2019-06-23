@@ -84,7 +84,6 @@ export class CalculatorService {
     this.clonedata.sort((x, y) => {
       return x.key === first ? -1 : y.key === first ? 1 : 0;
     });
-    console.log(this.clonedata);
     return this.clonedata;
   }
   createEmptyChart(d, firstChart) {
@@ -110,7 +109,7 @@ export class CalculatorService {
           if (power.values[i]) {
             importValue.y += power.values[i].y;
           } else {
-            console.log('calc import error', i);
+            console.log('calc import error', i, power);
           }
         }
       });
@@ -137,7 +136,7 @@ export class CalculatorService {
           if (power.values[i]) {
             importValue.y += power.values[i].y;
           } else {
-            console.log('calc export error', i);
+            console.log('calc export error', i, power);
           }
         }
       });

@@ -50,7 +50,6 @@ export class MutateService {
 
   }
   getMutate(data, country) {
-    console.log('getmutate', country, data);
     return this.observe(data, country);
   }
   /*

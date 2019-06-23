@@ -65,7 +65,6 @@ export class InstalledService {
     const year = moment(item.x).year();
     const installedThen = this.getInstalledAtTime(item.x, key, country, installed);
     const installedNow = this.getInstalledAtTime(new Date(), key, country, installed);
-
     let factor = installedNow / installedThen;
     if (isQuickview) {
       factor = 1;  //no normalization to current installation
