@@ -1,7 +1,7 @@
 {
   "Elektrische Energie": "gold",
   "Hydro Pumped Storage": "darkblue",
-  "Hydro Water Reservoir": "darkblue",
+  "Hydro Water Reservoir": "mediumblue",
   "Curtailment": "black",
   "Power2Gas": "orange",
   "Hydro Run-of-river and poundage": "blue",
@@ -12,7 +12,7 @@
   "Transport": "orangered",
   "Nuclear": "red",
   "Fossil Gas": "orange",
-  "Fossil Oil": "brown",
+  "Fossil Oil": "aquamarine",
   "Biomass": "darkgreen",
   "Solid biomass": "darkgreen",
   "Wind Onshore": "#AECDAC",
