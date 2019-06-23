@@ -1,7 +1,7 @@
 {
   "Elektrische Energie": "gold",
   "Hydro Pumped Storage": "darkblue",
-  "Hydro Water Reservoir": "purple",
+  "Hydro Water Reservoir": "darkblue",
   "Curtailment": "black",
   "Power2Gas": "orange",
   "Hydro Run-of-river and poundage": "blue",
