@@ -118,7 +118,6 @@ export class EnergyComponent implements OnInit {
       .attr('font-size', 10)
       .selectAll('g');
     // d3.json('../assets/data.json', function (error, data: any) {
-    console.log(sankeyData);
     this.sankey(sankeyData);
 
     link = link
