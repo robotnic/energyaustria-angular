@@ -45,6 +45,9 @@ export class InstalledService {
     for (let k in data[startYear]) {
       previous[k] = 2 * data[startYear][k] - data[startYear + 1][k];
       next[k] = 2 * data[endYear][k] - data[endYear - 1][k];
+      if (previous[k] < 0) {
+        previous[k] = 0;
+      }
     }
     result[startYear -1] = previous;
     for (let k in data) {
