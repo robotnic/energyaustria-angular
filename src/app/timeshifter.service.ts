@@ -21,7 +21,6 @@ export class TimeshifterService {
 
     plan.to.forEach((toName) => {
       plan.from.forEach((fromName) => {
-        console.log(fromName, toName);
         if (originalByName[fromName] && viewdataByName[fromName] && viewdataByName[toName] && defaults) {
           this.movePower(originalByName[fromName], viewdataByName[fromName], viewdataByName[toName], defaults);
         }

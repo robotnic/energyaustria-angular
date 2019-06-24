@@ -102,7 +102,7 @@ export class DatepickerComponent implements OnInit {
     this.onDate();
   }
   reload() {
-    this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, reload: true});
+    this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, country: this.country, refresh: true});
   }
 
   onDate() {
@@ -112,8 +112,8 @@ export class DatepickerComponent implements OnInit {
     this.day = parseInt(this.yyyymmdd.substring(6, 8));
     this.month = parseInt(this.yyyymmdd.substring(4, 6));
     this.year = parseInt(this.yyyymmdd.substring(0, 4));
-    console.log('year', this.year)
+    console.log('year', this.year);
     console.log('DAY', this.day);
-    this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, country: this.country, reload: false});
+    this.eventHandler.setDate({date: this.yyyymmdd, timetype: this.timetype, country: this.country, refresh: false});
   }
 }
