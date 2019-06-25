@@ -21,7 +21,8 @@ const routes: Routes = [
 {path: 'plan', component: PlanComponent, data: {title: 'Plan'}},
 {path: 'calcrules', component: CalcrulesComponent, data: {title: 'Rules'}},
 {path: 'installed', component: InstalledComponent, data: {title: 'Installed'}},
-{path: '', component: HomeComponent, data: {title: 'Home'}}
+{path: '**', component: HomeComponent, data: {title: 'Home'}}
+
 ];
 
 @NgModule({

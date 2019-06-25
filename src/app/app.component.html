@@ -3,10 +3,10 @@
 <div style="right:20px;position:absolute">
   <app-datepicker [(yyyymmdd)] = "yyyymmdd"></app-datepicker>
 </div>
-<div style="left:0px;top:0px;position:absolute">
-<img  [routerLink]="['/']" routerLinkActive="router-link-active" fragment="{{hash()}}" src="/assets/E.png" style="height:61px"/>
+<div style="left:0px;top:0px;position:absolute;border-width: 0;outline: 0pt" [routerLink]="['/']" routerLinkActive="router-link-active" fragment="{{hash()}}">
+  <img src="/assets/E.png" style="height:61px;border-width:0"/>
 </div>
-<div style="left:00px;top:10px;position:absolute; padding-left:70px">
+<div style="left:00px;top:10px;position:absolute; margin-left:70px">
 <button mat-button [routerLink]="['/power']" routerLinkActive="router-link-active" fragment="{{hash()}}">power</button>
 <button mat-button [routerLink]="['/powerdiff']" routerLinkActive="router-link-active"  fragment="{{hash()}}">powerdiff</button>
 <button mat-button [routerLink]="['/energy']" routerLinkActive="router-link-active"  fragment="{{hash()}}">energy</button>
