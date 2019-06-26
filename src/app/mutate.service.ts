@@ -22,14 +22,14 @@ export class MutateService {
       'to': ['Transport', 'Fossil Hard coal', 'Fossil Brown coal/Lignite', 'Fossil Gas']
     }
   };
-  observe(data, country) {
+  observe(data, ctrl) {
     this.observable = Observable.create(observer => {
       this.powerService.getDefaults().then((defaults) => {
         const allCharts = this.calculator.createCharts(data,  this.rules, defaults);
         this.data = allCharts;
         this.eventHandler.on('mutate').subscribe(async (mutate) => {
-          const normalized: any =  await this.calculator.mutate(this.data, {}, this.rules, defaults, country);
-          const modified: any =  await this.calculator.mutate(this.data, mutate, this.rules, defaults, country);
+          const normalized: any =  await this.calculator.mutate(this.data, {}, this.rules, defaults, ctrl);
+          const modified: any =  await this.calculator.mutate(this.data, mutate, this.rules, defaults, ctrl);
           if (normalized) {
             modified.normalized = normalized.modified;
             observer.next(modified);
@@ -49,8 +49,8 @@ export class MutateService {
   mutate() {
 
   }
-  getMutate(data, country) {
-    return this.observe(data, country);
+  getMutate(data, ctrl) {
+    return this.observe(data, ctrl);
   }
   /*
   doTheChanges(mutate, defaults, country) {

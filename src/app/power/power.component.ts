@@ -51,7 +51,7 @@ export class PowerComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
     }
     console.log('cc', ctrl.country)
-    this.subscription = this.mutateService.getMutate(charts, ctrl.country).subscribe((response) => {
+    this.subscription = this.mutateService.getMutate(charts, ctrl).subscribe((response) => {
       if (response) {
         this.setColors(response.modified);
         this.readLayers(response.modified);

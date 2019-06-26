@@ -97,7 +97,7 @@ export class SankeyService {
         if (this.subscription) {
           this.subscription.unsubscribe();
         }
-        this.subscription = this.mutateService.getMutate(charts, ctrl.country).subscribe((mcharts) => {
+        this.subscription = this.mutateService.getMutate(charts, ctrl).subscribe((mcharts) => {
           observer.next(mcharts);
         });
       });

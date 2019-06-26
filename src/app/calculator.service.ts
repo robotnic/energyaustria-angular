@@ -3,6 +3,7 @@ import { PowerService } from './power.service';
 import { LoadshifterService } from './loadshifter.service';
 import { TimeshifterService } from './timeshifter.service';
 import { StatisticsService } from './statistics.service';
+import { InstalledService } from './installed.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class CalculatorService {
     private powerService: PowerService,
     private loadShifter: LoadshifterService,
     private timeShifter: TimeshifterService,
-    private statisticsService: StatisticsService
+    private statisticsService: StatisticsService,
+    private installedService: InstalledService
   ) {}
 
   getPetrolPower(stat) {
@@ -26,22 +28,29 @@ export class CalculatorService {
     return avarageEVPower;
   }
 
-  mutate(data, modifier, rules, defaults, country) {
+  mutate(data, modifier, rules, defaults, ctrl) {
     return new Promise(async resolve => {
       if (!data) {
         resolve(null);
         return;
       }
-      this.loadShifter.addPower(this.clonedata, modifier, rules, defaults, this.powerByName['Curtailment'], country).then(clonedata2 => {
-        this.statisticsService.init(country).then(stat => {
-          const petrolPower = this.getPetrolPower(stat);
-          const clonedata = this.loadShifter.addEV(clonedata2, modifier, country, petrolPower);
-          const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, defaults, stat);
-          const timeshiftedData = this.timeShifter.shift(clonedata, loadshiftedData, rules, defaults);
-          resolve({
-            modified: timeshiftedData,
-            normalized: clonedata2,
-            original: data,
+      this.loadShifter.addPower(this.clonedata, modifier, rules, defaults, this.powerByName['Curtailment'], ctrl.country)
+        .then(clonedata2 => {
+        this.statisticsService.init(ctrl.country).then(stat => {
+          this.installedService.loadInstalled(ctrl.country).then(installed => {
+            console.log('IIIII', installed);
+            console.log('CCCC', ctrl);
+            const year = ctrl.date.substring(0, 4);
+            console.log('yera', year);
+            const petrolPower = this.getPetrolPower(stat);
+            const clonedata = this.loadShifter.addEV(clonedata2, modifier, ctrl.country, petrolPower);
+            const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, defaults, installed[year]);
+            const timeshiftedData = this.timeShifter.shift(clonedata, loadshiftedData, rules, defaults);
+            resolve({
+              modified: timeshiftedData,
+              normalized: clonedata2,
+              original: data,
+            });
           });
         });
       });

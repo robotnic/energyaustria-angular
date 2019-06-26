@@ -11,7 +11,8 @@ export class LoadshifterService {
     private statisticsService: StatisticsService
   ) {}
 
-  shift(data, mutate, rules, defaults, stat) {
+  shift(data, mutate, rules, defaults, installed) {
+    console.log('----thestat', installed);
     const clonedata = JSON.parse(JSON.stringify(data));
     const byName = {};
     clonedata.forEach(function(item) {
@@ -19,8 +20,12 @@ export class LoadshifterService {
     });
     defaults['Power2Gas'].min = -mutate['Power2Gas'];
     rules.loadShift.to.forEach((to) => {
-      const min = defaults[to].min || 0;
-      const max = defaults[to].max || 0;
+      let min = 0;
+      if (to === 'Hydro Pumped Storage') {
+        min = -installed[to] / 1000 || 0;
+      }
+      const max = installed[to] / 1000 || 0;
+      console.log(to, min, max);
       byName['Curtailment'].values.forEach((item, i) => {
         if (item.y < 0) {
           if (byName[to]) {

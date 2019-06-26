@@ -62,7 +62,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
       console.log('unscubsribe');
       this.subscription.unsubscribe();
     }
-    this.subscription = this.mutateService.getMutate(charts, ctrl.country).subscribe((response) => {
+    this.subscription = this.mutateService.getMutate(charts, ctrl).subscribe((response) => {
       this.makeDelta(response);
       this.setColors(response.diff);
       this.readLayers(response.diff);
