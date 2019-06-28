@@ -24,8 +24,7 @@ export class MutateService {
   };
   observe(data, ctrl) {
     this.observable = Observable.create(observer => {
-      this.powerService.getDefaults().then((defaults) => {
-        const allCharts = this.calculator.createCharts(data,  this.rules, defaults);
+        const allCharts = this.calculator.createCharts(data);
         this.data = allCharts;
         this.eventHandler.on('mutate').subscribe(async (mutate) => {
           const normalized: any =  await this.calculator.mutate(this.data, {}, this.rules, ctrl);
@@ -37,7 +36,6 @@ export class MutateService {
             observer.next(null);
           }
         });
-      });
     });
     return this.observable;
   }

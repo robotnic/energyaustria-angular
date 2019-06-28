@@ -57,7 +57,7 @@ export class CalculatorService {
     });
   }
 
-  createCharts(data, rules, defaults) {
+  createCharts(data) {
     console.log('-------------------create charts-------------');
     if (!data) {
       return null;
@@ -66,7 +66,7 @@ export class CalculatorService {
     this.clonedata = [];
     this.powerByName = {};
     const firstChart = data[0]
-    defaults = ['Curtailment', 'Power2Gas'];
+    let defaults = ['Curtailment', 'Power2Gas'];
     defaults.forEach(d => {
       this.createEmptyChart(d, firstChart);
       this.clonedata.push(this.powerByName[d]);
