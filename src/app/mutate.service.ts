@@ -14,8 +14,8 @@ export class MutateService {
   colors;
   rules = {
     loadShift: {
-      'from': ['Solar', 'Wind Onshore', 'Wind Offshore'], 
-      'to': ['Fossil Hard coal','Fossil Brown coal/Lignite', 'Transport', 'Fossil Gas', 'Hydro Water Reservoir', 'Biomass', 'Hydro Pumped Storage', 'Nuclear', 'Import', 'Power2Gas']
+      'from': ['Solar', 'Wind Onshore', 'Wind Offshore'],
+      'to': ['Fossil Hard coal', 'Fossil Brown coal/Lignite', 'Transport', 'Fossil Gas', 'Hydro Water Reservoir', 'Biomass', 'Hydro Pumped Storage', 'Nuclear', 'Import', 'Power2Gas']
     },
     timeShift: {
       'from': ['Hydro Pumped Storage', 'Hydro Water Reservoir'],
@@ -24,23 +24,23 @@ export class MutateService {
   };
   observe(data, ctrl) {
     this.observable = Observable.create(observer => {
-        const allCharts = this.calculator.createCharts(data);
-        this.data = allCharts;
-        this.eventHandler.on('mutate').subscribe(async (mutate) => {
-          const normalized: any =  await this.calculator.mutate(this.data, {}, this.rules, ctrl);
-          const modified: any =  await this.calculator.mutate(this.data, mutate, this.rules, ctrl);
-          if (normalized) {
-            modified.normalized = normalized.modified;
-            observer.next(modified);
-          } else {
-            observer.next(null);
-          }
-        });
+      const allCharts = this.calculator.createCharts(data);
+      this.data = allCharts;
+      this.eventHandler.on('mutate').subscribe(async (mutate) => {
+        const normalized: any = await this.calculator.mutate(this.data, {}, this.rules, ctrl);
+        const modified: any = await this.calculator.mutate(this.data, mutate, this.rules, ctrl);
+        if (normalized) {
+          modified.normalized = normalized.modified;
+          observer.next(modified);
+        } else {
+          observer.next(null);
+        }
+      });
     });
     return this.observable;
   }
 
-  constructor(private eventHandler: EventHandlerService, private calculator: CalculatorService, private powerService: PowerService) { }
+  constructor(private eventHandler: EventHandlerService, private calculator: CalculatorService, private powerService: PowerService) {}
   getRules() {
     return this.rules;
   }
