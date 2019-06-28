@@ -38,10 +38,7 @@ export class CalculatorService {
         .then(clonedata2 => {
         this.statisticsService.init(ctrl.country).then(stat => {
           this.installedService.loadInstalled(ctrl.country).then(installed => {
-            console.log('IIIII', installed);
-            console.log('CCCC', ctrl);
             const year = ctrl.date.substring(0, 4);
-            console.log('yera', year);
             const petrolPower = this.getPetrolPower(stat);
             const clonedata = this.loadShifter.addEV(clonedata2, modifier, ctrl.country, petrolPower);
             const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, installed[year]);

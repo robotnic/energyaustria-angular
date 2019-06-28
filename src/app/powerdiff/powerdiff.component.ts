@@ -99,6 +99,7 @@ export class PowerdiffComponent implements OnInit, OnDestroy {
   async ngOnInit() {
        this.colors = await this.http.get('/assets/colors.json').toPromise();
     this.eventHandler.on('datechange').subscribe((data) => {
+      console.log('datechange', data);
       this.load(data);
     });
 

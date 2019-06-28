@@ -50,7 +50,7 @@ export class PowerComponent implements OnInit, OnDestroy {
       console.log('unscubsribe');
       this.subscription.unsubscribe();
     }
-    console.log('cc', ctrl.country)
+    console.log('cc', ctrl);
     this.subscription = this.mutateService.getMutate(charts, ctrl).subscribe((response) => {
       if (response) {
         this.setColors(response.modified);
@@ -128,15 +128,15 @@ export class PowerComponent implements OnInit, OnDestroy {
         },
         xAxis: {
           showMaxMin: false,
-          tickFormat: function(d) {
+          tickFormat: (d) => {
             var t = "0";
             let timetype = 'week'
-            switch (timetype) {
+            switch (this.ctrl.timetype) {
               case 'day':
                 t = moment(d).format('HH:mm'); //d3.time.fmt(rmat('%x')(new Date(d))
                 break;
               case 'week':
-                t = moment(d).format('ddd DD.MMM.YYYY HH:mm'); //d3.time.fmt(rmat('%x')(new Date(d))
+                t = moment(d).format('ddd DD.MMM.YYYY '); //d3.time.fmt(rmat('%x')(new Date(d))
                 break;
               default:
                 t = moment(d).format('ddd DD.MMM.YYYY'); //d3.time.fmt(rmat('%x')(new Date(d))
