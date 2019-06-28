@@ -28,13 +28,13 @@ export class CalculatorService {
     return avarageEVPower;
   }
 
-  mutate(data, modifier, rules, defaults, ctrl) {
+  mutate(data, modifier, rules, ctrl) {
     return new Promise(async resolve => {
       if (!data) {
         resolve(null);
         return;
       }
-      this.loadShifter.addPower(this.clonedata, modifier, rules, defaults, this.powerByName['Curtailment'], ctrl.country)
+      this.loadShifter.addPower(this.clonedata, modifier, rules, this.powerByName['Curtailment'], ctrl.country)
         .then(clonedata2 => {
         this.statisticsService.init(ctrl.country).then(stat => {
           this.installedService.loadInstalled(ctrl.country).then(installed => {
@@ -44,8 +44,8 @@ export class CalculatorService {
             console.log('yera', year);
             const petrolPower = this.getPetrolPower(stat);
             const clonedata = this.loadShifter.addEV(clonedata2, modifier, ctrl.country, petrolPower);
-            const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, defaults, installed[year]);
-            const timeshiftedData = this.timeShifter.shift(clonedata, loadshiftedData, rules, defaults);
+            const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, installed[year]);
+            const timeshiftedData = this.timeShifter.shift(clonedata, loadshiftedData, rules, installed[year]);
             resolve({
               modified: timeshiftedData,
               normalized: clonedata2,

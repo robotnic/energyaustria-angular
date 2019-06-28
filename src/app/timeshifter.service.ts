@@ -8,7 +8,7 @@ export class TimeshifterService {
   constructor() {}
 
   // shift(originalData, viewdata, config, plan) {
-  shift(originalData, viewdata, rules , defaults) {
+  shift(originalData, viewdata, rules , installed) {
     const plan = rules.timeShift;
     const originalByName = {};
     const viewdataByName = {};
@@ -21,22 +21,22 @@ export class TimeshifterService {
 
     plan.to.forEach((toName) => {
       plan.from.forEach((fromName) => {
-        if (originalByName[fromName] && viewdataByName[fromName] && viewdataByName[toName] && defaults) {
-          this.movePower(originalByName[fromName], viewdataByName[fromName], viewdataByName[toName], defaults);
+        if (originalByName[fromName] && viewdataByName[fromName] && viewdataByName[toName] && installed) {
+          this.movePower(originalByName[fromName], viewdataByName[fromName], viewdataByName[toName], installed);
         }
       });
     });
     return  viewdata ;
   }
 
-  movePower(origFromChart, newFromChart, newToChart, config) {
+  movePower(origFromChart, newFromChart, newToChart, installed) {
     let freeEnergy = 0;
     origFromChart.values.forEach(function(value, i) {
       const delta = value.y - newFromChart.values[i].y;
       freeEnergy += delta;
       if (newToChart && newToChart.values &&  newToChart.values[i] && newToChart.values[i].y > 0 && freeEnergy > 0) {
         const origY = newToChart.values[i].y;
-        const maxPower = config[origFromChart.key].max;
+        const maxPower = installed[origFromChart.key];
 
         let shiftPower = freeEnergy; // newToChart.values[i].y;
         if (shiftPower > maxPower) {

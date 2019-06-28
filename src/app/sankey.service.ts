@@ -37,14 +37,12 @@ export class SankeyService {
     delete colors['Leistung [MW]'];
     delete colors['Preis [EUR/MWh]'];
     this.eventHandler.on('datechange').subscribe((data) => {
-      console.log('SHO FAST', data);
       this.statisticsService.init(data.country).then((statistics) => {
         delete statistics['Summe'];
         for (let s in statistics) {
           delete statistics[s].Insgesamt;
         }
         statistics = this.reduceLinks(statistics);
-        console.log('datechange', data)
         this.loadData(data).then((ob) => {
           ob.subscribe((charts) => {
             const sum = this.makeDiff(charts);
@@ -59,7 +57,6 @@ export class SankeyService {
             this.makeStatisticsNodes(statistics, data.timetype);
             // this.bigestLinks(2);
             this.removeUnneededNodes();
-            console.log('this.saki', this.saki);
             observer.next(this.saki);
           });
         });
@@ -87,7 +84,6 @@ export class SankeyService {
         }
       }
     }
-    console.log('sorted', biggestNumbers);
     return statistics;
   }
 
@@ -109,7 +105,6 @@ export class SankeyService {
       return b.value - a.value;
     });
     this.saki.links = this.saki.links.slice(0, number);
-    console.log('links', this.saki.links);
   }
   removeUnneededNodes() {
     this.saki.nodes.forEach((node) => {
@@ -135,7 +130,6 @@ export class SankeyService {
        return node.name !== '';
      });
      */
-    console.log(this.saki.nodes);
   }
 
   makeDiff(charts) {
@@ -161,7 +155,6 @@ export class SankeyService {
             const delta = item.y - modified.values[i].y;
             sum[orig.key].delta -= delta * hours;
             sum[orig.key].orig -= item.y * hours;
-            //console.log(modified.values[i].y * hours, 'GWh', orig.key, hours, one, two);
             sum[orig.key].modified -= modified.values[i].y * hours;
           });
         }
@@ -170,7 +163,6 @@ export class SankeyService {
         this.allElectric += sum[orig.key].modified;
       }
     });
-    console.log('Total', this.allElectric);
     return sum;
   }
 
@@ -190,7 +182,6 @@ export class SankeyService {
     };
     const electricityFactor = 1; //electricityUsage / this.allElectric /1.30; //because it didn't fit todo: find the bug
 
-    console.log('usage', electricityUsage / this.allElectric);
     let theLinks = [];
     for (const s in statistics) {
       const es = decodeURIComponent(s);
@@ -223,7 +214,6 @@ export class SankeyService {
   mutateStatistices(statistics) {
     const statatistics = JSON.parse(JSON.stringify(statistics));
     const transport = this.eventHandler.getState().mutate.Transport;
-    //    console.log('STAT', statatistics.Traktion.Diesel, transport);
     const types = ['Road'];
     types.forEach(type => {
       const delta = {};
@@ -294,7 +284,6 @@ export class SankeyService {
       if (sum[color]) {
         value = -sum[color].modified;
       }
-      console.log(color, value);
       let source = count++;
       let target = 0;
       if (value < 0) {

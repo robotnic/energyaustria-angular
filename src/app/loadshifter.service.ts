@@ -11,21 +11,19 @@ export class LoadshifterService {
     private statisticsService: StatisticsService
   ) {}
 
-  shift(data, mutate, rules, defaults, installed) {
-    console.log('----thestat', installed);
+  shift(data, mutate, rules, installed) {
     const clonedata = JSON.parse(JSON.stringify(data));
     const byName = {};
     clonedata.forEach(function(item) {
       byName[item.key] = item;
     });
-    defaults['Power2Gas'].min = -mutate['Power2Gas'];
+    //defaults['Power2Gas'].min = -mutate['Power2Gas'];
     rules.loadShift.to.forEach((to) => {
       let min = 0;
       if (to === 'Hydro Pumped Storage') {
         min = -installed[to] / 1000 || 0;
       }
       const max = installed[to] / 1000 || 0;
-      console.log(to, min, max);
       byName['Curtailment'].values.forEach((item, i) => {
         if (item.y < 0) {
           if (byName[to]) {
@@ -47,7 +45,7 @@ export class LoadshifterService {
     });
     return clonedata;
   }
-  addPower(data, mutate, rules, defaults, curtailment, country) {
+  addPower(data, mutate, rules, curtailment, country) {
     return new Promise(resolve => {
       curtailment.values.forEach((item) => {
         item.y = 0;
