@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  onInit() {
+  ngOnInit() {
     console.log('init');
     document.documentElement.requestFullscreen();
 
