@@ -63,7 +63,7 @@ export class CalculatorService {
     this.clonedata = [];
     this.powerByName = {};
     const firstChart = data[0]
-    let defaults = ['Curtailment', 'Power2Gas'];
+    let defaults = ['Power2Gas', 'Curtailment'];
     defaults.forEach(d => {
       this.createEmptyChart(d, firstChart);
       this.clonedata.push(this.powerByName[d]);

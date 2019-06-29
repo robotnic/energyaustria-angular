@@ -9,7 +9,7 @@
   "Fossil Hard coal": "black",
   "Kohle": "black",
   "Öl": "brown",
-  "Transport": "gray",
+  "Transport": "#d9534f",
   "Nuclear": "red",
   "Fossil Gas": "orange",
   "Fossil Oil": "aquamarine",

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router,  NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
@@ -7,7 +7,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     constructor(titleService: Title, router: Router ) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -15,6 +15,12 @@ export class AppComponent {
         titleService.setTitle(title);
       }
     });
+  }
+  onInit() {
+    console.log('init');
+    document.documentElement.requestFullscreen();
+
+    window.scrollTo(0, 1);
   }
   hash() {
     return location.hash.replace(/^#+/, '');
@@ -34,3 +40,4 @@ export class AppComponent {
     return data;
   }
 }
+

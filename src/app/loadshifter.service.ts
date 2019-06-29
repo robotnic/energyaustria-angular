@@ -23,6 +23,11 @@ export class LoadshifterService {
       if (to === 'Hydro Pumped Storage') {
         min = -installed[to] / 1000 || 0;
       }
+      if (to === 'Power2Gas') {
+        console.log('mutate', mutate);
+        min = -parseFloat(mutate['Power2Gas']) || 0;
+      }
+ 
       const max = installed[to] / 1000 || 0;
       byName['Curtailment'].values.forEach((item, i) => {
         if (item.y < 0) {

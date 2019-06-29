@@ -85,6 +85,7 @@ export class PowerComponent implements OnInit, OnDestroy {
       chart: {
 
         type: 'multiChart',
+        showLegend: true,
         legend: {
           rightAlign: false,
           align: false,
@@ -93,13 +94,12 @@ export class PowerComponent implements OnInit, OnDestroy {
               this.legendStateChanged(e);
             })
           }
-
         },
-        height: 850,
+        height: window.innerHeight - 10,
         margin: {
           right: 75,
           top: 120,
-          bottom: 270,
+          bottom: 170,
           left: 75
         },
         x: function(d) {
