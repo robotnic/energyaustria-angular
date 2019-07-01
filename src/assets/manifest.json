@@ -3,12 +3,11 @@
   "name": "Kinlan's Amazing Application ++",
   "icons": [
     {
-      "src": "launcher-icon-4x.png",
-      "sizes": "192x192",
+      "src": "E.png",
       "type": "image/png"
     }
   ],
   "start_url": "/index.html",
-  "display": "standalone",
+  "display": "browser",
   "orientation": "landscape"
 }

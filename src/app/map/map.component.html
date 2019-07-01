@@ -1,26 +1,22 @@
-<h1>  Solares in Österreich</h1>
+<h1> PV map Austria</h1>
 <div class="map"
      leaflet
     [leafletLayersControl]="layersControl"
      (leafletMapReady)="onMapReady($event)"
      [leafletOptions]="options">
 </div>
+<h2>Where to put it?</h2>
+If we know how much renewables we need, we have to put it somewhere.
+The map should give an impression about the size of the renewables.
 <br/>
-<br/>
-<br/>
-<div>
-
-  <h2>Die Erneuerbaren brauchen ihren Platz</h2>
 <p>
-Mit dem heutigen Stand der Technik (2019) können wir unseren Energiebedarf mit erneuerbaren Energien decken.
-Dabei haben sich PV und Wind als Gewinner hervorgetan die ab einer gewissen CO2 Steuer ohne Subventionen wirtschaftlich sein könnten.
+The Gigawatts will pop up on meadows beside highways. 
+
 </p>
-
-In der Karte ist ein technisch mögliches Szenario dargestellt das im Detail natürlich so nie umgesetzt werden kann.
-
-
-  Um ein Gefühl dafür zu bekommen, wieviel Erneuerbare wir brauchen, gibt es hier einen automatisch erzeugten Datensatz.
-solar osmturbo query
+<p>
+It would be a big step if we could agree on where to put the equipment. Until then, here is the more random placement. 
+</p>
+<br/>
 <pre>
     [out:json];
     area['name'='Österreich'];
@@ -34,44 +30,3 @@ solar osmturbo query
     (._;>;);out meta;
 
 </pre>
-
-<h2>Wohin damit?</h2>
-<h3>Energie</h3>
-<p>
-Erneuerbare Energie ist eine notwendige, aber noch nicht ausreichende Bedingung für die Energiewende.
-Es braucht riesige Flächen für die Energieernte.
-</p>
-<p>
-Mit modernen PV Modulen, lassen sich ca. 100 MWp/km² realisieren um hier einen Runden Wert zu nennen. 
-Wir wissen also größenordnungsmäßig den Flächenverbrauch.
-</p>
-
-<h3>Dezentral</h3>
-<p>
-Mit entsprechenden Investitionen sind Haushalte durchaus Energieneutral betreibar.
-Großstädte werden immer Energie importieren müssen und das gleiche gilt für die Industie. 
-Wenn Dezentral = nimby bedeutet, wird es nicht funktionieren.
-</p>
-<p>
-Noch stehen keine öffentlichen Daten zur Verfügung die das Hochspannungsnetz darstellen.
-Ein Ausbau des Hochspannungsnetzes ist teuer. Dezentral ist so gesehen billiger.
-Question to APG? What's the EU law on these data?
-Wie würde sich eine Stromübertragungssteuer auswirken?
-</p>
-<h3>Österreich</h3>
-
-
-
-
-
-Da keine Daten zur Auslastung des Stromnetzes zur Verfüung stehen, gehen wir vom best szenario aus.
-<p>
-Alle Graphicen gehen von einem Stromnetz zu einem Preis von 0 (Null) zur verfügung steht und 100% Wirkungsgrad (Supraleiter) hat.
-</p>
-Wen
-
-
-<h3>International</h3>
-
-
-</div>

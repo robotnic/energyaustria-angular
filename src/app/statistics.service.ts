@@ -24,6 +24,6 @@ export class StatisticsService {
 //    return this.httpClient.get('/theapi/consumtion/' + country + '/2016').toPromise();
   }
   public area() {
-    return this.httpClient.get('/api/area').toPromise();
+    return this.httpClient.get('/assets/countries.json').toPromise();
   }
 }

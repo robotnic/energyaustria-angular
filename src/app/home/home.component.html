@@ -1,40 +1,67 @@
-<h1>2050 Klimaneutral</h1>
+<h1>Power Europe</h1>
+This tool visualizes historic electricity production data provided by ENTSO-E.
+
+<h2>Add Renewables Power</h2>
+<p>
+Based on these data, the user can simulate a past with more renewables.
+
+</p>
+We can select a day in the past and simulate the replacement of fossils by renewables.
+<br/>
+
+
 <img src="/assets/addenergy.gif"/>
-<p>
-Dieses Tool bietet eine interactive Möglichkeit, die Auswirkungen alternativer Energien zu simulieren.
-Dabei werden Daten von APG und Statistic Austria als Grundlage genommen.
-</p>
-<p>
-Basierend auf historischen Daten wird errechnet was der Ausbau der Erneuerbaren und die Elektrifizierung aller Diesel und Benzin Motoren bewirkt. 
-</p>
-
-<h2>Energie</h2>
-
-Unser Endenergieverbrauch beträgt ungefähr 300 TWh pro Jahr.
 <br/>
-<img src="/assets/energy.png"/>
-<br/>
+<a href="/power#datechange=date:20190319;timetype:day;country:Austria;refresh:false;&mutate=Wind%2520Onshore:0;Wind%2520Offshore:0;Solar:0;Power2Gas:0;Transport:0;quickview:false;&view=layers:111111111111111111110;&state=">
+Try yourself
+</a>
 <p>
-Auffallend ist der verschindend kleine Teil der die erneuerbaren Energien und der große Anteil an Erdöl Produkten.
+1 GWp Solar ~10 km²; 3.000.000 panels.
+<br/>
+1 GWp Wind ~200 * 5 MW Wind Turbine
 </p>
-<p>Allerdings spricht der Zweite Hauptsatz der Thermodynamik für die Erneuerbaren</p>
 
-<h4>Chemische Energie</h4>
-* Läßt sich in großen Mengen Speichern<br/>
-* Läßt sich nur mit großen Wärmeverlusten in mechanische Energie verwandeln<br/>
-* Rohöl ist mit ~0.05€/kWh relativ teuer
-<h4>Elektrische Energie</h4>
-* Verbrauch und Erzeung müssen überinstimmen.<br/> 
-* Mit Wärmepumpen ist viel zu machen<br>
-* Wind und Solar liefern elektrische Energie.
-<h4>Speicher</h4>
-* Kapaiztät von ca 2 TWh in den (Pump-) Speichern
-* 5 GW Spitzenleistung<br/>
-* 2 GW Pumpleistung
-<h4>Transport</h4>
+<h2>Energy</h2>
+Electricity is only a part of the energy we need.
+In this tool the effect of electrified transport is shown.<br/>
+<img src="/assets/energy-transport.gif"/>
+<p>
+Replacing fossils by electricity, reduces the energy <strong>used by the customers</strong>.
+Please have in mind, that that's not equivalent to primary energy.<br/>
 
+<a href="/energy">try here</a>
+</p>
 
-<h2>Stromwende</h2>
-Die erfolgreichsten alternativen Energiequellen sind Wind und Solar. 
-Es ist zu erwarten, dass diese in einem günstigen Umfeld ohne Subventionen konkurrenzfähig werden.
+<h2>Szenarios</h2>
+<h3>Austria 15 GWp PV, 100% EV. April 2019.</h3>
+In the simulation we show the load of charging vehicles as a constant value.<br>
+We don't know when the E-Cars will charge. 
+<p>
+But our simulations shows that shifting charging time by some hours, could have a big impact.
+</p>
+<p>
+The red area shows the additional energy needed by electric vehicles that is not coverd by renewables.
+The black areas are curtailed energy.
+</p>
+<p>
+If there is lots of PV in the system, it would be benefitial for the grid, to charge comuter vehicles during worktime.
+</p>
+<img src="/assets/curtailment-transport.png"/>
+<br/>
+<a href="/power#datechange=date:20190423;timetype:week;country:Austria;refresh:false;&mutate=Wind%2520Onshore:7;Wind%2520Offshore:0;Solar:15;Power2Gas:0;Transport:100;quickview:false;&view=layers:0010000000000000100;&state=">
+Try
+</a>
+<h3>Power2Gas</h3>
+In this diagram PV and Power2Gas are dominant. Power2Gas is shown here before conversion losses.  
+<br/>
+<img src="/assets/pvh2.png"/>
+<br/>
+<a href="/energy#datechange=date:20190423;timetype:week;country:Austria;refresh:false;&mutate=Wind%20Onshore:7;Wind%20Offshore:0;Solar:56;Power2Gas:30;Transport:0;quickview:false;&view=layers:1111111111111111111;&state=">
+try
+</a>
+<h3>PV Map</h3>
+How much space is needed for PV. Where do we put the installations.<br/>
+<img src="/assets/pvmap.png"/>
+<br/>
+
 

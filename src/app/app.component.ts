@@ -17,8 +17,6 @@ export class AppComponent implements OnInit {
     });
   }
   ngOnInit() {
-    console.log('init');
-    document.documentElement.requestFullscreen();
 
     window.scrollTo(0, 1);
   }
