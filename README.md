@@ -10,19 +10,24 @@ We can select a day in the past and simulate the replacement of fossils by renew
 
 ![real time view](https://raw.githubusercontent.com/robotnic/power-europe-angular/master/src/assets/addenergy.gif)
 
-Try yourself
 
 | peek power | | |
 | ------------ | ---------- | -------- |
 | 1 GWp Solar | ~10 km² | 3.000.000 panels |
 | 1 GWp Wind | ~200 * 5 MW Wind Turbine | |
 
+This tool focuses on responsive illustration and easy usage.
+
+
+
+
+
 ## Energy
 Electricity is only a part of the energy we need. In this tool the effect of electrified transport is shown.
 ![energy](https://github.com/robotnic/power-europe-angular/blob/master/src/assets/energy-transport.gif)
 
 Replacing fossils by electricity, reduces the energy used by the customers. Please have in mind, that that's not equivalent to primary energy.
-try here
+
 
 ## Szenarios
 ### Austria 15 GWp PV, 100% EV. April 2019.
@@ -38,14 +43,12 @@ If there is lots of PV in the system, it would be benefitial for the grid, to ch
 To select a single layer, try double-click.
 
 
-Try
 ### Power2Gas
 In this diagram PV and Power2Gas are dominant. Power2Gas is shown here before conversion losses. 
 ![pv](https://github.com/robotnic/power-europe-angular/blob/master/src/assets/pvh2.png)
 
 
 
-try
 ### PV Map
 How much space is needed for PV. Where do we put the installations.
 ![pv](https://github.com/robotnic/power-europe-angular/blob/master/src/assets/pvmap.png)
@@ -55,3 +58,16 @@ The price of PV is dropping very fast. Large scale installations will pop up in 
 PV needs space. If done well, solar parks can be an eco habitates for lots of species.
 PV needs less space than biofuils.
 
+## Alorithm in behind
+
+### Add Renewables
+
+We have the installed GWp in a specific year.
+We are able to calculate the effect of more Renewables.
+
+
+### Loadshift
+
+
+
+### Timeshift
