@@ -23,7 +23,7 @@ export class InstalledComponent implements OnInit {
   country;
   year;
   colors;
-  originalInstalled: string;
+  originalInstalled;
   constructor(private installedService: InstalledService, private eventHandlerService: EventHandlerService, private http: HttpClient) {}
 
   async ngOnInit() {
