@@ -9,12 +9,13 @@ Inspired by Fraunhofer ISE(https://www.energy-charts.de/)
 ## Install
 ```
 git clone https://github.com/robotnic/power-europe-angular.git
+cd power-europe-angular
 npm install
 npm test
 ```
-[start](http://localhost:4200)
+[http://localhost:4200](http://localhost:4200)
 
-## Add Renewables Power
+## Add Renewable Power
 Based on the ENTSO-E transparancy data, the user can simulate a past with more renewables.
 
 The user can select a day in the past and simulate the replacement of fossils by renewables. 
