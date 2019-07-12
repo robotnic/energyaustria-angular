@@ -6,6 +6,14 @@ This tool visualizes historic electricity production data provided by ENTSO-E.
 
 Inspired by Fraunhofer ISE(https://www.energy-charts.de/)
 
+## Install
+```
+git clone https://github.com/robotnic/power-europe-angular.git
+npm install
+npm test
+```
+[start](http://localhost:4200)
+
 ## Add Renewables Power
 Based on the ENTSO-E transparancy data, the user can simulate a past with more renewables.
 
