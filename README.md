@@ -12,10 +12,10 @@ We can select a day in the past and simulate the replacement of fossils by renew
 
 Try yourself
 
-| peek power|||
-| ------------|----------|--------|
+| peek power | | |
+| ------------ | ---------- | -------- |
 
-| 1 GWp Solar | ~10 km² | 3.000.000 panels|
+| 1 GWp Solar | ~10 km² | 3.000.000 panels |
 | 1 GWp Wind | ~200 * 5 MW Wind Turbine |
 
 ## Energy
