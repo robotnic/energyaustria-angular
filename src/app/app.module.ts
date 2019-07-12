@@ -25,7 +25,6 @@ import { EnergyComponent } from './energy/energy.component';
 import { PowerdiffComponent } from './powerdiff/powerdiff.component';
 import { CalcrulesComponent } from './calcrules/calcrules.component';
 import { StorageComponent } from './storage/storage.component';
-import { PlanComponent } from './plan/plan.component';
 import { HomeComponent } from './home/home.component';
 import { UnitsPipe } from './units.pipe';
 import { InstalledComponent } from './installed/installed.component';
@@ -44,7 +43,6 @@ import { InstalledComponent } from './installed/installed.component';
     PowerdiffComponent,
     CalcrulesComponent,
     StorageComponent,
-    PlanComponent,
     HomeComponent,
     UnitsPipe,
     InstalledComponent

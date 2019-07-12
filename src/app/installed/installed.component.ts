@@ -9,7 +9,7 @@ import { parse } from 'url';
 @Component({
   selector: 'app-installed',
   templateUrl: './installed.component.html',
-  styleUrls: ['./installed.component.less', '/nv.d3.css'],
+  styleUrls: ['./installed.component.less', './nv.d3.css'],
   encapsulation: ViewEncapsulation.None
 
 })

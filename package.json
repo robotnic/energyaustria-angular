@@ -5,8 +5,7 @@
     "ng": "ng",
     "start": "node index.js",
     "test": "ng serve --proxy-config proxy.conf.json --watch",
-    "build": "ng build --prod --source-map
-",
+    "build": "ng build --prod --source-map  --build-optimizer",
     "test2": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -54,6 +53,7 @@
     "@types/leaflet-providers": "^1.1.3",
     "@types/node": "^8.9.5",
     "codelyzer": "~4.5.0",
+    "gzipper": "^2.8.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.1",

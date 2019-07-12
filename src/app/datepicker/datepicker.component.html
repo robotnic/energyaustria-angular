@@ -1,7 +1,7 @@
 <div text-align="right">
 
 <mat-form-field  style="width:120px">
-  <mat-select matNativeControl required [(value)] = "country" (selectionChange)="onDate($event)" [(ngModel)]="country" placeholder="country">
+  <mat-select matNativeControl required [(value)] = "country" (selectionChange)="onDate()" [(ngModel)]="country" placeholder="country">
     <mat-option value="{{key}}" *ngFor="let key of keys()">{{key}}</mat-option>
   </mat-select>
 </mat-form-field>
@@ -9,7 +9,7 @@
 
 
 <mat-form-field  style="width:70px">
-  <mat-select matNativeControl required [(value)] = "timetype" (selectionChange)="onDate($event)" [(ngModel)]="timetype">
+  <mat-select matNativeControl required [(value)] = "timetype" (selectionChange)="onDate()" [(ngModel)]="timetype">
     <mat-option value="day">day</mat-option>
     <mat-option value="week">week</mat-option>
     <mat-option value="month">month</mat-option>
