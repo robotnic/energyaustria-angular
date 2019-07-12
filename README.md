@@ -14,9 +14,8 @@ Try yourself
 
 | peek power | | |
 | ------------ | ---------- | -------- |
-
 | 1 GWp Solar | ~10 km² | 3.000.000 panels |
-| 1 GWp Wind | ~200 * 5 MW Wind Turbine |
+| 1 GWp Wind | ~200 * 5 MW Wind Turbine | |
 
 ## Energy
 Electricity is only a part of the energy we need. In this tool the effect of electrified transport is shown.
