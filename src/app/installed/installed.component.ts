@@ -124,7 +124,13 @@ export class InstalledComponent implements OnInit {
         type: 'multiBarChart',
         stacked: true,
         height: 850,
-        showLegend: false
+        showLegend: false,
+        yAxis: {
+          tickFormat: function(d) {
+            return d3.format(',.2f')(d / 1000);
+          },
+          axisLabel: 'GW'
+        }
       }
     };
   }
