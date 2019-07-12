@@ -1,27 +1,36 @@
-# Energy
+Power Europe
+This tool visualizes historic electricity production data provided by ENTSO-E.
+Add Renewables Power
+Based on these data, the user can simulate a past with more renewables.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.1.
+We can select a day in the past and simulate the replacement of fossils by renewables. 
 
-## Development server
+Try yourself
+1 GWp Solar ~10 km²; 3.000.000 panels. 
+1 GWp Wind ~200 * 5 MW Wind Turbine
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Energy
+Electricity is only a part of the energy we need. In this tool the effect of electrified transport is shown.
 
-## Code scaffolding
+Replacing fossils by electricity, reduces the energy used by the customers. Please have in mind, that that's not equivalent to primary energy.
+try here
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Szenarios
+Austria 15 GWp PV, 100% EV. April 2019.
+In the simulation we show the load of charging vehicles as a constant value.
+We don't know when the E-Cars will charge.
+But our simulations shows that shifting charging time by some hours, could have a big impact.
 
-## Build
+The red area shows the additional energy needed by electric vehicles that is not coverd by renewables. The black areas are curtailed energy.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+If there is lots of PV in the system, it would be benefitial for the grid, to charge comuter vehicles during worktime.
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Try
+Power2Gas
+In this diagram PV and Power2Gas are dominant. Power2Gas is shown here before conversion losses. 
 
-## Running end-to-end tests
+try
+PV Map
+How much space is needed for PV. Where do we put the installations.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
