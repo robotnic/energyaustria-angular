@@ -8,16 +8,18 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
-    constructor(titleService: Title, router: Router ) {
+  url;
+  constructor(titleService: Title, router: Router ) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+        this.url = router.routerState.snapshot.url.split('#')[0];
+        console.log('ROUTER2', this.url);
         const title = this.getTitle(router.routerState, router.routerState.root).join('-');
         titleService.setTitle(title);
       }
     });
   }
   ngOnInit() {
-
     window.scrollTo(0, 1);
   }
   hash() {

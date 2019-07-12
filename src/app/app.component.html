@@ -1,6 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
-<div style="right:20px;position:absolute">
+<div style="right:20px;position:absolute" *ngIf="url != '/'">
   <app-datepicker [(yyyymmdd)] = "yyyymmdd"></app-datepicker>
 </div>
 <div style="left:0px;top:0px;position:absolute;border-width: 0;outline: 0pt" [routerLink]="['/']" routerLinkActive="router-link-active" fragment="{{hash()}}">
@@ -20,4 +20,4 @@
 <div class="outlet">
 <router-outlet></router-outlet>
 </div>
-<app-mutateui></app-mutateui>
+<app-mutateui *ngIf="url != '/'"></app-mutateui>
