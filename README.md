@@ -1,6 +1,6 @@
 # Power Europe
 
-[demo at heroku](https://power-europe.herokuapp.com/)
+[demo at heroku](https://power-europe.herokuapp.com/) (20 sek wake up time)
 
 This tool visualizes historic electricity production data provided by ENTSO-E.
 ## Adding Renewables Power

@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { EventHandlerService } from '../event-handler.service';
 import { MutateService } from '../mutate.service';
 import { HttpClient } from '@angular/common/http';
+import { strictEqual } from 'assert';
 
 @Component({
   selector: 'app-power',
@@ -40,17 +41,13 @@ export class PowerComponent implements OnInit, OnDestroy {
     this.ctrl = ctrl;
     this.loading++;
     const charts = await this.powerService.loadENTSOECharts(ctrl);
-    console.log('charts', charts);
     this.loading--;
     //    console.log('CHARTS', charts1);
     //    const charts = await this.powerService.loadCharts(ctrl);
     this.readLayers();
-    console.log('......load..........................................................................')
     if (this.subscription) {
-      console.log('unscubsribe');
       this.subscription.unsubscribe();
     }
-    console.log('cc', ctrl);
     this.subscription = this.mutateService.getMutate(charts, ctrl).subscribe((response) => {
       if (response) {
         this.setColors(response.modified);
@@ -208,12 +205,14 @@ export class PowerComponent implements OnInit, OnDestroy {
   }
   readLayers(data ? ) {
     const state = this.eventHandler.getState();
-    for (let i = 0; i < state.view.layers.length; i++) {
-      if (data && data[i]) {
-        if (state.view.layers[i] === '1') {
-          data[i].disabled = false;
-        } else {
-          data[i].disabled = true;
+    if (state.view.layers) {
+      for (let i = 0; i < state.view.layers.length; i++) {
+        if (data && data[i]) {
+          if (state.view.layers[i] === '1') {
+            data[i].disabled = false;
+          } else {
+            data[i].disabled = true;
+          }
         }
       }
     }
@@ -225,7 +224,6 @@ export class PowerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('descroy');
     this.subscription.unsubscribe();
   }
 }

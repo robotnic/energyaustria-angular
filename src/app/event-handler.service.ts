@@ -10,7 +10,7 @@ export class EventHandlerService {
   events: any[];
   layers: [];
   observers = {};
-  state: any = {
+  defaultState: any = {
     'datechange': {
       'date': _moment().subtract(1, 'd').format('YYYYMMDD'),
       'timetype': 'day',
@@ -27,9 +27,10 @@ export class EventHandlerService {
     },
     'view': {
       'layers': '111111111111111111110'
-    },
-    'state': null
+    }
   };
+  state = JSON.parse(JSON.stringify(this.defaultState));
+
   constructor() {
     this.getStateHash();
   }
@@ -80,24 +81,34 @@ export class EventHandlerService {
       this.setStateHash();
     }
   }
+
   setStateHash() {
-    var url = '';
+    let url = '';
+    // tslint:disable-next-line:forin
     for (let s in this.state) {
-      url += '&' + s + '='; 
+      let hit = false;
+      let suburl = '&' + s + '=';
       for(let v in this.state[s]) {
-        url += v + ':' + this.state[s][v] + ';';
+        if (this.state[s][v] !== this.defaultState[s][v] && this.state[s][v]) {
+          suburl += v + ':' + this.state[s][v] + ';';
+          hit = true;
+        }
+      }
+      if (hit) {
+        url += suburl;
       }
     }
     location.hash = url.substring(1);
   }
   getStateHash() {
+    this.state = JSON.parse(JSON.stringify(this.defaultState));
 //    let hash = location.hash.substring(1);
     const hash = location.hash.replace(/^#+/, '');
     const parts = hash.split('&');
     if (parts[0]) {
       parts.forEach(part => {
         const kvss = part.split('=');
-        this.state[kvss[0]] = {};
+        //this.state[kvss[0]] = {};
         kvss[1].split(';').forEach(kvs => {
           if (kvs) {
             const kv = kvs.split(':');
@@ -106,7 +117,7 @@ export class EventHandlerService {
               value = false;
             } else {
               if (kvss[0] === 'mutate') {
-                value = parseInt(value);
+                value = parseInt(value) || 0;
               }
             }
             this.state[kvss[0]][decodeURIComponent(kv[0])] = decodeURIComponent(value);
@@ -116,5 +127,6 @@ export class EventHandlerService {
       });
 //      this.state = state;
     }
+    //this.state = Object.assign(this.defaultState, this.state);
   }
 }
