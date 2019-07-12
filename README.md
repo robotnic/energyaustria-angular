@@ -73,6 +73,11 @@ P(new) = P(past) * (Pp(past) + added) / Pp(past);
 The power harvested from renewable, are subtracted from fossil energy. 
 If there are no fossiles needed anymore, the hydro power stations will reduce electricity production.
 
+```
+P(coal new) = P(coal past) - P(new) + P(past);
+```
+
+
 ### Timeshift
 
 Stored hydro shift the saved energy. Water that was not be released from hydro storage, can be used later in time.
