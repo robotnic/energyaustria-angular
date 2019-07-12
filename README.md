@@ -4,9 +4,9 @@
 
 This tool visualizes historic electricity production data provided by ENTSO-E.
 ## Add Renewables Power
-Based on these data, the user can simulate a past with more renewables.
+Based on the ENTSO-E transparancy data, the user can simulate a past with more renewables.
 
-We can select a day in the past and simulate the replacement of fossils by renewables. 
+The user can select a day in the past and simulate the replacement of fossils by renewables. 
 
 ![real time view](https://raw.githubusercontent.com/robotnic/power-europe-angular/master/src/assets/addenergy.gif)
 
@@ -17,8 +17,7 @@ We can select a day in the past and simulate the replacement of fossils by renew
 | 1 GWp Wind | ~200 * 5 MW Wind Turbine | |
 
 This tool focuses on responsive illustration and easy usage.
-
-
+There are many factors not included.
 
 
 
@@ -62,12 +61,18 @@ PV needs less space than biofuils.
 
 ### Add Renewables
 
-We have the installed GWp in a specific year.
+We have the installed Peek Power (Pp) of a specific year.
 We are able to calculate the effect of more Renewables.
+```
+P(new) = P(past) * (Pp(past) + added) / Pp(past); 
+```
 
 
 ### Loadshift
 
-
+The power harvested from renewable, are subtracted from fossil energy. 
+If there are no fossiles needed anymore, the hydro power stations will reduce electricity production.
 
 ### Timeshift
+
+Stored hydro shift the saved energy. Water that was not be released from hydro storage, can be used later in time.
