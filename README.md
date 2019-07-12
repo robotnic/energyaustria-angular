@@ -11,11 +11,12 @@ We can select a day in the past and simulate the replacement of fossils by renew
 ![real time view](https://raw.githubusercontent.com/robotnic/power-europe-angular/master/src/assets/addenergy.gif)
 
 Try yourself
-|peek power|||
-|------------|----------|--------|
 
-|1 GWp Solar| ~10 km²| 3.000.000 panels|
-|1 GWp Wind | ~200 * 5 MW Wind Turbine |
+| peek power|||
+| ------------|----------|--------|
+
+| 1 GWp Solar | ~10 km² | 3.000.000 panels|
+| 1 GWp Wind | ~200 * 5 MW Wind Turbine |
 
 ## Energy
 Electricity is only a part of the energy we need. In this tool the effect of electrified transport is shown.
