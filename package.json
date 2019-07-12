@@ -4,9 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "node index.js",
-    "test": "ng serve --proxy-config proxy.conf.json --watch",
+    "startdev": "ng serve --proxy-config proxy.conf.json --watch",
     "build": "ng build",
-    "test2": "ng test",
+    "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

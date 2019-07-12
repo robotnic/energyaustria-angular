@@ -3,6 +3,9 @@
 [demo at heroku](https://power-europe.herokuapp.com/) (20 sec wake up time)
 
 This tool visualizes historic electricity production data provided by ENTSO-E.
+
+Inspired by Fraunhofer ISE(https://www.energy-charts.de/)
+
 ## Add Renewables Power
 Based on the ENTSO-E transparancy data, the user can simulate a past with more renewables.
 
@@ -17,8 +20,6 @@ The user can select a day in the past and simulate the replacement of fossils by
 | 1 GWp Wind | ~200 * 5 MW Wind Turbine | |
 
 This tool focuses on responsive illustration and easy usage.
-There are many factors not included.
-
 
 
 ## Energy
@@ -59,9 +60,11 @@ PV needs less space than biofuils.
 
 ## Alorithm in behind
 
+Hier some simplified formulas to give you an idea, how it works.
+
 ### Add Renewables
 
-We have the installed Peek Power (Pp) of a specific year.
+We know the installed Peek Power (Pp) of a specific year.
 We are able to calculate the effect of more Renewables.
 ```
 P(new) = P(past) * (Pp(past) + added) / Pp(past); 
@@ -70,14 +73,15 @@ P(new) = P(past) * (Pp(past) + added) / Pp(past);
 
 ### Loadshift
 
-The power harvested from renewable, are subtracted from fossil energy. 
-If there are no fossiles needed anymore, the hydro power stations will reduce electricity production.
+The power harvested from renewable, is subtracted from fossil energy. 
 
 ```
 P(coal new) = P(coal past) - P(new) + P(past);
 ```
+If there are no fossiles needed anymore, the hydro power stations will reduce electricity production.
 
 
 ### Timeshift
 
-Stored hydro shift the saved energy. Water that was not be released from hydro storage, can be used later in time.
+In this step we release Water from hydro storages.
+
