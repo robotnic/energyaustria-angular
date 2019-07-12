@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "node index.js",
     "test": "ng serve --proxy-config proxy.conf.json --watch",
-    "build": "ng build",
+    "build": "ng build --prod --source-map
+",
     "test2": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
