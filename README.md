@@ -3,7 +3,7 @@
 [demo at heroku](https://power-europe.herokuapp.com/)
 
 This tool visualizes historic electricity production data provided by ENTSO-E.
-Add Renewables Power
+## Adding Renewables Power
 Based on these data, the user can simulate a past with more renewables.
 
 We can select a day in the past and simulate the replacement of fossils by renewables. 
