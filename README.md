@@ -14,6 +14,7 @@ Try yourself
 
 ## Energy
 Electricity is only a part of the energy we need. In this tool the effect of electrified transport is shown.
+![energy](https://github.com/robotnic/power-europe-angular/blob/master/src/assets/energy-transport.gif)
 
 Replacing fossils by electricity, reduces the energy used by the customers. Please have in mind, that that's not equivalent to primary energy.
 try here
