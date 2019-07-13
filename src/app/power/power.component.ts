@@ -82,9 +82,9 @@ export class PowerComponent implements OnInit, OnDestroy {
       chart: {
 
         type: 'multiChart',
-        showLegend: true,
+        showLegend: false,
         legend: {
-          rightAlign: false,
+          rightAlign: true,
           align: false,
           dispatch: {
             stateChange: (e => {
@@ -94,10 +94,10 @@ export class PowerComponent implements OnInit, OnDestroy {
         },
         height: window.innerHeight - 10,
         margin: {
-          right: 75,
-          top: 120,
-          bottom: 170,
-          left: 75
+          right: 35,
+          top: 20,
+          bottom: 80,
+          left: 60
         },
         x: function(d) {
           return d.x;

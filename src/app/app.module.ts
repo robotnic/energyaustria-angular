@@ -11,7 +11,7 @@ import { NvD3Module } from 'ng2-nvd3';
 import { HttpClientModule } from '@angular/common/http';
 import { MomentModule } from 'ngx-moment';
 import { MatButtonModule, MatInputModule, MatDatepickerModule, MatIconModule,
-  MatSelectModule, MatCardModule, MatTabsModule} from '@angular/material';
+  MatSelectModule, MatCardModule, MatTabsModule, MatMenuModule} from '@angular/material';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 // ts-ignore
@@ -60,6 +60,7 @@ import { InstalledComponent } from './installed/installed.component';
     MatSelectModule,
     MatCardModule,
     MatTabsModule,
+    MatMenuModule,
     FormsModule,
     ReactiveFormsModule,
     MatIconModule,

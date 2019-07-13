@@ -6,8 +6,24 @@ hr {
   border:0px solid blue;
   height:15px;
   box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.08);
+  margin-top:-15px;
 }
 button.router-link-active {
-  border-bottom: 1px solid lightgrey;
-  border-radius: 0px;
+  color: blue;
+}
+button {
+  padding-top: 0px;
+}
+.logo {
+  position:absolute;
+  top: 0px;
+  left: 0px;
+}
+span {
+  display: inline-block;
+}
+@media screen and (max-width: 1024px) {
+    .datepicker {
+        display: none !important;
+    }
 }

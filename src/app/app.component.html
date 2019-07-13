@@ -1,11 +1,30 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
-<div style="right:20px;position:absolute" *ngIf="url != '/'">
+<div style="right:20px;position:absolute" *ngIf="url != '/'" class="datepicker">
   <app-datepicker [(yyyymmdd)] = "yyyymmdd"></app-datepicker>
 </div>
-<div style="left:0px;top:0px;position:absolute;border-width: 0;outline: 0pt" [routerLink]="['/']" routerLinkActive="router-link-active" fragment="{{hash()}}">
-  <img src="/assets/E.png" style="height:61px;border-width:0"/>
-</div>
+<span [routerLink]="['/']" routerLinkActive="router-link-active" fragment="{{hash()}}" class="logo">
+  <img src="/assets/E.png" style="height:40px;border-width:0; margin-top:-3px;"/>
+</span>
+&#160;
+&#160;
+&#160;
+&#160;
+&#160;
+&#160;
+<button mat-button [routerLink]="['/power']" routerLinkActive="router-link-active" fragment="{{hash()}}">power</button>
+<button mat-button [routerLink]="['/energy']" routerLinkActive="router-link-active"  fragment="{{hash()}}">energy</button>
+
+<button mat-button [matMenuTriggerFor]="belowMenu">more</button>
+<mat-menu #belowMenu="matMenu" yPosition="below">
+  <button mat-menu-item  [routerLink]="['/powerdiff']" >powerdiff</button>
+  <button mat-menu-item  [routerLink]="['/storage']" >stored hydro</button>
+  <button mat-menu-item  [routerLink]="['/installed']" >Installed</button>
+  <button mat-menu-item  [routerLink]="['/map']" >map</button>
+</mat-menu>
+
+
+<!--
 <div style="left:00px;top:10px;position:absolute; margin-left:70px">
 <button mat-button [routerLink]="['/power']" routerLinkActive="router-link-active" fragment="{{hash()}}">power</button>
 <button mat-button [routerLink]="['/powerdiff']" routerLinkActive="router-link-active"  fragment="{{hash()}}">powerdiff</button>
@@ -14,8 +33,7 @@
 <button mat-button [routerLink]="['/map']" routerLinkActive="router-link-active"  fragment="{{hash()}}">map</button>
 <button mat-button [routerLink]="['/installed']" routerLinkActive="router-link-active"  fragment="{{hash()}}">installed</button>
 </div>
-<br/>
-<br/>
+-->
 <hr/>
 <div class="outlet">
 <router-outlet></router-outlet>

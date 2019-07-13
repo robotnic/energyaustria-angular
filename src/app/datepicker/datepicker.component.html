@@ -1,7 +1,7 @@
 <div text-align="right">
 
 <mat-form-field  style="width:120px">
-  <mat-select matNativeControl required [(value)] = "country" (selectionChange)="onDate()" [(ngModel)]="country" placeholder="country">
+  <mat-select matNativeControl required [(value)] = "country" (selectionChange)="onDate()" [(ngModel)]="country">
     <mat-option value="{{key}}" *ngFor="let key of keys()">{{key}}</mat-option>
   </mat-select>
 </mat-form-field>
