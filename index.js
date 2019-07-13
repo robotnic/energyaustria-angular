@@ -1,6 +1,9 @@
 var express = require('express');
 var request = require('request');
 var app = express();
+const compression = require('compression')
+app.use(compression());
+
 
 const PORT = process.env.PORT || 3000
 const baseUrl = 'https://entsoe.herokuapp.com'
