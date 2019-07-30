@@ -20,6 +20,14 @@
       </mat-form-field>
       <button  mat-mini-fab color="primary" (click)="inc('Transport')">+</button>
   </div>
+  <div class="inputline">
+    <button  mat-mini-fab color="primary" (click)="dec('Power2Gas')">-</button>
+    <mat-form-field class="md-block" lex-gt-sm >
+      <input matInput (input) = "change()" placeholder="P2G" type="number" min="0" [(ngModel)]="mutate['Power2Gas']" style="width:50px;">
+    </mat-form-field>
+    <button  mat-mini-fab color="primary" (click)="inc('Power2Gas')">+</button>
+  </div>
+
 
 
   <!--

@@ -241,7 +241,7 @@ export class PowerComponent implements OnInit, OnDestroy {
   }
  
   guideline() {
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 600) {
       return false;
     } else  {
       return true;
@@ -253,26 +253,30 @@ export class PowerComponent implements OnInit, OnDestroy {
 
   height() { 
     let h = 400;
-    if (window.innerWidth < 800) {
+    if (window.innerWidth < 600) {
       h = window.innerHeight - 300;
     } else {
-      h = window.innerHeight - 100;
+      h = window.innerHeight - 10;
     }
     console.log(h);
     return h;
   }
   margin() {
-    let m = {
-      right: 60,
+    const m = {
+      right: 160,
       top: 50,
       bottom: 80,
       left: 60
     };
-    if (window.innerWidth < 800) {
+    if (window.innerWidth < 600) {
       m.right = 5;
       m.left = 30;
       m.bottom = 20;
     }
+    if (window.innerHeight > 600) {
+      m.bottom = 150;
+    }
+    console.log(m);
     return m;
   }
 
