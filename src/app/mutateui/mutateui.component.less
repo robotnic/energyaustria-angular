@@ -1,15 +1,30 @@
-mat-form-field{
-  display:block;
-  width:50px;
+mat-form-field {
+  display:inline-block;
+  width:40px;
+  text-align: center;
+}
+.inputline{
+  white-space: nowrap;
+  display:inline-block;
+  margin-right:10px;
 }
 
-.box{
-position:absolute;
+.box {
 right:10px;
-top: 80px;
+top: 50px;
 z-index:100;
+margin-left:20px;
 transform:scale(1)
 }
-.rollover{
+.rollover {
   font-size:9px;
+}
+@media (min-width: 800px) {
+  .box {
+    position:absolute;
+    margin-left:0px;
+  }
+  .inputline {  
+    display: block;
+  }
 }

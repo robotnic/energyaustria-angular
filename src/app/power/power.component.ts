@@ -92,13 +92,8 @@ export class PowerComponent implements OnInit, OnDestroy {
             })
           }
         },
-        height: window.innerHeight - 10,
-        margin: {
-          right: 35,
-          top: 20,
-          bottom: 80,
-          left: 60
-        },
+        height: this.height(),
+        margin: this.margin(),
         x: function(d) {
           return d.x;
         },
@@ -109,8 +104,8 @@ export class PowerComponent implements OnInit, OnDestroy {
         valueFormat: function(d) {
           return d3.format('.5f')(d);
         },
-        duration: 500,
-        useInteractiveGuideline: true,
+        duration: this.duration(),
+        useInteractiveGuideline: this.guideline(),
         interactiveLayer: {
           tooltip: {
             valueFormatter: function(d, i) {
@@ -221,6 +216,64 @@ export class PowerComponent implements OnInit, OnDestroy {
   formatDate(date) {
     var dateString = moment(date, 'YYYYMMDD').format('YYYY MMM DD');
     return dateString;
+  }
+
+  right() {
+    this.ctrl.date = moment(this.ctrl.date, 'YYYYMMDD').subtract(1, this.ctrl.timetype).format('YYYYMMDD');
+    this.eventHandler.setDate(this.ctrl);
+  }
+
+  left() {
+    this.ctrl.date = moment(this.ctrl.date, 'YYYYMMDD').add(1, this.ctrl.timetype).format('YYYYMMDD');
+    this.eventHandler.setDate(this.ctrl);
+  }
+  pinchin() {
+    if (this.ctrl.timetype === 'day') {
+      this.ctrl.timetype = 'week';
+      this.eventHandler.setDate(this.ctrl);
+    }
+  }
+  pinchout() {
+    if (this.ctrl.timetype === 'week') {
+      this.ctrl.timetype = 'day';
+      this.eventHandler.setDate(this.ctrl);
+    }
+  }
+ 
+  guideline() {
+    if (window.innerWidth < 1000) {
+      return false;
+    } else  {
+      return true;
+    }
+  }
+  duration() {
+    return 0;
+  }
+
+  height() { 
+    let h = 400;
+    if (window.innerWidth < 800) {
+      h = window.innerHeight - 300;
+    } else {
+      h = window.innerHeight - 100;
+    }
+    console.log(h);
+    return h;
+  }
+  margin() {
+    let m = {
+      right: 60,
+      top: 50,
+      bottom: 80,
+      left: 60
+    };
+    if (window.innerWidth < 800) {
+      m.right = 5;
+      m.left = 30;
+      m.bottom = 20;
+    }
+    return m;
   }
 
   ngOnDestroy() {

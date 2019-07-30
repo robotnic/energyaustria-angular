@@ -63,9 +63,15 @@ export class EnergyComponent implements OnInit {
       this.colors = await this.http.get('/assets/colors.json').toPromise();
     }
     d3.selectAll("svg > *").remove();
-    const svg = d3.select('#sankey'),
-      width = +svg.attr('width'),
-      height = +svg.attr('height');
+    const svg = d3.select('#sankey');
+    const  width = window.innerWidth - 200;
+    let  height = window.innerHeight - 100;
+    if (height < 600) {
+      height = 600;
+    }
+    console.log(width, height);
+    svg.attr('width', width + 'px');
+    svg.attr('height', height + 'px');
     /*
     while(svg[0].firstChild){
         svg[0].removeChidld(svg[0].firstChild)
@@ -91,8 +97,8 @@ export class EnergyComponent implements OnInit {
         .nodeWidth(15)
         .nodePadding(10)
         .extent([
-          [1, 1],
-          [width - 1, height - 6]
+          [0, 0],
+          [width - 1, height - 1]
         ]);
     }
     //  .nodeAlign(d3Sankey.sankeyLeft)

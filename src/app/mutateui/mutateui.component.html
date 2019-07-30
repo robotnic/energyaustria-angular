@@ -1,10 +1,28 @@
 <div class="box">
-    <mat-form-field class="md-block" title="Add {{mutate.Solar}} GWp Photovoltic. This equals to {{mutate.Solar*0.4}} photovoltaic panels per Austrian">
+  <div class="inputline">
+      <button mat-mini-fab color="primary" (click)="dec('Solar')">-</button>
+      <mat-form-field class="md-block" title="Add {{mutate.Solar}} GWp Photovoltic. This equals to {{mutate.Solar*0.4}} photovoltaic panels per Austrian">
         <input matInput (input) = "change()" placeholder="Solar" type="number" min="0" [(ngModel)] ="mutate.Solar" style="width:50px;">
       </mat-form-field>
+      <button mat-mini-fab color="primary" (click)="inc('Solar')">+</button>
+  </div>
+  <div class="inputline">
+      <button  mat-mini-fab color="primary" (click)="dec('Wind Onshore')">-</button>
       <mat-form-field class="md-block" lex-gt-sm title="Add {{mutate['Wind Onshore']}} GW Wind. This equals to {{mutate['Wind Onshore']*200}} big Windturbines">
         <input matInput (input) = "change()" placeholder="Onshore" type="number" min="0" [(ngModel)]="mutate['Wind Onshore']" style="width:50px;">
       </mat-form-field>
+      <button  mat-mini-fab color="primary" (click)="inc('Wind Onshore')">+</button>
+  </div>
+  <div class="inputline">
+      <button  mat-mini-fab color="primary" (click)="dec('Transport')">-</button>
+      <mat-form-field class="md-block" lex-gt-sm >
+        <input matInput (input) = "change()" placeholder="EV%" type="number" min="0" [(ngModel)]="mutate['Transport']" style="width:50px;">
+      </mat-form-field>
+      <button  mat-mini-fab color="primary" (click)="inc('Transport')">+</button>
+  </div>
+
+
+  <!--
       <mat-form-field class="md-block" lex-gt-sm title="Add {{mutate['Wind Offshore']}} GW Wind. This equals to {{mutate['Wind Offshore']*200}} big Windturbines">
         <input matInput (input) = "change()" placeholder="Offshore" type="number" min="0" [(ngModel)]="mutate['Wind Offshore']" style="width:50px;">
       </mat-form-field>
@@ -18,4 +36,5 @@
           Reset
           <span class="rollover">rollover</span>
         </button>
+    -->
   </div>

@@ -113,14 +113,16 @@ export class EventHandlerService {
           if (kvs) {
             const kv = kvs.split(':');
             let value: any = kv[1];
+            value = decodeURIComponent(value);
             if (value === 'false') {
               value = false;
             } else {
               if (kvss[0] === 'mutate') {
-                value = parseInt(value) || 0;
+                value = parseInt(value, 10) || 0;
+                console.log(kvs, value);
               }
             }
-            this.state[kvss[0]][decodeURIComponent(kv[0])] = decodeURIComponent(value);
+            this.state[kvss[0]][decodeURIComponent(kv[0])] = value;
           }
         });
         //state[kvs[0]] = {};

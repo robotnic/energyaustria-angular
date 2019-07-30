@@ -50,6 +50,29 @@ export class MutateuiComponent implements OnInit {
     this.mutate.quickview = false;
     this.eventHandler.setMutate(this.mutate);
   }
+  inc(type) {
+    let delta = 1;
+    if (type === 'Transport') {
+      delta = 5;
+    }
+    this.mutate[type] += delta;
+    if (type === 'Transport' && this.mutate[type] > 100) {
+      this.mutate[type] = 100;
+    }
+    this.change();
+  }
+
+  dec(type) {
+    let delta = 1;
+    if (type === 'Transport') {
+      delta = 5;
+    }
+    this.mutate[type] -= delta;
+    if (this.mutate[type] < 0) {
+      this.mutate[type] = 0;
+    }
+    this.change();
+  }
   reset() {
     let resetAlready = true;
     for(const m in this.origMutate) {

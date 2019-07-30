@@ -28,8 +28,15 @@ import { StorageComponent } from './storage/storage.component';
 import { HomeComponent } from './home/home.component';
 import { UnitsPipe } from './units.pipe';
 import { InstalledComponent } from './installed/installed.component';
+import * as Hammer from 'hammerjs';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 
 
+export class HammerConfig extends HammerGestureConfig {
+  overrides = <any>{
+    'swipe': { direction: Hammer.DIRECTION_ALL }
+  };
+}
 
 @NgModule({
   declarations: [
@@ -68,7 +75,11 @@ import { InstalledComponent } from './installed/installed.component';
   ],
   providers: [
     PowerService,
-    EventHandlerService
+    EventHandlerService,
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: HammerConfig
+    }
   ],
   bootstrap: [AppComponent]
 })
