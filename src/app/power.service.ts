@@ -43,7 +43,6 @@ export class PowerService {
     const startQuery = start.format('YYYYMMDDHHmm');
     const endQuery = end.format('YYYYMMDDHHmm');
     return new Promise < any[] > ((resolve, reject) => {
-      console.log(ctrl);
       const url = '/api/generated?start=' + startQuery + '&end=' + endQuery + '&area=' + ctrl.country + '&refresh=' + ctrl.refresh;
       this.http.get(url).subscribe((data: any[]) => {
         if (data) {

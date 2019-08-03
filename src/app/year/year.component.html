@@ -1,0 +1,22 @@
+<h2>
+  Year {{year}}
+</h2>
+<button (click)="generate()"> generate report</button>
+<table *ngIf="sums.normalized">
+  <tr>
+    <th>generation type</th>
+    <th>original GWh</th>
+    <th>modified GWh</th>
+    <th>delta GWh<th>
+  </tr>
+<tr *ngFor="let item of sums.normalized | keyvalue">
+    <td>{{item.key}}</td>  
+    <td>{{item.value | number: '0.0-0':'fr'}}</td>
+    <td>{{sums.modified[item.key] | number:'0.0-0':'fr'}}</td>
+    <td>{{sums.modified[item.key] - item.value | number:'0.0-0':'fr'}}</td>
+</tr>
+</table>
+<br/>
+<br/>
+<br/>
+<app-energy></app-energy>

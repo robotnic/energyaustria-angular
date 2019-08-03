@@ -29,7 +29,10 @@
   </div>
 
 
-
+  <button type="button" (mouseover)="over()" (mouseout)="out()" (click)="reset()" style="width:50px;background-color:white;border:1px solid black"  value="click" ng-mouseover="setOriginal()" ng-mouseout="setModified()">
+    Reset
+    <span class="rollover">rollover</span>
+  </button>
   <!--
       <mat-form-field class="md-block" lex-gt-sm title="Add {{mutate['Wind Offshore']}} GW Wind. This equals to {{mutate['Wind Offshore']*200}} big Windturbines">
         <input matInput (input) = "change()" placeholder="Offshore" type="number" min="0" [(ngModel)]="mutate['Wind Offshore']" style="width:50px;">

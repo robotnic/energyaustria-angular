@@ -30,6 +30,13 @@ import { UnitsPipe } from './units.pipe';
 import { InstalledComponent } from './installed/installed.component';
 import * as Hammer from 'hammerjs';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { YearComponent } from './year/year.component';
+
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+// the second parameter 'fr' is optional
+registerLocaleData(localeFr, 'fr');
 
 
 export class HammerConfig extends HammerGestureConfig {
@@ -52,7 +59,8 @@ export class HammerConfig extends HammerGestureConfig {
     StorageComponent,
     HomeComponent,
     UnitsPipe,
-    InstalledComponent
+    InstalledComponent,
+    YearComponent
   ],
   imports: [
     BrowserModule,

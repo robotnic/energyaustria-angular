@@ -9,6 +9,7 @@ import { CalcrulesComponent } from './calcrules/calcrules.component';
 import { StorageComponent } from './storage/storage.component';
 import { HomeComponent } from './home/home.component';
 import { InstalledComponent } from './installed/installed.component';
+import { YearComponent } from './year/year.component';
 
 const routes: Routes = [
 {path: 'power', component: PowerComponent, data: {title: 'Power'}},
@@ -19,6 +20,7 @@ const routes: Routes = [
 {path: 'map', component: MapComponent, data: {title: 'Map'}},
 {path: 'calcrules', component: CalcrulesComponent, data: {title: 'Rules'}},
 {path: 'installed', component: InstalledComponent, data: {title: 'Installed'}},
+{path: 'year', component: YearComponent, data: {title: 'Year'}},
 {path: '**', component: HomeComponent, data: {title: 'Home'}}
 
 ];

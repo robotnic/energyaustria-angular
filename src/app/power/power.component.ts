@@ -70,6 +70,7 @@ export class PowerComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.colors = await this.http.get('/assets/colors.json').toPromise();
     this.eventHandler.on('datechange').subscribe((data) => {
+      console.log('DDD', data);
       this.load(data);
     });
     this.eventHandler.on('view').subscribe(data => {
