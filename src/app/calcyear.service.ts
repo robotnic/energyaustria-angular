@@ -50,14 +50,38 @@ export class CalcyearService {
     });
   }
 
-  makeSums(response) {
+  makeSums(charts) {
+    console.log('charts', charts);
+    const sum = {};
+    // tslint:disable-next-line:forin
+    for (const c in charts) {
+      console.log('chart', c, charts[c]);
+      charts[c].forEach(chart => {
+        if (!sum[chart.key]) {
+          sum[chart.key] = {
+            orig: 0,
+            modified: 0
+          }
+        }
+        chart.values.forEach(value => {
+          if (c === 'normalized') {
+            sum[chart.key].orig += value.y  / 4;
+          }
+          if (c === 'modified') {
+            sum[chart.key].modified -= value.y / 4;
+          }
+        });
+      });
+    };
+    console.log('newsum', sum);
+    /*
     const sum = {
       normalized: {},
       modified: {},
     };
     // tslint:disable-next-line:forin
     for (const type in sum) {
-      response[type].forEach(chart => {
+      charts[type].forEach(chart => {
         chart.values.forEach(value => {
           if (!sum[type][chart.key]) {
             sum[type][chart.key] = 0;
@@ -68,7 +92,7 @@ export class CalcyearService {
         });
       });
     }
-
+    */
     return sum;
   }
 

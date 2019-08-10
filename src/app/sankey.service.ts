@@ -26,12 +26,12 @@ export class SankeyService {
     private powerService: PowerService,
     private mutateService: MutateService
   ) {}
-  async sankey() {
+  async sankey(sum) {
     return Observable.create(async observer => {
-      this.doTheSankey(observer);
+      this.doTheSankey(observer, sum);
     });
   }
-  async doTheSankey(observer) {
+  async doTheSankey(observer, sum) {
     const origColors = await this.powerService.getDefaults();
     const colors = JSON.parse(JSON.stringify(origColors));
     delete colors['Leistung [MW]'];
@@ -45,23 +45,29 @@ export class SankeyService {
         statistics = this.reduceLinks(statistics);
         this.loadData(data).then((ob) => {
           ob.subscribe((charts) => {
-            const sum = this.makeDiff(charts);
-            this.saki = {
-              links: [],
-              nodes: []
-            };
-            this.allNames.length = 0;
-            this.pushNode('Electricity');
-            this.makeNodes(colors);
-            this.makeLinks(colors, sum);
-            this.makeStatisticsNodes(statistics, data.timetype);
-            // this.bigestLinks(2);
-            this.removeUnneededNodes();
+            const  sum2 = this.makeDiff(charts);
+            console.log('sum - sum2', sum, sum2);
+            this.transformToSankey(sum, colors, statistics, data);
             observer.next(this.saki);
+
           });
         });
       });
     });
+  }
+
+  transformToSankey(sum, colors, statistics, data) {
+    this.saki = {
+      links: [],
+      nodes: []
+    };
+    this.allNames.length = 0;
+    this.pushNode('Electricity');
+    this.makeNodes(colors);
+    this.makeLinks(colors, sum);
+    this.makeStatisticsNodes(statistics, data.timetype);
+    // this.bigestLinks(2);
+    this.removeUnneededNodes();
   }
 
   reduceLinks(statistics) {
@@ -190,7 +196,7 @@ export class SankeyService {
       // tslint:disable-next-line:forin
       for (const t in statistics[s]) {
         const j = this.pushNode(t);
-        let value = statistics[s][t] / 365; //GWh per year -> GWh pro day
+        let value = statistics[s][t]; // 365; //GWh per year -> GWh pro day
         if (timetype === 'week') {
           value = value * 7;
         }

@@ -13,9 +13,9 @@
 &#160;
 &#160;
 <button mat-button [routerLink]="['/power']" routerLinkActive="router-link-active" fragment="{{hash()}}">power</button>
-<button mat-button [routerLink]="['/energy']" routerLinkActive="router-link-active"  fragment="{{hash()}}">energy</button>
+<button mat-button [routerLink]="['/year']" routerLinkActive="router-link-active"  fragment="{{hash()}}">energy</button>
 
-<button mat-button [matMenuTriggerFor]="belowMenu">more</button>
+<button mat-button [matMenuTriggerFor]="belowMenu">beta</button>
 <mat-menu #belowMenu="matMenu" yPosition="below">
   <button mat-menu-item  [routerLink]="['/powerdiff']" >powerdiff</button>
   <button mat-menu-item  [routerLink]="['/storage']" >stored hydro</button>

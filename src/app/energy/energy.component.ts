@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as d3 from 'd3';
 import * as d3Sankey from 'd3-sankey';
 import { PowerService } from '../power.service';
@@ -7,6 +7,7 @@ import { MutateService } from '../mutate.service';
 import { String2HexCodeColor } from 'string-to-hex-code-color';
 import { SankeyService } from '../sankey.service';
 import { HttpClient } from '@angular/common/http';
+import { SummaryResolver } from '@angular/compiler';
 
 @Component({
   selector: 'app-energy',
@@ -14,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./energy.component.less']
 })
 export class EnergyComponent implements OnInit {
+  @Input() sums;
   colors;
   sankey;
   saki = {
@@ -26,7 +28,8 @@ export class EnergyComponent implements OnInit {
     private http: HttpClient) {}
 
   async ngOnInit() {
-    this.sankeyService.sankey().then(ob => ob.subscribe(data => {
+    console.log('sums for sankey', this.sums)
+    this.sankeyService.sankey(this.sums).then(ob => ob.subscribe(data => {
       let saki = JSON.parse(JSON.stringify(data));
       //console.log(JSON.stringify(data, null, 2));
       //d3.selectAll("svg > *").remove();

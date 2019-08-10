@@ -1,9 +1,9 @@
 {
   "/aapi": {
-    "target": "http://localhost:5000",
+    "target": "http://localhost:9000",
     "secure": false,
     "pathRewrite": {
-      "^/api": ""
+      "^/aapi": "/api"
     },
     "logLevel": "debug"
   },
