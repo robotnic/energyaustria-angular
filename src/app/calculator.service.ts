@@ -38,6 +38,7 @@ export class CalculatorService {
       this.loadShifter.addPower(this.clonedata, modifier, rules, this.powerByName['Curtailment'], ctrl.country)
         .then(clonedata2 => {
         this.statisticsService.init(ctrl.country).then(stat => {
+          console.log('give type of stat', stat);
           this.installedService.loadInstalled(ctrl.country).then(installed => {
             const year = ctrl.date.substring(0, 4);
             const petrolPower = this.getPetrolPower(stat.consumption);

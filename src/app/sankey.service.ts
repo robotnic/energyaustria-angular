@@ -6,8 +6,8 @@ import { EventHandlerService } from './event-handler.service';
 import { MutateService } from './mutate.service';
 import { String2HexCodeColor } from 'string-to-hex-code-color';
 
-var benzin = 'Motor Gasoline (w/o bio)';
-var diesel = 'Gas/Diesel Oil (w/o bio)';
+const benzin = 'Motor Gasoline (w/o bio)';
+const diesel = 'Gas/Diesel Oil (w/o bio)';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,7 @@ export class SankeyService {
     delete colors['Preis [EUR/MWh]'];
     this.eventHandler.on('datechange').subscribe((data) => {
       this.statisticsService.init(data.country).then((ret) => {
-        const statistics = ret.consumption;
+        let statistics = ret.consumption;
         delete statistics['Summe'];
         for (let s in statistics) {
           delete statistics[s].Insgesamt;
