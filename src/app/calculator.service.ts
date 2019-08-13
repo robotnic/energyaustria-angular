@@ -20,6 +20,7 @@ export class CalculatorService {
   ) {}
 
   getPetrolPower(stat) {
+    console.log('stta', stat);
     const factor = 4;
     const benzin = stat['Road']['Motor Gasoline (w/o bio)'];
     const diesel = stat['Road']['Gas/Diesel Oil (w/o bio)'];
@@ -39,7 +40,7 @@ export class CalculatorService {
         this.statisticsService.init(ctrl.country).then(stat => {
           this.installedService.loadInstalled(ctrl.country).then(installed => {
             const year = ctrl.date.substring(0, 4);
-            const petrolPower = this.getPetrolPower(stat);
+            const petrolPower = this.getPetrolPower(stat.consumption);
             const clonedata = this.loadShifter.addEV(clonedata2, modifier, ctrl.country, petrolPower);
             const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, installed[year]);
             const timeshiftedData = this.timeShifter.shift(clonedata, loadshiftedData, rules, installed[year]);

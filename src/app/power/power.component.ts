@@ -83,7 +83,7 @@ export class PowerComponent implements OnInit, OnDestroy {
       chart: {
 
         type: 'multiChart',
-        showLegend: false,
+        showLegend: this.showLegend(),
         legend: {
           rightAlign: true,
           align: false,
@@ -279,6 +279,9 @@ export class PowerComponent implements OnInit, OnDestroy {
     }
     console.log(m);
     return m;
+  }
+  showLegend() {
+    return window.innerWidth > 600;
   }
 
   ngOnDestroy() {

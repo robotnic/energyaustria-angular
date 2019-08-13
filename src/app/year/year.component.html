@@ -1,78 +1,177 @@
 <h2>
   Year {{year}}
 </h2>
-<button  mat-raised-button color="primary" (click)="generate()"> generate report</button>
-<br/>
-<br/>
-<div fxLayout="column" fxLayoutGap="32px">
-<mat-card>
-<h2>Generated Electricity in TWh</h2>
-<table mat-table [dataSource]="sumArrayTable" class="mat-elevation-z0" matSort>
+<button mat-raised-button color="primary" (click)="generate()"> generate report</button>
+<br />
+<mat-card *ngIf="totalArray.length">
+<h2>CO2 Summary</h2>
+<table mat-table [dataSource]="totalArray" class="mat-elevation-z0">
 
   <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
-  <!-- Position Column -->
-  <ng-container matColumnDef="key">
-    <th mat-header-cell *matHeaderCellDef> Source </th>
-    <td mat-cell *matCellDef="let element"> {{element.key}} </td>
+
+  <!-- title -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Energy </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
   </ng-container>
 
 
   <!-- Position Column -->
   <ng-container matColumnDef="orig">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Original </th>
-    <td mat-cell *matCellDef="let element"> {{element.orig | number: '0.0-0':'fr'}} </td>
+    <th mat-header-cell *matHeaderCellDef> Orig CO2 </th>
+    <td mat-cell *matCellDef="let element"> {{element.orig  | number: '0.0-0':'fr' }} Mt</td>
   </ng-container>
 
   <!-- Name Column -->
   <ng-container matColumnDef="modified">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Modified </th>
-    <td mat-cell *matCellDef="let element"> {{element.modified *-1 | number: '0.0-0':'fr'}} </td>
+    <th mat-header-cell *matHeaderCellDef> Modified CO2 </th>
+    <td mat-cell *matCellDef="let element"> {{element.modified  | number: '0.0-0':'fr' }} Mt</td>
   </ng-container>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="delta">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Delta </th>
-    <td mat-cell *matCellDef="let element"> {{element.delta | number: '0.0-0':'fr'}} </td>
+  <!-- Weight Column -->
+  <ng-container matColumnDef="percent">
+    <th mat-header-cell *matHeaderCellDef> Result % </th>
+    <td mat-cell *matCellDef="let element"> {{element.percent | number: '0.0-1'}} %</td>
   </ng-container>
 
-
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <tr mat-header-row *matHeaderRowDef="summaryColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: summaryColumns;"></tr>
 </table>
-  <mat-paginator [pageSizeOptions]="[ 10, 20]" showFirstLastButtons></mat-paginator>
-
 </mat-card>
-<mat-card>
-<h2>Energy Usage in TWh</h2>
-<table mat-table [dataSource]="energyArrayTable" class="mat-elevation-z0" matSort>
+<br/>
+<br />
+<div fxLayout="column" fxLayoutGap="32px">
+  <mat-card *ngIf="sumArrayTable">
+    <h2>Generated Electricity in GWh</h2>
+    <table mat-table [dataSource]="sumArrayTable" class="mat-elevation-z0" matSort>
 
-  <!--- Note that these columns can be defined in any order.
+      <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
-  <!-- Position Column -->
-  <ng-container matColumnDef="key">
-    <th mat-header-cell *matHeaderCellDef> Source </th>
-    <td mat-cell *matCellDef="let element"> {{element.key}} </td>
+      <!-- Position Column -->
+      <ng-container matColumnDef="key">
+        <th mat-header-cell *matHeaderCellDef> Source </th>
+        <td mat-cell *matCellDef="let element"> {{element.key}} </td>
+      </ng-container>
+
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="orig">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Original GWh </th>
+        <td mat-cell *matCellDef="let element"> {{element.orig | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="modified">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Modified GWH </th>
+        <td mat-cell *matCellDef="let element"> {{element.modified *-1 | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="delta">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Δ GWh</th>
+        <td mat-cell *matCellDef="let element"> {{element.delta | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Price €/MWh</th>
+        <td mat-cell *matCellDef="let element"> {{element.price | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="origCO2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>CO2 Mt</th>
+        <td mat-cell *matCellDef="let element"> {{element.origCO2 / 1000 | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="modifiedCO2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>CO2 Mt</th>
+        <td mat-cell *matCellDef="let element"> {{-element.modifiedCO2 / 1000 | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="deltaCO2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Δ CO2 Mt</th>
+        <td mat-cell *matCellDef="let element"> {{(+element.modifiedCO2 + element.origCO2) / -1000 | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+
+      <!--
+  <ng-container matColumnDef="origPrice">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> orig Price </th>
+    <td mat-cell *matCellDef="let element"> {{element.origPrice | number: '0.0-0':'fr'}} M€</td>
   </ng-container>
-
-
-  <!-- Position Column -->
-  <ng-container matColumnDef="orig">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Original </th>
-    <td mat-cell *matCellDef="let element"> {{element.orig | number: '0.0-0':'fr'}} </td>
+  <ng-container matColumnDef="modifiedPrice">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> modified Price </th>
+    <td mat-cell *matCellDef="let element"> {{-element.modifiedPrice | number: '0.0-0':'fr'}} M€</td>
   </ng-container>
+-->
+      <ng-container matColumnDef="deltaPrice">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Δ Revenue M€</th>
+        <td mat-cell *matCellDef="let element"> {{(-element.origPrice - element.modifiedPrice)  | number: '0.0-0':'fr'}} M€</td>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <!--
+  <mat-footer-row *matHeaderRowDef="footerColumns" class="sticky-footer">1</mat-footer-row>
+  -->
+    </table>
+    <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+
+  </mat-card>
+  <mat-card *ngIf="energyArrayTable">
+    <h2>Energy Usage in TWh</h2>
+    <table mat-table [dataSource]="energyArrayTable" class="mat-elevation-z0" matSort>
+
+      <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+      <!-- Position Column -->
+      <ng-container matColumnDef="key">
+        <th mat-header-cell *matHeaderCellDef> Source </th>
+        <td mat-cell *matCellDef="let element"> {{element.key}} </td>
+      </ng-container>
 
 
-  <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
-</table>
-<mat-paginator [pageSizeOptions]="[ 10, 20]" showFirstLastButtons></mat-paginator>
-</mat-card>
+      <!-- Energy -->
+      <ng-container matColumnDef="orig">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Original GWh</th>
+        <td mat-cell *matCellDef="let element"> {{element.orig | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <!-- co2 -->
+      <ng-container matColumnDef="co2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> CO2 Mt</th>
+        <td mat-cell *matCellDef="let element"> {{element.co2 / 1000| number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <!-- modified -->
+      <ng-container matColumnDef="modified">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>modified GWh</th>
+        <td mat-cell *matCellDef="let element"> {{element.modified | number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+      <!-- modifiedCO2 -->
+      <ng-container matColumnDef="modifiedCO2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> CO2 Mt</th>
+        <td mat-cell *matCellDef="let element"> {{element.modifiedCO2 / 1000| number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+
+      <!-- modifiedCO2 -->
+      <ng-container matColumnDef="deltaCO2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Δ CO2 Mt</th>
+        <td mat-cell *matCellDef="let element"> {{element.deltaCO2 / 1000| number: '0.0-0':'fr'}} </td>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+
+    </table>
+    <mat-paginator [pageSizeOptions]="[ 10, 20]" showFirstLastButtons></mat-paginator>
+  </mat-card>
 </div>
-<br/>
-<br/>
-<br/>
-<br/>
+<br />
+<br />
+<br />
 <!--
 <table *ngIf="(sums | json) != '{}'">
   <tr>

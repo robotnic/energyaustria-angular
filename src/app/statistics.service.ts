@@ -8,15 +8,24 @@ import { HttpClient } from '@angular/common/http';
 })
 export class StatisticsService {
   constructor( private httpClient: HttpClient) {}
-  consumption = {};
-  public init(country) {
+  consumptionByCountry = {};
+  co2;
+  public async init(country) {
+    this.co2 = await this.httpClient.get('/assets/co2.json').toPromise();
+
     return new Promise((resolve) => {
-      if (this.consumption[country]) {
-          resolve(this.consumption[country]);
+      if (this.consumptionByCountry[country]) {
+          resolve(this.consumptionByCountry[country]);
       } else {
         this.httpClient.get('/api/consumtion/' + country + '/2016').subscribe(consumption => {
-          this.consumption[country] = consumption;
-          resolve(consumption);
+          this.consumptionByCountry[country] = {
+            consumption: consumption,
+            co2: this.co2
+          };
+          resolve({
+            consumption: consumption,
+            co2: this.co2
+          });
         });
       }
     });

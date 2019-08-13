@@ -37,7 +37,8 @@ export class SankeyService {
     delete colors['Leistung [MW]'];
     delete colors['Preis [EUR/MWh]'];
     this.eventHandler.on('datechange').subscribe((data) => {
-      this.statisticsService.init(data.country).then((statistics) => {
+      this.statisticsService.init(data.country).then((ret) => {
+        const statistics = ret.consumption;
         delete statistics['Summe'];
         for (let s in statistics) {
           delete statistics[s].Insgesamt;
