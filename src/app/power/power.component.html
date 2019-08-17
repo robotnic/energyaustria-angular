@@ -6,3 +6,4 @@
     </h2>
   </div>
   <div (swipeleft)="left()" (swiperight)="right()" (pinchin)="pinchin()" (pinchout)="pinchout()"><nvd3 #nvd3 [options]="options" [data]="data"></nvd3></div>
+<div *ngFor="let item of data" class="layerselector"><div class="color" [ngStyle]="{'background-color': item.color}"></div>{{item.key}}</div>

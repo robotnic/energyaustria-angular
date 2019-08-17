@@ -96,9 +96,11 @@ export class CalcyearService {
             }
             if (c === 'modified') {
               sum[chart.key].modified -= value.y / 4;
-              sum[chart.key].modifiedPrice -= value.y / 4 * price;
+              sum[chart.key].modifiedPrice += value.y / 4 * price;
               sum[chart.key].modifiedCO2 -= value.y / 4 * co2;
             }
+          } else {
+            //console.log(chart.key, value, price);
           }
         });
         sum[chart.key].price = sum[chart.key].origPrice / sum[chart.key].orig * 1000;
@@ -106,25 +108,6 @@ export class CalcyearService {
       });
     }
     console.log('newsum', sum);
-    /*
-    const sum = {
-      normalized: {},
-      modified: {},
-    };
-    // tslint:disable-next-line:forin
-    for (const type in sum) {
-      charts[type].forEach(chart => {
-        chart.values.forEach(value => {
-          if (!sum[type][chart.key]) {
-            sum[type][chart.key] = 0;
-          }
-          if (value.y) {
-            sum[type][chart.key] += value.y / 4;
-          }
-        });
-      });
-    }
-    */
     return sum;
   }
 

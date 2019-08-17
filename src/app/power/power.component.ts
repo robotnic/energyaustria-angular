@@ -275,13 +275,14 @@ export class PowerComponent implements OnInit, OnDestroy {
       m.bottom = 20;
     }
     if (window.innerHeight > 600) {
-      m.bottom = 150;
+      m.bottom = 250;
     }
     console.log(m);
     return m;
   }
   showLegend() {
-    return window.innerWidth > 600;
+//    return window.innerWidth > 600;
+    return false;
   }
 
   ngOnDestroy() {

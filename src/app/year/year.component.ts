@@ -15,9 +15,10 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./year.component.less']
 })
 export class YearComponent implements OnInit {
-  displayedColumns: string[] = ['key', 'orig', 'origCO2', 'modified', 'modifiedCO2', 'price', 'delta', 'deltaPrice', 'deltaCO2'   ];
+  displayedColumns: string[] = ['key', 'orig', 'origPrice', 'origCO2', 'modified', 'modifiedPrice',
+  'modifiedCO2', 'price', 'delta', 'deltaPrice', 'deltaCO2'   ];
   displayedColumns2: string[] = ['key', 'orig', 'co2', 'modified', 'modifiedCO2', 'deltaCO2'];
-  summaryColumns: string[] = ['name', 'orig', 'modified', 'percent'];
+  summaryColumns: string[] = ['name', 'orig', 'modified', 'percent', 'deltaPercent'];
 
   sums = {};
   sumArray = [];
@@ -32,13 +33,20 @@ export class YearComponent implements OnInit {
     'co2electric': 0,
     'modifiedCO2electric': 0
   };
+  loading = {
+    charts: false,
+    energy: false,
+    statistics: false,
+  };
   totalArray = [];
   sumArrayTable;
   energyArrayTable;
 
   //@ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatSort, {}) sort: MatSort;
+  @ViewChild(MatSort, {}) sort2: MatSort;
   @ViewChild(MatPaginator, {}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {}) paginator2: MatPaginator;
 
 
   constructor(private calcyear: CalcyearService, private eventHandler: EventHandlerService, private statisticsService: StatisticsService, private http: HttpClient) {}
@@ -60,8 +68,12 @@ export class YearComponent implements OnInit {
     this.total['co2electric'] = 0;
     this.total['modifiedCO2electric'] =  0;
  
+    this.loading.charts = true;
     this.charts = await this.calcyear.init(this.ctrl);
+    this.loading.charts = false;
+    this.loading.energy = true;
     this.calcyear.load(this.charts, this.ctrl).subscribe(sums => {
+      this.loading.energy = false;
       sums = JSON.parse(JSON.stringify(sums));
       delete sums['Leistung [MW]'];
       this.sumArray = [];
@@ -79,16 +91,21 @@ export class YearComponent implements OnInit {
         if (item.modified < 0) {
           this.total['modifiedCO2electric'] -= item.modifiedCO2;
         }
+        item.deltaPrice = item.modifiedPrice - item.origPrice;
       });
+      console.log('sumArray', this.sumArray);
       this.sumArrayTable = new MatTableDataSource(this.sumArray) ;
       this.sumArrayTable.sort = this.sort;
-      this.sumArrayTable.paginator = this.paginator;
+//      this.sumArrayTable.paginator = this.paginator;
       this.sums = sums;
       this.makeTotalArray();
     });
+
     const country = this.state.datechange.country;
     console.log('give county', country);
+    this.loading.statistics = true;
     this.statisticsService.init(country).then(ret => {
+      this.loading.statistics = false;
       const data = ret.consumption;
       const co2 = ret.co2;
       console.log('statdata', data);
@@ -118,9 +135,11 @@ export class YearComponent implements OnInit {
           deltaCO2: -energy[e] * co2[e] + energy[e] * co2[e] * ev
         });
       }
+      /*
       energyArray = energyArray.sort((b, a) => {
         return (a.orig > b.orig) ? 1 : ((b.orig > a.orig) ? -1 : 0);
       });
+      */
       energyArray.forEach(item => {
         if (!isNaN(item['co2'])) {
           this.total['co2'] += item.co2 / 1000;
@@ -131,10 +150,21 @@ export class YearComponent implements OnInit {
       });
       this.makeTotalArray();
       this.energyArrayTable = new MatTableDataSource(energyArray) ;
-      this.energyArrayTable.sort = this.sort;
-      this.energyArrayTable.paginator = this.paginator;
+//      this.energyArrayTable.paginator = this.paginator2;
+      this.energyArrayTable.sort = this.sort2;
     });
   }
+
+  /*
+  sortElectic(event) {
+    console.log(event.active, event.direction);
+    console.log(this.energyArrayTable);
+    this.energyArrayTable.sort = ((a, b) => {
+      return a[event.active] < b[event.active];
+    });
+//    return true;
+  }
+  */
 
   calcEv(e) {
     let ev = 1;
@@ -151,19 +181,23 @@ export class YearComponent implements OnInit {
       name: 'electric',
       orig: this.total.co2electric / 1000,
       modified: this.total.modifiedCO2electric / 1000,
-      percent: this.total.modifiedCO2electric / this.total.co2electric * 100 - 100
+      percent: this.total.modifiedCO2electric / this.total.co2electric * 100,
+      deltaPercent: this.total.modifiedCO2electric / this.total.co2electric * 100 - 100
     });
     totalArray.push({
       name: 'non electric',
       orig: this.total.co2,
       modified: this.total.modifiedCO2,
-      percent: this.total.modifiedCO2 / this.total.co2 * 100 - 100
+      percent: this.total.modifiedCO2 / this.total.co2 * 100,
+      deltaPercent: this.total.modifiedCO2 / this.total.co2 * 100 - 100
     });
     totalArray.push({
       name: 'total',
       orig: this.total.co2 + this.total.co2electric / 1000,
       modified: this.total.modifiedCO2 + this.total.modifiedCO2electric / 1000,
-      percent: (this.total.modifiedCO2 + this.total.modifiedCO2electric / 1000) / (this.total.co2 + this.total.co2electric / 1000) * 100 - 100
+      percent: (this.total.modifiedCO2 + this.total.modifiedCO2electric / 1000) / (this.total.co2 + this.total.co2electric / 1000) * 100,
+      deltaPercent: (this.total.modifiedCO2 + this.total.modifiedCO2electric / 1000)
+      / (this.total.co2 + this.total.co2electric / 1000) * 100 - 100
     });
     //this.totalArray = new MatTableDataSource<Element>(totalArray);
     this.totalArray = totalArray;

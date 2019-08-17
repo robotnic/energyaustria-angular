@@ -1,5 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
-
+<div style="position:fixed; width:100%;">
 <div style="right:20px;top:-10px;position:absolute" *ngIf="url != '/'" class="datepicker">
   <app-datepicker [(yyyymmdd)] = "yyyymmdd"></app-datepicker>
 </div>
@@ -36,7 +36,10 @@
 </div>
 -->
 <hr/>
+<app-mutateui *ngIf="url != '/'"></app-mutateui>
+</div>
 <div class="outlet">
+  <br/>
+  <br/>
 <router-outlet></router-outlet>
 </div>
-<app-mutateui *ngIf="url != '/'"></app-mutateui>

@@ -12,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MomentModule } from 'ngx-moment';
 import { MatButtonModule, MatInputModule, MatDatepickerModule, MatIconModule,
   MatSelectModule, MatCardModule, MatTabsModule, MatMenuModule, MatTableModule,
-  MatSortModule, MatPaginatorModule} from '@angular/material';
+  MatSortModule, MatPaginatorModule, MatCheckboxModule} from '@angular/material';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 // ts-ignore
@@ -82,6 +82,7 @@ export class HammerConfig extends HammerGestureConfig {
     MatIconModule,
     MatTableModule,
     MatSortModule,
+    MatCheckboxModule,
     LeafletModule,
     MatPaginatorModule
   ],

@@ -36,18 +36,18 @@ export class CalculatorService {
         return;
       }
       this.loadShifter.addPower(this.clonedata, modifier, rules, this.powerByName['Curtailment'], ctrl.country)
-        .then(clonedata2 => {
+        .then(normalizedData => {
         this.statisticsService.init(ctrl.country).then(stat => {
           console.log('give type of stat', stat);
           this.installedService.loadInstalled(ctrl.country).then(installed => {
             const year = ctrl.date.substring(0, 4);
             const petrolPower = this.getPetrolPower(stat.consumption);
-            const clonedata = this.loadShifter.addEV(clonedata2, modifier, ctrl.country, petrolPower);
+            const clonedata = this.loadShifter.addEV(normalizedData, modifier, ctrl.country, petrolPower);
             const loadshiftedData = this.loadShifter.shift(clonedata, modifier, rules, installed[year]);
             const timeshiftedData = this.timeShifter.shift(clonedata, loadshiftedData, rules, installed[year]);
             resolve({
               modified: timeshiftedData,
-              normalized: clonedata2,
+              normalized: normalizedData,
               original: data,
             });
           });
